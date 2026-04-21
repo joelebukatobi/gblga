@@ -1,0 +1,112 @@
+// src/admin/templates/pages/reset-password.js
+// Reset password page template
+
+import { authLayout } from '../layouts/auth.js';
+
+/**
+ * Reset Password Page Template
+ * 
+ * @param {Object} options
+ * @param {string} options.token - Password reset token
+ * @param {string} [options.error] - Error message to display
+ * @returns {string} Complete HTML page
+ */
+export function resetPasswordPage({ token, error = '' } = {}) {
+  const errorHtml = error 
+    ? `<div class="alert alert--error" role="alert">${escapeHtml(error)}</div>` 
+    : '';
+
+  const body = `
+        <div class="login__container">
+          <!-- Auth Card -->
+          <div class="auth-card">
+            <div class="auth-card__header">
+              <h1 class="auth-card__title">Reset Password</h1>
+              <p class="auth-card__subtitle">Enter your new password below</p>
+            </div>
+
+            <hr class="divider" />
+
+            <!-- Response area for HTMX -->
+            <div id="reset-response">
+              ${errorHtml}
+            </div>
+
+            <!-- Reset Password Form -->
+            <form 
+              class="auth-card__form"
+              hx-post="/admin/auth/reset-password"
+              hx-target="#reset-response"
+              hx-swap="innerHTML"
+            >
+              <!-- Hidden token field -->
+              <input type="hidden" name="token" value="${escapeHtml(token)}" />
+
+              <!-- New Password -->
+              <div class="form__group">
+                <label class="label" for="password">New Password</label>
+                <div class="form__wrapper">
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="input input--lg input--icon-right"
+                    placeholder="Enter new password"
+                    minlength="8"
+                    required
+                  />
+                  <button type="button" class="input__addon" onclick="togglePassword()">
+                    <i data-lucide="eye" id="password-icon"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="form__group">
+                <label class="label" for="confirmPassword">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="input input--lg"
+                  placeholder="Confirm new password"
+                  minlength="8"
+                  required
+                />
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" class="btn btn--primary btn--lg btn--full">Reset Password</button>
+            </form>
+
+            <!-- Footer -->
+            <div class="auth-card__footer">
+              <a href="/admin/auth/login">← Back to login</a>
+            </div>
+          </div>
+        </div>
+  `;
+
+  return authLayout({
+    title: 'Reset Password',
+    description: 'Reset your BlogCMS Dashboard password',
+    body
+  });
+}
+
+/**
+ * Escape HTML special characters to prevent XSS
+ * @param {string} text 
+ * @returns {string}
+ */
+function escapeHtml(text) {
+  if (!text) return '';
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, char => map[char]);
+}

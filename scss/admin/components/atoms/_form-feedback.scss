@@ -1,0 +1,25 @@
+// ============================================================================
+// Form Feedback Atom
+// Error messages, help text, and hints - atomic elements
+// ============================================================================
+
+.form-feedback {
+  @apply block text-body-xs mt-[0.4rem];
+
+  &--error {
+    @apply text-red-600;
+
+    .dark & {
+      @apply text-red-400;
+    }
+  }
+
+  &--help,
+  &--hint {
+    @apply text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+}

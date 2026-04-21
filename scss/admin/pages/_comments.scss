@@ -1,0 +1,167 @@
+// ============================================================================
+// Comments Page Styles
+// Styles for the post comments management page
+// ============================================================================
+
+.comments-list {
+  @apply flex flex-col gap-[1.6rem];
+}
+
+.comment {
+  @apply flex flex-col gap-[1.2rem];
+
+  &__main {
+    @apply flex gap-[1.2rem];
+  }
+
+  &__avatar {
+    @apply flex-shrink-0;
+  }
+
+  &__content {
+    @apply flex-1 min-w-0;
+  }
+
+  &__header {
+    @apply flex flex-wrap items-center justify-between gap-[0.8rem];
+    @apply mb-[0.4rem];
+  }
+
+  &__meta {
+    @apply flex flex-wrap items-center gap-[0.8rem];
+  }
+
+  &__author {
+    @apply text-body-sm font-semibold text-grey-900;
+
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &__email {
+    @apply text-body-xs text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  &__time {
+    @apply text-body-xs text-grey-400;
+
+    .dark & {
+      @apply text-grey-500;
+    }
+  }
+
+  &__edited {
+    @apply hidden text-body-xs text-grey-400 italic;
+
+    .dark & {
+      @apply text-grey-500;
+    }
+
+    &--visible {
+      @apply inline;
+    }
+  }
+
+  &__actions {
+    @apply flex items-center gap-[0.4rem];
+    @apply opacity-0 transition-opacity duration-200;
+
+    .comment:hover & {
+      @apply opacity-100;
+    }
+  }
+
+  &__body {
+    @apply text-body text-grey-700 leading-relaxed;
+
+    .dark & {
+      @apply text-grey-300;
+    }
+  }
+
+  &__edit-form,
+  &__reply-form {
+    @apply mt-[1.2rem];
+
+    textarea {
+      @apply w-full mb-[1.2rem];
+      @apply border border-grey-200 rounded-lg;
+
+      .dark & {
+        @apply border-grey-700;
+      }
+    }
+  }
+
+  &__replies {
+    @apply flex flex-col gap-[1.2rem];
+    @apply mt-[0.8rem] ml-[1.6rem];
+  }
+
+  // Nested depth styles
+  &--nested {
+    &.comment--depth-1 {
+      @apply ml-[1.6rem];
+    }
+
+    &.comment--depth-2 {
+      @apply ml-[3.2rem];
+    }
+
+    &.comment--depth-3 {
+      @apply ml-[4.8rem];
+    }
+  }
+}
+
+// Empty state for no comments
+.empty-state {
+  @apply flex flex-col items-center justify-center;
+  @apply py-[4.8rem] px-[2.4rem];
+  @apply text-center;
+
+  &__icon {
+    @apply flex items-center justify-center;
+    @apply w-[6.4rem] h-[6.4rem] mb-[1.6rem];
+    @apply rounded-full bg-grey-100;
+
+    .dark & {
+      @apply bg-grey-800;
+    }
+
+    svg,
+    i {
+      @apply w-[3.2rem] h-[3.2rem] text-grey-400;
+
+      .dark & {
+        @apply text-grey-500;
+      }
+    }
+  }
+
+  &__title {
+    @apply text-body-lg font-semibold text-grey-900 mb-[0.8rem];
+
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &__text {
+    @apply text-body text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+}
+
+// Page header back link
+.page-header__back {
+  @apply mb-[0.8rem];
+}

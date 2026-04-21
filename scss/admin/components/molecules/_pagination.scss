@@ -1,0 +1,59 @@
+// ============================================================================
+// Pagination Component
+// Using Tailwind utilities
+// ============================================================================
+
+.pagination {
+  @apply flex flex-row items-center w-fit gap-x-[0.4rem];
+  @apply bg-transparent p-0 rounded-none mx-0;
+
+  &__item {
+    @apply flex items-center justify-center w-[2rem] h-[2rem];
+    @apply text-body-sm font-semibold text-grey-600 dark:text-grey-400;
+    @apply bg-white dark:bg-grey-800;
+    @apply border border-grey-200 dark:border-grey-700;
+    @apply rounded-[0.24rem] shadow-sm;
+    @apply transition-all duration-200;
+
+    &:hover {
+      @apply border-blue-200 text-blue-600;
+      @apply z-10;
+
+      .dark & {
+        @apply border-grey-500 text-grey-200;
+      }
+    }
+
+    &--active {
+      @apply bg-blue-600 text-white border-blue-600 font-bold;
+      @apply hover:bg-blue-700 hover:border-blue-700;
+
+      .dark & {
+        @apply bg-grey-700 text-white border-grey-600 font-bold;
+        @apply hover:bg-grey-600 hover:border-grey-500;
+      }
+    }
+
+    &--disabled {
+      @apply opacity-40 cursor-not-allowed hover:border-grey-200 hover:text-grey-600 bg-grey-50;
+    }
+
+    // Arrows - special hover state
+    svg {
+      @apply w-[1.2rem] h-[1.2rem];
+    }
+
+    // Chevron button hover
+    &:has(svg):hover {
+      @apply bg-blue-600 border-blue-600 text-white;
+
+      .dark & {
+        @apply bg-grey-700 border-grey-600 text-white;
+      }
+    }
+  }
+
+  &__ellipsis {
+    @apply px-[0.4rem] text-grey-400 font-bold tracking-widest h-[2rem] flex items-center;
+  }
+}

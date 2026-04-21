@@ -1,0 +1,73 @@
+// ============================================================================
+// Avatar Component
+// Using maximum Tailwind utilities
+// ============================================================================
+
+.avatar {
+  @apply relative inline-flex items-center justify-center flex-shrink-0;
+  @apply bg-grey-200 dark:bg-grey-700 rounded-full overflow-hidden;
+
+  img {
+    @apply w-full h-full object-cover;
+  }
+
+  // Sizes
+  &--xs {
+    @apply w-[2.4rem] h-[2.4rem] text-body-xs;
+  }
+
+  &--sm {
+    @apply w-[3.2rem] h-[3.2rem] text-body-sm;
+  }
+
+  &--md {
+    @apply w-[4.0rem] h-[4.0rem] text-body;
+  }
+
+  &--lg {
+    @apply w-[4.8rem] h-[4.8rem] text-body-lg;
+  }
+
+  &--xl {
+    @apply w-[6.4rem] h-[6.4rem] text-body-xl;
+  }
+
+  // Status indicator
+  &__status {
+    @apply absolute bottom-0 right-0 w-[1.2rem] h-[1.2rem] rounded-full border-2 border-white dark:border-grey-800;
+
+    &--online {
+      @apply bg-emerald-500;
+    }
+
+    &--offline {
+      @apply bg-grey-400;
+    }
+
+    &--busy {
+      @apply bg-red-500;
+    }
+
+    &--away {
+      @apply bg-amber-500;
+    }
+  }
+
+  // Placeholder avatar (for pending invitations, etc.)
+  &--placeholder {
+    @apply w-10 h-10 rounded-full bg-grey-200 flex items-center justify-center;
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+  }
+
+  // Initials avatar (when no image)
+  &--initials {
+    @apply bg-blue-600 text-white font-semibold;
+
+    .dark & {
+      @apply bg-blue-500;
+    }
+  }
+}

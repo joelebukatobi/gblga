@@ -1,0 +1,45 @@
+// ============================================================================
+// Tabs Component
+// Using Tailwind utilities - works with Preline hs-tabs
+// ============================================================================
+
+.tabs {
+  &__list {
+    @apply flex gap-[0.4rem] border-b border-grey-200 dark:border-grey-700;
+  }
+
+  &__trigger {
+    @apply px-[1.6rem] py-[0.8rem] text-body-sm font-medium;
+    @apply text-grey-500 dark:text-grey-400;
+    @apply border-b-2 border-transparent -mb-px;
+    @apply hover:text-grey-700 dark:hover:text-grey-200;
+    @apply transition-colors duration-200;
+
+    &--active {
+      @apply text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400;
+    }
+  }
+
+  &__content {
+    @apply hidden py-[1.6rem];
+
+    &--active {
+      @apply block;
+    }
+  }
+
+  // Pills variant
+  &--pills {
+    .tabs__list {
+      @apply border-0 bg-grey-100 dark:bg-grey-800 rounded-lg p-[0.4rem] gap-0;
+    }
+
+    .tabs__trigger {
+      @apply border-0 rounded-lg;
+
+      &--active {
+        @apply bg-white dark:bg-grey-700 text-grey-900 dark:text-white shadow-sm;
+      }
+    }
+  }
+}

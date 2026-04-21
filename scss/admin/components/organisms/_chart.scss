@@ -1,0 +1,120 @@
+// ============================================================================
+// Chart Container Component
+// Using Tailwind utilities
+// ============================================================================
+
+.chart-container {
+  @apply bg-white dark:bg-grey-800 rounded-lg p-[2.4rem];
+  @apply border border-grey-200 dark:border-grey-700;
+
+  &__header {
+    @apply flex items-center justify-between mb-[2.4rem];
+  }
+
+  &__title {
+    @apply text-body font-semibold text-grey-900 dark:text-white;
+  }
+
+  &__legend {
+    @apply flex items-center gap-[1.6rem];
+  }
+
+  &__legend-item {
+    @apply flex items-center gap-[0.8rem] text-body-sm text-grey-600 dark:text-grey-400;
+
+    &::before {
+      @apply content-[''] w-[1.2rem] h-[1.2rem] rounded-full;
+    }
+
+    &--primary::before {
+      @apply bg-blue-500;
+    }
+
+    &--secondary::before {
+      @apply bg-emerald-500;
+    }
+
+    &--tertiary::before {
+      @apply bg-amber-500;
+    }
+  }
+
+  &__chart {
+    @apply w-full bg-gradient-to-b from-blue-600/10 dark:bg-gradient-to-b dark:from-grey-800/10 to-transparent rounded-md flex items-center justify-center text-grey-500 dark:text-grey-400;
+
+    // Default height when not in a constrained widget
+    @apply min-h-[28rem] h-[28rem];
+
+    & .chart-container__loading {
+      @apply text-center text-grey-500 py-8;
+
+      .dark & {
+        @apply text-grey-400;
+      }
+
+      & i,
+      & svg {
+        @apply w-12 h-12 mx-auto mb-4 opacity-50;
+      }
+    }
+  }
+}
+
+// ============================================================================
+// Traffic Chart (Preline ApexCharts)
+// ============================================================================
+.traffic-chart {
+  @apply flex flex-col p-[1.6rem] h-full;
+
+  &__summary {
+    @apply flex justify-center gap-[2.4rem] mb-[1.2rem];
+    @apply shrink-0;
+  }
+
+  &__stat {
+    @apply text-center;
+  }
+
+  &__stat-value {
+    @apply block text-body-xl font-bold text-grey-900 dark:text-white;
+  }
+
+  &__stat-label {
+    @apply block text-body-xs text-grey-500 dark:text-grey-400 mt-[0.2rem];
+  }
+
+  // ApexCharts container - fills remaining space
+  & > div[id^="traffic-chart-"] {
+    @apply w-full flex-1;
+    @apply min-h-0 relative;
+  }
+
+  // Chart element with min-height for ApexCharts
+  &__chart-element {
+    @apply min-h-[32rem] w-full;
+  }
+
+  // Tooltip date styling (for ApexCharts tooltip formatter)
+  &__tooltip-date {
+    @apply text-body-xs opacity-70;
+  }
+}
+
+// Chart range selector
+.chart-range {
+  @apply flex items-center gap-[0.2rem] p-[0.4rem] bg-grey-50/50 dark:bg-grey-800 rounded-md;
+
+  &__btn,
+  &__item {
+    @apply py-[0.6rem] px-[1.2rem] text-body-sm font-medium rounded-md;
+    @apply text-grey-600 dark:text-grey-400;
+    @apply hover:text-grey-900 dark:hover:text-white transition-colors;
+
+    // Active state - blue background with white text (matching button style)
+    &--active,
+    &.active {
+      @apply bg-blue-600 text-white shadow-sm;
+      @apply dark:bg-blue-500 dark:text-white;
+    }
+  }
+}

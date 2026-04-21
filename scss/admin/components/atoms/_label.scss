@@ -1,0 +1,17 @@
+// ============================================================================
+// Label Atom
+// Form label component - atomic element
+// ============================================================================
+
+.label {
+  @apply block text-body-xs font-medium mb-[0.8rem];
+  @apply text-grey-900;
+
+  .dark & {
+    @apply text-white;
+  }
+
+  &--required::after {
+    @apply content-['*'] ml-[0.4rem] text-red-500;
+  }
+}

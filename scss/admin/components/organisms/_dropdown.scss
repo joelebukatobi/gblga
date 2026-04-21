@@ -1,0 +1,189 @@
+// ============================================================================
+// Dropdown Component
+// Using Tailwind utilities - works with Preline hs-dropdown
+// ============================================================================
+
+// Preline dropdown wrapper
+.hs-dropdown {
+  @apply relative inline-flex;
+
+  & button {
+    @apply text-body-sm;
+  }
+
+  & svg {
+    @apply h-[.96rem] w-[.96rem] transition-transform duration-200 stroke-[1.5];
+  }
+
+  // Full-width variant for form dropdowns
+  &--full {
+    @apply w-full;
+  }
+
+  &--bottom-right {
+    --placement: bottom-right;
+  }
+}
+
+// Dropdown toggle chevron animation
+.dropdown__chevron {
+  .hs-dropdown.open & {
+    @apply rotate-180;
+  }
+}
+
+// Dropdown menu (Preline compatible)
+.dropdown__menu {
+  @apply transition-[opacity,margin] duration-200;
+  @apply opacity-0 hidden z-50;
+  @apply bg-white;
+  .dark & {
+    @apply bg-grey-900;
+  }
+  @apply shadow-lg rounded-md;
+  @apply border;
+  @apply border-grey-100;
+  .dark & {
+    @apply border-grey-700;
+  }
+  @apply absolute inset-auto top-full left-0 mt-[0.8rem] transform-none;
+  @apply p-[.4rem] w-auto space-y-[.4rem];
+  @apply max-h-[32rem] overflow-y-auto;
+
+  // Override inline styles from Preline JS (default: right-aligned)
+  &[style] {
+    position: absolute !important;
+    inset: auto !important;
+    top: 100% !important;
+    right: 0 !important;
+    margin-top: 0.8rem !important;
+    transform: none !important;
+  }
+
+  // Left-aligned dropdown (for Export/Import buttons)
+  &--left[style] {
+    right: auto !important;
+    left: 0 !important;
+  }
+
+  // Full-width variant for form dropdowns
+  &--full {
+    @apply w-full;
+  }
+
+  // Size variants
+  &--sm {
+    @apply min-w-[12rem] p-[0.6rem];
+  }
+
+  &--md {
+    @apply min-w-[16rem] p-[0.8rem];
+  }
+
+  &--lg {
+    @apply min-w-[24rem] p-[0.8rem];
+  }
+
+  &--wide {
+    @apply w-[32.0rem];
+  }
+}
+
+// Preline active state for dropdown menu
+.hs-dropdown.open .dropdown__menu {
+  @apply opacity-100 block;
+}
+
+// Dropdown item
+.dropdown__item {
+  @apply flex items-center gap-[.64rem] py-[.4rem] px-[.8rem] rounded-md text-body-sm w-full;
+  @apply text-grey-900;
+  .dark & {
+    @apply text-white;
+  }
+  @apply transition-colors duration-200;
+
+  svg,
+  i {
+    @apply h-[.96rem] w-[.96rem];
+  }
+
+  &:hover {
+    @apply bg-blue-600/10;
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+  }
+
+  // Description text within dropdown item
+  &-description {
+    @apply text-body-sm;
+  }
+
+  &--danger {
+    @apply text-red-600;
+
+    &:hover {
+      @apply bg-red-50;
+
+      .dark & {
+        @apply bg-red-900/20;
+      }
+    }
+
+    .dark & {
+      @apply text-red-400;
+    }
+  }
+
+  &--active {
+    @apply bg-grey-100;
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+  }
+}
+
+// Dropdown divider
+.dropdown__divider {
+  @apply my-[0.8rem] border-t;
+  @apply border-grey-100;
+  .dark & {
+    @apply border-grey-700;
+  }
+}
+
+// Preline Select toggle button active styles (when dropdown is open)
+.hs-select.active {
+  .form__input,
+  .form__select {
+    @apply outline-none ring-2 ring-blue-500/20 border-blue-500;
+  }
+}
+
+// Dropdown header (user info, etc.)
+.dropdown__header {
+  @apply px-[.8rem] py-[.8rem] mb-[.8rem];
+  @apply border-b;
+  @apply border-grey-100;
+  .dark & {
+    @apply border-grey-700;
+  }
+
+  &-name {
+    @apply text-body-sm font-semibold leading-tight mb-[.48rem];
+    @apply text-grey-900;
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &-email {
+    @apply text-body-xs leading-tight text-grey-500;
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+}

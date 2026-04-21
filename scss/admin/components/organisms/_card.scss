@@ -1,0 +1,420 @@
+// ============================================================================
+// Card Components - Consolidated (DRY/KISS/SOLID)
+// Base card, stat-card, quick-stat, and all card variants
+// ============================================================================
+
+// ============================================================================
+// Base Card
+// ============================================================================
+.card {
+  @apply bg-white rounded-lg border shadow-sm;
+  @apply border-grey-100;
+
+  .dark & {
+    @apply bg-grey-900 border-grey-700;
+  }
+
+  &__header {
+    @apply flex items-center justify-between p-[1.6rem];
+    @apply border-b border-grey-100;
+
+    .dark & {
+      @apply border-grey-700;
+    }
+
+    &-group {
+      @apply flex items-center gap-[1.2rem];
+    }
+
+    // Page section titles in card headers (new/edit forms, accordions)
+    & h2 {
+      @apply text-body font-semibold text-grey-900;
+
+      .dark & {
+        @apply text-white;
+      }
+    }
+
+    // Subtitle/paragraph in headers
+    & p {
+      @apply text-body-sm text-grey-500;
+
+      .dark & {
+        @apply text-grey-400;
+      }
+    }
+  }
+
+  &__title {
+    @apply text-body font-semibold text-grey-900;
+
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &__subtitle {
+    @apply mt-[0.4rem] text-body-xs text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  &__actions {
+    @apply flex items-center gap-[0.8rem];
+  }
+
+  &__icon-box {
+    @apply h-16 w-16 rounded-lg flex items-center justify-center shrink-0;
+
+    svg {
+      @apply h-8 w-8;
+    }
+
+    &--blue {
+      @apply bg-blue-600/10 text-blue-600;
+      .dark & {
+        @apply bg-blue-500/20 text-blue-400;
+      }
+    }
+
+    &--green {
+      @apply bg-green-600/10 text-green-600;
+      .dark & {
+        @apply bg-green-500/20 text-green-400;
+      }
+    }
+
+    &--red {
+      @apply bg-red-600/10 text-red-600;
+      .dark & {
+        @apply bg-red-500/20 text-red-400;
+      }
+    }
+
+    &--cyan {
+      @apply bg-cyan-600/10 text-cyan-600;
+      .dark & {
+        @apply bg-cyan-500/20 text-cyan-400;
+      }
+    }
+
+    &--purple {
+      @apply bg-purple-600/10 text-purple-600;
+      .dark & {
+        @apply bg-purple-500/20 text-purple-400;
+      }
+    }
+
+    &--grey {
+      @apply bg-grey-100 text-grey-400;
+      .dark & {
+        @apply bg-grey-800 text-grey-600;
+      }
+    }
+
+    &--lg {
+      @apply w-[6.4rem] h-[6.4rem];
+      svg {
+        @apply w-[3.2rem] h-[3.2rem];
+      }
+    }
+  }
+
+  &__body {
+    @apply p-[2.4rem];
+  }
+
+  &__footer {
+    @apply px-[2.4rem] py-[1.6rem] border-t border-grey-100;
+
+    .dark & {
+      @apply border-grey-700;
+    }
+  }
+
+  &__panel {
+    @apply p-[1.6rem]; // Compact padding for media sidebars
+  }
+
+  // ============================================================================
+  // Accordion Card (Settings page)
+  // ============================================================================
+  &--accordion {
+    @apply overflow-hidden;
+  }
+
+  &__header--accordion {
+    @apply cursor-pointer select-none;
+    @apply transition-colors duration-200;
+
+    &:hover {
+      @apply bg-blue-600/10;
+
+      .dark & {
+        @apply bg-blue-500/10;
+      }
+    }
+  }
+
+  &__header-actions {
+    @apply flex items-center gap-[1.2rem];
+
+    // Hide save button when card is collapsed
+    .card--collapsed & {
+      .btn {
+        @apply hidden;
+      }
+    }
+  }
+
+  &__info {
+    & h2 {
+      @apply text-body font-semibold text-grey-900;
+
+      .dark & {
+        @apply text-white;
+      }
+    }
+
+    & p {
+      @apply text-body-sm text-grey-500;
+
+      .dark & {
+        @apply text-grey-400;
+      }
+    }
+  }
+
+  &__accordion-icon {
+    @apply flex items-center justify-center;
+    @apply w-[3.2rem] h-[3.2rem];
+    @apply text-grey-400;
+    @apply transition-transform duration-300 ease-in-out;
+
+    .dark & {
+      @apply text-grey-500;
+    }
+
+    svg {
+      @apply w-[2rem] h-[2rem];
+    }
+  }
+
+  &__body--accordion {
+    @apply transition-all duration-300 ease-in-out;
+    @apply max-h-[200rem];
+    @apply opacity-100;
+    @apply overflow-hidden;
+  }
+
+  // Collapsed state
+  &--collapsed {
+    .card__body--accordion {
+      @apply max-h-0;
+      @apply opacity-0;
+      @apply p-0;
+    }
+
+    .card__accordion-icon {
+      @apply rotate-180;
+    }
+  }
+}
+
+// ============================================================================
+// Quick Stat Card (Dashboard stats)
+// ============================================================================
+.quick-stat {
+  @apply bg-white rounded-lg shadow-sm;
+  @apply border border-grey-100/50;
+  @apply flex flex-col h-full p-[1.6rem];
+
+  .dark & {
+    @apply bg-grey-900 border-grey-800;
+  }
+
+  &__icon {
+    @apply shrink-0 flex items-center justify-center rounded-md;
+    @apply size-[4.4rem];
+
+    svg {
+      @apply h-8 w-8 stroke-1;
+    }
+
+    &--posts,
+    &--views,
+    &--comments,
+    &--users {
+      @apply bg-blue-100 text-blue-600;
+
+      .dark & {
+        @apply bg-white/10 text-white;
+      }
+    }
+
+    &--views {
+      @apply bg-emerald-100 text-emerald-600;
+    }
+
+    &--comments {
+      @apply bg-amber-100 text-amber-600;
+    }
+
+    &--users {
+      @apply bg-purple-100 text-purple-600;
+    }
+  }
+
+  &__content {
+    @apply mt-[1.6rem];
+  }
+
+  &__label {
+    @apply block text-body-sm font-bold lg:font-medium uppercase tracking-wide;
+  }
+
+  &__value {
+    @apply block text-body-xl font-bold mt-[0.4rem] leading-none;
+  }
+
+  &__change {
+    @apply inline-flex items-center gap-[0.4rem] text-body-xs lg:text-body font-bold lg:font-medium mt-[0.8rem];
+
+    svg {
+      @apply w-[1.4rem] h-[1.4rem] stroke-1;
+    }
+
+    &--up {
+      @apply text-emerald-600;
+
+      .dark & {
+        @apply text-emerald-400;
+      }
+    }
+
+    &--down {
+      @apply text-red-600;
+
+      .dark & {
+        @apply text-red-400;
+      }
+    }
+  }
+}
+
+// Quick stats grid
+.quick-stats {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-[1.6rem] mb-[2.4rem];
+}
+
+// ============================================================================
+// Media Card (for image/video grid)
+// ============================================================================
+// .media-card {
+//   @apply relative bg-white rounded-lg overflow-hidden;
+//   @apply border border-grey-200 shadow-sm;
+//   @apply transition-all duration-200;
+
+//   .dark & {
+//     @apply bg-grey-900 border-grey-700;
+//   }
+
+//   &:hover {
+//     @apply shadow-md border-grey-300;
+
+//     .dark & {
+//       @apply border-grey-600;
+//     }
+
+//     .media-card__actions {
+//       @apply opacity-100;
+//     }
+//   }
+
+//   &__tag {
+//     @apply absolute top-[0.8rem] left-[0.8rem] z-10;
+//     @apply px-[0.8rem] py-[0.4rem];
+//     @apply text-xs font-medium rounded-full;
+//     @apply bg-blue-100 text-blue-700;
+
+//     .dark & {
+//       @apply bg-blue-900/50 text-blue-400;
+//     }
+//   }
+
+//   &__thumbnail {
+//     @apply relative aspect-square overflow-hidden bg-grey-100;
+
+//     .dark & {
+//       @apply bg-grey-800;
+//     }
+
+//     img {
+//       @apply w-full h-full object-cover;
+//       @apply transition-transform duration-300;
+//     }
+
+//     &:hover img {
+//       @apply scale-105;
+//     }
+//   }
+
+//   &__actions {
+//     @apply absolute inset-0 flex items-center justify-center gap-[0.8rem];
+//     @apply bg-black/50 opacity-0;
+//     @apply transition-opacity duration-200;
+//   }
+
+//   &__action-btn {
+//     @apply flex items-center justify-center;
+//     @apply w-[3.2rem] h-[3.2rem] rounded-full;
+//     @apply bg-white text-grey-700;
+//     @apply transition-all duration-200;
+//     @apply hover:bg-grey-100 hover:scale-110;
+
+//     .dark & {
+//       @apply bg-grey-800 text-grey-200;
+//       @apply hover:bg-grey-700;
+//     }
+
+//     &--delete {
+//       @apply hover:bg-red-100 hover:text-red-600;
+
+//       .dark & {
+//         @apply hover:bg-red-900/50 hover:text-red-400;
+//       }
+//     }
+
+//     svg {
+//       @apply w-[1.6rem] h-[1.6rem];
+//     }
+//   }
+
+//   &__details {
+//     @apply p-[1.2rem];
+//   }
+
+//   &__title {
+//     @apply text-sm font-medium text-grey-900 truncate;
+
+//     .dark & {
+//       @apply text-white;
+//     }
+//   }
+
+//   &__meta {
+//     @apply mt-[0.4rem] text-xs text-grey-500;
+
+//     .dark & {
+//       @apply text-grey-400;
+//     }
+//   }
+// }
+
+// // Media Grid
+// .media-grid {
+//   @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-[1.6rem];
+// }
+

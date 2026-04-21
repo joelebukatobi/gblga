@@ -1,0 +1,80 @@
+// ============================================================================
+// Organism · Footer
+// ============================================================================
+
+.site-footer {
+  @apply text-maroon;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] pt-[6.4rem] pb-[3.2rem];
+  }
+
+  &__top {
+    @apply grid gap-[4.8rem] items-start;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  }
+
+  &__brand {
+    @apply flex flex-col;
+  }
+
+  &__logo {
+    @apply inline-flex;
+
+    .logo__image {
+      @apply h-[6rem] w-auto;
+    }
+  }
+
+  &__column {
+    @apply flex flex-col gap-[1.6rem];
+  }
+
+  &__column-title {
+    @apply text-[1.6rem] font-forum text-maroon m-0 font-semibold;
+  }
+
+  &__column-list {
+    @apply flex flex-col gap-[0.8rem] list-none m-0 p-0;
+
+    li {
+      @apply list-none;
+    }
+  }
+
+  &__column-link {
+    @apply text-[1.4rem] font-lato text-maroon/80 no-underline transition-colors duration-200;
+
+    &:hover {
+      @apply text-maroon;
+    }
+  }
+
+  &__divider {
+    @apply w-full border-0 border-t-[0.1rem] border-maroon/20 my-[3.2rem] mb-[2.0rem];
+  }
+
+  &__bottom {
+    @apply flex items-center justify-center gap-[2.4rem];
+  }
+
+  &__social {
+    @apply flex items-center gap-[1.6rem] list-none m-0 p-0;
+
+    li {
+      @apply list-none;
+    }
+  }
+
+  &__social-link {
+    @apply flex items-center justify-center w-[4rem] h-[4rem] text-maroon/80 transition-colors duration-200;
+
+    &:hover {
+      @apply text-maroon;
+    }
+
+    i {
+      @apply text-[2.4rem];
+    }
+  }
+}

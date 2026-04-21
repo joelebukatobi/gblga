@@ -1,0 +1,100 @@
+// ============================================================================
+// Base Styles - Minimal resets that Tailwind preflight doesn't cover
+// ============================================================================
+
+// Focus visible for accessibility
+:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+:focus:not(:focus-visible) {
+  @apply outline-none ring-0;
+}
+
+// Selection
+::selection {
+  @apply bg-blue-200 text-blue-900;
+}
+
+.dark ::selection {
+  @apply bg-blue-700 text-blue-100;
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-grey-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-grey-300 rounded-full hover:bg-grey-400;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-grey-800;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-grey-600 hover:bg-grey-500;
+}
+
+// Hide scrollbars on mobile for cleaner UI
+@media (max-width: 1023px) {
+  ::-webkit-scrollbar {
+    @apply hidden w-0 h-0;
+  }
+
+  * {
+    @apply scrollbar-hide;
+  }
+}
+
+html {
+  // box-sizing: border-box; // Handled by Tailwind preflight
+  @apply h-full text-[62.5%]; // 1rem = 10px (Default for < 1536px)
+
+  // Desktop: prevent body scroll, app handles scrolling
+  @media (min-width: 1024px) {
+    @apply overflow-hidden;
+  }
+
+  // Standard laptops/desktops
+  @media (min-width: 1440px) {
+    @apply text-[87.5%]; // 1rem = 14px
+  }
+
+  // Large screens with HiDPI (accounting for 150% system scaling)
+  // @media (min-width: 1700px) {
+  //   font-size: 150%; // 1rem = 24px
+  // }
+}
+
+body {
+  @apply h-full max-w-[100vw];
+  @apply bg-white;
+
+  // Desktop: prevent body scroll, app handles scrolling
+  @media (min-width: 1024px) {
+    @apply overflow-hidden;
+  }
+
+  .dark & {
+    @apply bg-grey-900;
+  }
+}
+
+// ============================================================================
+// HTMX Loading Indicators
+// ============================================================================
+
+.htmx-indicator {
+  @apply hidden;
+}
+
+.htmx-request .htmx-indicator,
+.htmx-indicator.htmx-request {
+  @apply inline-block;
+}

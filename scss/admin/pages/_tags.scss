@@ -1,0 +1,45 @@
+// ============================================================================
+// Tags Page Styles
+// ============================================================================
+
+.tags {
+  .table__tbody {
+    .table__td {
+      &:nth-child(2) {
+        & > div {
+          @apply text-body-sm text-grey-600;
+
+          .dark & {
+            @apply text-grey-400;
+          }
+        }
+      }
+
+      &:nth-child(3) {
+        & > div {
+          @apply text-body-sm text-grey-700;
+
+          .dark & {
+            @apply text-grey-300;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  .tags__table-content {
+    @apply overflow-x-auto;
+
+    .table {
+      .table__tr {
+        @apply mb-[1.6rem] rounded-lg;
+      }
+
+      .table__tbody {
+        @apply mb-[1.6rem];
+      }
+    }
+  }
+}

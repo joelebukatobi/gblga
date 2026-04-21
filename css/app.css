@@ -1,0 +1,11 @@
+/*
+ * Public App CSS Entry Point
+ * Tailwind CSS v4 + compiled app SCSS components
+ */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "./theme.css";
+@import "../.build/app.css";

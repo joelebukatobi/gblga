@@ -1,0 +1,16 @@
+// ============================================================================
+// GBLGA Typography
+// ============================================================================
+
+.gblga {
+  @apply text-[1.6rem] leading-[1.6] bg-cream;
+}
+
+.gblga h1,
+.gblga h2,
+.gblga h3,
+.gblga h4,
+.gblga h5,
+.gblga h6 {
+  @apply font-normal tracking-[0.02em];
+}

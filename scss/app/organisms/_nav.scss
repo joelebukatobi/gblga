@@ -1,0 +1,83 @@
+// ============================================================================
+// Organism · Top Navigation
+// ============================================================================
+
+.site-nav {
+  @apply fixed left-0 right-0 mx-auto bg-cream/95 text-black rounded-[0.4rem] z-50 transition-all duration-300;
+  top: 4.8rem;
+  max-width: var(--max-width);
+
+  &--scrolled {
+    @apply bg-cream shadow-lg rounded-none;
+    top: 0;
+  }
+
+  &__inner {
+    @apply flex items-center justify-between h-[7.2rem] px-[3.2rem];
+  }
+
+  &__brand {
+    @apply inline-flex items-center gap-[1.2rem] no-underline;
+
+    .logo__image {
+      @apply h-[4rem] w-auto;
+    }
+  }
+
+  &__center {
+    @apply flex items-center;
+  }
+
+  &__links {
+    @apply flex items-center gap-[0.8rem] list-none m-0 p-0;
+  }
+
+  &__item {
+    @apply list-none;
+  }
+
+  // All nav links - same style
+  &__link {
+    @apply relative px-[1.6rem] py-[0.8rem] text-[1.6rem] font-lato text-black no-underline transition-colors duration-200;
+
+    &:hover,
+    &--active,
+    &[aria-current='page'] {
+      @apply text-plum;
+    }
+
+    &--active,
+    &[aria-current='page'] {
+      @apply font-semibold;
+
+      &::after {
+        @apply absolute bottom-0 left-[1.6rem] right-[1.6rem] h-[0.2rem] bg-plum;
+        content: '';
+      }
+    }
+  }
+
+  &__end {
+    @apply flex items-center gap-[2.0rem];
+  }
+
+  &__utilities {
+    @apply flex items-center gap-[1.2rem];
+  }
+
+  &__utility-btn {
+    @apply w-[4rem] h-[4rem] flex items-center justify-center bg-transparent border-0 text-black cursor-pointer transition-colors duration-200;
+
+    &:hover {
+      @apply text-plum;
+    }
+
+    i {
+      @apply text-[2rem];
+    }
+  }
+
+  &__lang {
+    @apply text-[1.4rem] font-lato text-black;
+  }
+}

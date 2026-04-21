@@ -1,0 +1,387 @@
+// ============================================================================
+// Widgets Components - Fully Refactored (DRY/KISS/SOLID)
+// Reusable widget/list components for dashboard
+// ============================================================================
+
+// ==================================================
+// WIDGET CONTAINER
+// ==================================================
+.widget {
+  @apply bg-white rounded-lg shadow-sm;
+  @apply border border-grey-100/50;
+  @apply flex flex-col h-full overflow-hidden;
+
+  .dark & {
+    @apply bg-grey-900 border-grey-800;
+  }
+
+  &--flush .widget__body {
+    @apply px-0 pb-0;
+  }
+
+  // Recent Activity: Fill the fixed height container
+  &--recent-activity {
+    @apply h-full;
+
+    .chart-container__chart {
+      @apply min-h-auto h-auto;
+    }
+  }
+
+  // Traffic Overview: Fill the grid row to match Recent Activity
+  &--traffic-overview {
+    @apply h-full;
+  }
+
+  &__link {
+    @apply font-medium text-blue-600 hover:text-blue-700 dark:text-grey-400 dark:hover:text-white;
+    @apply inline-flex items-center gap-[0.4rem];
+  }
+
+  &__header {
+    @apply flex items-center justify-between px-[1.6rem] pt-[1.6rem];
+  }
+
+  &__title {
+    @apply font-semibold leading-tight;
+  }
+
+  &__subtitle {
+    @apply font-normal;
+  }
+
+  &__actions {
+    @apply flex items-center gap-[0.8rem];
+  }
+
+  &__body {
+    @apply px-[1.6rem] pb-[1.6rem] flex-1;
+
+    // Empty state within widget (dashboard widgets)
+    > .empty {
+      @apply text-center py-8;
+
+      > p {
+        @apply text-grey-500;
+
+        .dark & {
+          @apply text-grey-400;
+        }
+      }
+    }
+  }
+
+  &__footer {
+    @apply px-[1.6rem] py-[1.6rem] border-t border-grey-100;
+    @apply bg-grey-50;
+
+    .dark & {
+      @apply border-grey-700 bg-grey-800/50;
+    }
+  }
+
+  // Traffic Overview mobile layout
+  @media (max-width: 640px) {
+    .widget__header--traffic {
+      @apply flex-col items-start gap-2;
+
+      .widget__title,
+      .widget__subtitle {
+        @apply text-left w-full;
+      }
+
+      .chart-range {
+        @apply mt-2 w-full justify-start;
+      }
+    }
+  }
+}
+
+// ==================================================
+// TIMELINE
+// ==================================================
+.activity-timeline {
+  // @apply space-between;
+  @apply h-full flex flex-col justify-between;
+
+  &__item {
+    @apply flex items-start gap-[1.2rem];
+  }
+
+  &__dot {
+    @apply shrink-0 flex items-center justify-center rounded-full;
+    @apply size-[3.2rem];
+    @apply mt-[0.2rem];
+
+    svg {
+      @apply w-[1.6rem] h-[1.6rem] stroke-1;
+    }
+
+    &--post,
+    &--comment,
+    &--user {
+      @apply bg-blue-100 text-blue-600;
+
+      .dark & {
+        @apply bg-white/10 text-white;
+      }
+    }
+
+    &--comment {
+      @apply bg-emerald-100 text-emerald-600;
+    }
+
+    &--user {
+      @apply bg-purple-100 text-purple-600;
+    }
+
+    &--subscriber {
+      @apply bg-orange-100 text-orange-600;
+
+      .dark & {
+        @apply bg-white/10 text-white;
+      }
+    }
+  }
+
+  &__content {
+    @apply flex-1 min-w-0 pt-[0.2rem] flex flex-col gap-[0.4rem];
+  }
+
+  &__text {
+    @apply text-body-lg lg:text-body leading-tight;
+    @apply m-0;
+
+    strong {
+      @apply font-semibold;
+    }
+
+    a {
+      @apply hover:underline;
+      @apply text-blue-600;
+
+      .dark & {
+        @apply text-white;
+      }
+    }
+  }
+
+  &__time {
+    @apply text-body-sm;
+    @apply m-0;
+  }
+}
+
+// ==================================================
+// ACTIVITY LIST
+// ==================================================
+.activity-list {
+  @apply divide-y divide-grey-100;
+
+  .dark & {
+    @apply divide-grey-700;
+  }
+
+  &__item {
+    @apply flex items-start gap-[1.6rem] py-[1.6rem] first:pt-0 last:pb-0;
+  }
+
+  &__icon {
+    @apply shrink-0 flex items-center justify-center rounded-full;
+    @apply size-16;
+
+    svg {
+      @apply size-8;
+    }
+
+    &--post {
+      @apply bg-blue-100 text-blue-600;
+
+      .dark & {
+        @apply bg-white/10 text-white;
+      }
+    }
+
+    &--comment {
+      @apply bg-emerald-100 text-emerald-600;
+
+      .dark & {
+        @apply bg-emerald-900/30 text-emerald-400;
+      }
+    }
+
+    &--user {
+      @apply bg-purple-100 text-purple-600;
+
+      .dark & {
+        @apply bg-purple-900/30 text-purple-400;
+      }
+    }
+  }
+
+  &__content {
+    @apply flex-1 min-w-0;
+  }
+
+  &__title {
+    @apply text-body-lg lg:text-body;
+  }
+
+  &__desc {
+    @apply text-body truncate;
+  }
+
+  &__time {
+    @apply text-body-sm;
+  }
+}
+
+// ==================================================
+// RANKED LIST
+// ==================================================
+.top-list {
+  @apply space-y-[0.8rem];
+
+  // Container padding when inside widget--flush (matches header padding)
+  .widget--flush & {
+    @apply px-[1.6rem] pb-8;
+  }
+
+  &__item {
+    @apply flex flex-col justify-between gap-[1.2rem] rounded-lg px-[1.2rem] py-4 lg:flex-row lg:items-start;
+    @apply bg-blue-600/5;
+
+    .dark & {
+      @apply bg-grey-800/50;
+    }
+  }
+
+  &__item {
+    & > div:first-child {
+      @apply flex items-start gap-[1.2rem];
+
+      & > div {
+        @apply flex-1 min-w-0 flex flex-col;
+
+        & h6 {
+          @apply text-body-sm lg:text-body m-0;
+        }
+
+        & span {
+          @apply text-body-sm truncate m-0;
+        }
+      }
+    }
+
+    & > div:last-child {
+      @apply ml-16 flex items-start lg:ml-auto lg:justify-end lg:gap-[1.2rem];
+
+      & > span:first-child {
+        @apply shrink-0 text-body-sm font-semibold tabular-nums lg:text-right;
+        @apply text-grey-900 min-w-[3.5rem];
+
+        .dark & {
+          @apply text-white;
+        }
+      }
+    }
+  }
+
+  &__rank {
+    @apply shrink-0 flex h-[2.8rem] w-[2.8rem] items-center justify-center rounded-full;
+    @apply text-body font-bold;
+    @apply bg-blue-600 text-white;
+
+    .dark & {
+      @apply bg-blue-500 text-white;
+    }
+  }
+
+  &__change {
+    @apply shrink-0 flex items-center gap-[0.2rem] text-body-xs font-medium tabular-nums;
+    @apply min-w-12;
+
+    svg {
+      @apply w-[1.2rem] h-[1.2rem];
+    }
+
+    &--up {
+      @apply text-emerald-600;
+
+      .dark & {
+        @apply text-emerald-400;
+      }
+    }
+
+    &--down {
+      @apply text-red-600;
+
+      .dark & {
+        @apply text-red-400;
+      }
+    }
+  }
+}
+
+// ==================================================
+// MEDIA LIST
+// ==================================================
+.recent-posts {
+  @apply divide-y divide-grey-100;
+
+  .dark & {
+    @apply divide-grey-700;
+  }
+
+  // Container padding when inside widget--flush (matches header padding)
+  .widget--flush & {
+    @apply px-[1.6rem] pb-8;
+  }
+
+  &__item {
+    @apply flex items-start gap-[1.6rem] py-[1.2rem];
+
+    &:first-child {
+      @apply pt-0;
+    }
+
+    &:last-child {
+      @apply pb-0;
+    }
+  }
+
+  &__image {
+    @apply shrink-0 h-12 w-16 overflow-hidden rounded-lg;
+    @apply bg-grey-100;
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+
+    img {
+      @apply w-full h-full object-cover;
+    }
+  }
+
+  &__content {
+    @apply flex-1 min-w-0;
+  }
+
+  &__title {
+    @apply text-body-sm lg:text-body;
+  }
+
+  &__meta {
+    @apply flex  items-center gap-[0.4rem];
+    @apply text-body-sm;
+
+    span {
+      @apply inline-block;
+    
+    }
+  }
+
+  &__status {
+    @apply shrink-0 ml-auto;
+  }
+}

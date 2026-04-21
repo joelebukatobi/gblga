@@ -1,0 +1,572 @@
+// ============================================================================
+// Form Component - Refactored (DRY/KISS/SOLID)
+// Using maximum Tailwind utilities
+// Molecules handle layout only - atoms define appearance
+// ============================================================================
+
+.form {
+  // [UNUSED - COMMENTED OUT] Form container with max-width constraint
+  // &__container {
+  //   @apply max-w-lg;
+  // }
+
+  // [UNUSED - COMMENTED OUT] Form with vertical spacing between groups
+  // &--spaced {
+  //   @apply space-y-6;
+  //
+  //   // Override default margin on groups since we're using space-y
+  //   .form__group {
+  //     @apply mb-0;
+  //   }
+  // }
+
+  // Form Group - Layout container for label + input + feedback
+  &__group {
+    @apply mb-[1.6rem];
+
+    // Layout within group
+    .label {
+      @apply block;
+    }
+
+    .input,
+    .select,
+    textarea,
+    .textarea {
+      @apply w-full;
+    }
+
+    // Error state modifier
+    &--error {
+      .input,
+      .select,
+      textarea,
+      .textarea {
+        @apply border-red-500 bg-red-50;
+
+        &:focus {
+          @apply ring-red-500/20;
+        }
+
+        .dark & {
+          @apply border-red-500 bg-red-900/10;
+        }
+      }
+    }
+
+    // Spacing modifier for additional top margin
+    &--spaced {
+      @apply mt-[1.6rem];
+    }
+
+    &--tight {
+      @apply mb-0 mt-6;
+    }
+  }
+
+  // Input wrapper for icons/addons (positioning only)
+  &__wrapper {
+    @apply relative flex items-center;
+
+    .input__icon {
+      @apply absolute top-1/2 -translate-y-1/2;
+    }
+  }
+
+  // Form Row Layouts (grid variants)
+  &__row {
+    @apply grid gap-[1.6rem] mb-[1.6rem];
+
+    &--2col {
+      @apply grid-cols-1 md:grid-cols-2;
+    }
+
+    &--3col {
+      @apply grid-cols-1 md:grid-cols-3;
+    }
+  }
+
+  &__stack {
+    @apply flex flex-col gap-[1.2rem];
+  }
+
+  &__divider {
+    @apply w-full border-t border-grey-50 my-[2.4rem];
+    .dark & {
+      @apply border-grey-700;
+    }
+
+    &--sm {
+      @apply my-[0.8rem];
+    }
+  }
+
+  // Info Box
+  &__info-box {
+    @apply p-[1.6rem] bg-blue-600/5 mb-[1.6rem] rounded-md;
+    .dark & {
+      @apply bg-blue-500/20;
+    }
+
+    &-title {
+      @apply text-body-sm font-semibold text-grey-900 pb-[1.2rem] mb-0 border-b border-grey-100;
+      .dark & {
+        @apply text-white border-grey-500;
+      }
+
+      &--mb {
+        @apply mb-[1.6rem];
+      }
+    }
+
+    & .card__title {
+      @apply text-body-sm lg:text-body;
+    }
+
+    & p {
+      @apply text-body-sm text-grey-600;
+
+      .dark & {
+        @apply text-grey-400;
+      }
+    }
+  }
+
+  // [UNUSED - COMMENTED OUT]
+  // &__list-divided {
+  //   @apply divide-y divide-grey-100;
+  //   .dark & {
+  //     @apply divide-grey-500;
+  //   }
+  //
+  //   & > * {
+  //     @apply py-[0.8rem];
+  //     &:first-child {
+  //       @apply pt-[1.2rem];
+  //     }
+  //     &:last-child {
+  //       @apply pb-0;
+  //     }
+  //   }
+  // }
+
+  &__details-list {
+    @apply flex flex-col text-body-sm;
+  }
+
+  &__details-item {
+    @apply flex justify-between;
+
+    &-label {
+      @apply text-grey-500;
+      .dark & {
+        @apply text-grey-400;
+      }
+    }
+
+    &-value {
+      @apply font-medium text-grey-900;
+      .dark & {
+        @apply text-white;
+      }
+
+      &--success {
+        @apply text-green-600;
+        .dark & {
+          @apply text-green-400;
+        }
+      }
+
+      &--warning {
+        @apply text-amber-600;
+        .dark & {
+          @apply text-amber-400;
+        }
+      }
+
+      &--danger {
+        @apply text-red-600;
+        .dark & {
+          @apply text-red-400;
+        }
+      }
+    }
+  }
+
+  &__field-group {
+    @apply flex items-center gap-[1.6rem];
+  }
+
+  &__avatar-group {
+    @apply flex items-center gap-[1.6rem];
+
+    &--centered {
+      @apply flex-col items-center;
+
+      .form__avatar-actions {
+        @apply text-center;
+
+        .btn {
+          @apply mb-[0.8rem];
+        }
+      }
+    }
+  }
+
+  &__avatar-preview {
+    img {
+      @apply w-[12rem] h-[12rem] rounded-full object-cover;
+    }
+  }
+
+  &__avatar-placeholder {
+    @apply w-[12rem] h-[12rem] rounded-full bg-grey-200 flex items-center justify-center;
+
+    img {
+      @apply w-full h-full rounded-full object-cover;
+    }
+
+    svg, i {
+      @apply w-[4.8rem] h-[4.8rem] text-grey-400;
+    }
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+  }
+
+  &__select-native {
+    @apply hidden;
+  }
+
+  // [UNUSED - COMMENTED OUT]
+  // &__item-group {
+  //   @apply flex items-center gap-[1.2rem];
+  // }
+
+  // [UNUSED - COMMENTED OUT] Control groups for checkboxes/radios
+  // &__control-group {
+  //   @apply flex items-center gap-[1.2rem] cursor-pointer;
+  // }
+  //
+  // &__check-group {
+  //   @apply flex items-center gap-[1.2rem] cursor-pointer;
+  // }
+  //
+  // &__check-label {
+  //   @apply text-body-sm text-grey-700;
+  //   .dark & {
+  //     @apply text-grey-300;
+  //   }
+  // }
+
+  // Checkbox wrapper for label + input + text pattern
+  &__checkbox-wrapper {
+    @apply flex items-center gap-3 cursor-pointer;
+
+    & > span {
+      @apply text-body-sm text-grey-600;
+
+      .dark & {
+        @apply text-grey-400;
+      }
+    }
+  }
+
+  // Form hint text (e.g., file requirements)
+  &__hint {
+    @apply block mt-[0.8rem] text-body-sm text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  // Role hints with color-coded text
+  &__role-hints {
+    @apply text-body-sm;
+
+    & strong {
+      @apply font-semibold;
+
+      &:nth-of-type(1) {
+        @apply text-blue-600;
+      }
+
+      &:nth-of-type(2) {
+        @apply text-purple-600;
+      }
+
+      &:nth-of-type(3) {
+        @apply text-cyan-600;
+      }
+
+      &:nth-of-type(4) {
+        @apply text-amber-600;
+      }
+    }
+  }
+
+  // Preline Select Custom Classes
+  // [UNUSED - COMMENTED OUT] Base class only - variants still used
+  // &__select {
+  //   @apply w-full flex items-center justify-between;
+  // }
+
+  &__select-toggle {
+    @apply hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative w-full flex items-center justify-between cursor-pointer px-[1.2rem] bg-white border border-grey-100/50 text-body-sm text-grey-900 hover:border-grey-300 focus:outline-none dark:bg-grey-900 dark:border-grey-800 dark:text-white dark:hover:border-grey-600 h-[3.2rem] rounded-md;
+  }
+
+  &__select-dropdown {
+    @apply mt-[0.8rem] z-50 w-full max-h-56 bg-white border border-grey-100 shadow-lg overflow-y-auto p-[0.4rem] rounded-md dark:bg-grey-900 dark:border-grey-700;
+  }
+
+  &__select-search {
+    @apply sticky top-0 p-[0.8rem] bg-white border-b border-grey-100 mb-[0.4rem];
+
+    &__input {
+      @apply w-full;
+      @apply text-body-sm placeholder:text-body-sm;
+      @apply bg-white text-grey-900 placeholder-grey-400;
+      @apply border border-grey-100/50 rounded-md;
+      @apply outline-none;
+      @apply transition-all duration-200;
+      @apply h-[3.2rem] px-[1.2rem];
+
+      &:focus {
+        @apply border-blue-600 ring-2 ring-blue-600/20;
+      }
+
+      .dark & {
+        @apply bg-grey-900 text-white placeholder-grey-500;
+        @apply border-grey-700;
+
+        &:focus {
+          @apply border-blue-600 ring-blue-600/20;
+        }
+      }
+    }
+  }
+
+  &__select-option {
+    @apply py-[0.64rem] px-[0.8rem] mb-[0.4rem] w-full text-body-sm text-grey-900 cursor-pointer transition-all duration-200 border-0 rounded-md focus:outline-none hs-selected:bg-blue-600/10 hs-selected:border-0 dark:text-white dark:hs-selected:bg-grey-700/50;
+
+    &:last-child {
+      @apply mb-0;
+    }
+  }
+
+  // [UNUSED - COMMENTED OUT] Horizontal Divider
+  // &__hr {
+  //   @apply border-grey-50 my-6;
+  //
+  //   .dark & {
+  //     @apply border-grey-700;
+  //   }
+  // }
+
+  // [UNUSED - COMMENTED OUT] Form Actions (for sticky save buttons)
+  // &__actions {
+  //   @apply flex items-center gap-[1.6rem];
+  //
+  //   &--sticky {
+  //     @apply sticky bottom-0;
+  //     @apply bg-white dark:bg-grey-900;
+  //     @apply border-t border-grey-100 dark:border-grey-700;
+  //     @apply py-[1.6rem] px-0;
+  //     @apply z-10;
+  //   }
+  // }
+}
+
+// Image Upload Component
+.image-upload {
+  @apply flex flex-col gap-[1.2rem];
+
+  &__dropzone {
+    @apply border border-dashed border-grey-100/50 rounded-md;
+    @apply py-[3.2rem] px-[2rem] text-center cursor-pointer;
+    @apply transition-all duration-200;
+    @apply bg-grey-50;
+
+    &:hover {
+      @apply border-blue-500 bg-blue-50;
+    }
+
+    &.dragover {
+      @apply border-blue-500 bg-blue-100;
+    }
+
+    .dark & {
+      @apply bg-grey-800 border-grey-600;
+
+      &:hover {
+        @apply border-blue-400 bg-grey-700;
+      }
+    }
+
+    &--overlay {
+      @apply absolute inset-0;
+      @apply bg-black/60;
+      @apply flex flex-col items-center justify-center;
+      @apply border-0;
+      @apply opacity-0;
+      @apply transition-opacity duration-200;
+
+      &:hover {
+        @apply opacity-100 bg-black/60;
+      }
+
+      &.dragover {
+        @apply opacity-100 bg-black/70;
+      }
+
+      .dark & {
+        @apply bg-grey-900/40;
+
+        &:hover {
+          @apply bg-grey-900/40;
+        }
+
+        &.dragover {
+          @apply bg-grey-900/50;
+        }
+      }
+
+      .image-upload__icon,
+      .image-upload__text,
+      .image-upload__hint {
+        @apply text-white;
+
+        .dark & {
+          @apply text-white;
+        }
+      }
+
+      .image-upload__hint {
+        @apply text-white/70;
+      }
+    }
+  }
+
+  &__icon {
+    @apply w-[4.8rem] h-[4.8rem] mx-auto mb-[1.2rem] text-grey-500 stroke-1;
+  }
+
+  &__text {
+    @apply text-body-sm text-grey-600 mb-[0.4rem];
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  &__hint {
+    @apply text-body-xs text-grey-400;
+
+    .dark & {
+      @apply text-grey-500;
+    }
+  }
+
+  &__preview {
+    @apply hidden relative rounded-md overflow-hidden max-w-full aspect-[32/9] max-h-[16rem];
+    @apply bg-grey-100;
+
+    &.has-image {
+      @apply block;
+    }
+
+    img {
+      @apply w-full h-full object-cover;
+    }
+
+    .dark & {
+      @apply bg-grey-800;
+    }
+  }
+
+  &__remove {
+    @apply absolute top-[0.8rem] right-[0.8rem];
+    @apply w-[3.2rem] h-[3.2rem] rounded-full;
+    @apply bg-black/60 text-white border-none cursor-pointer;
+    @apply flex items-center justify-center;
+    @apply transition-colors duration-200;
+
+    &:hover {
+      @apply bg-red-500;
+    }
+  }
+}
+
+// CKEditor Styling
+.ck-editor {
+  &__editable {
+    min-height: 240px !important;
+  }
+}
+
+.ck {
+  &.ck-toolbar {
+    .ck-toolbar__items {
+      .ck-button {
+        .ck-icon {
+          width: 1.2rem !important;
+          height: 1.2rem !important;
+        }
+      }
+    }
+  }
+}
+
+// Lighter dropdown chevron (appears thinner)
+.ck.ck-dropdown.ck-heading-dropdown {
+  .ck-dropdown__arrow {
+    opacity: 0.5 !important;
+  }
+}
+
+.dark {
+  .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+    border: 1px solid #404040 !important;
+    border-bottom: 1px solid #404040 !important;
+  }
+
+  .ck {
+    &.ck-editor__main {
+      .ck-editor__editable {
+        background-color: #1e1e1e !important;
+        color: #ffffff !important;
+        border-color: #404040 !important;
+      }
+    }
+
+    &.ck-toolbar {
+      background-color: #2a2a2a !important;
+      border: none !important;
+
+      .ck-toolbar__items {
+        .ck-button {
+          color: #e5e5e5 !important;
+
+          &:hover {
+            background-color: #404040 !important;
+          }
+
+          &.ck-on {
+            background-color: #505050 !important;
+          }
+        }
+      }
+    }
+
+    &.ck-dropdown__panel {
+      background-color: #2a2a2a !important;
+      border-color: #404040 !important;
+    }
+
+    &.ck-editor {
+      border: 1px solid #404040 !important;
+    }
+  }
+}

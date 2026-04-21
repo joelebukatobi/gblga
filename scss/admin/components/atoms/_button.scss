@@ -1,0 +1,168 @@
+// ============================================================================
+// Button Component - Refactored (DRY/KISS/SOLID)
+// Using Tailwind utilities - can also use Preline hs-button classes
+// ============================================================================
+
+.btn {
+  @apply inline-flex items-center justify-center gap-[0.8rem];
+  @apply px-[1.2rem] text-body-sm font-medium rounded-sm cursor-pointer h-[2.4rem];
+  @apply transition-all duration-200;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+
+  // Hide icons on mobile
+  i,
+  svg {
+    @apply hidden sm:inline-block;
+    @apply size-[1.4rem] stroke-1;
+  }
+
+  // Primary
+  &--primary {
+    @apply bg-blue-600 text-white;
+    @apply hover:bg-blue-700 active:bg-blue-800 hover:text-white;
+    @apply focus:ring-[.08rem] focus:ring-blue-500 focus:ring-offset-2;
+
+    .dark & {
+      @apply bg-white text-grey-900 hover:bg-grey-100;
+    }
+  }
+
+  // Secondary
+  &--secondary {
+    @apply bg-grey-100 text-grey-700;
+    @apply hover:bg-grey-200;
+    @apply focus:ring-[.08rem] focus:ring-grey-500 focus:ring-offset-2;
+
+    .dark & {
+      @apply bg-grey-700 text-grey-200 hover:bg-grey-600;
+    }
+  }
+
+  // Outline
+  &--outline {
+    @apply border bg-transparent;
+    @apply border-grey-300 text-grey-700;
+    @apply hover:bg-blue-600/10;
+    @apply focus:ring-2 focus:ring-grey-500 focus:ring-offset-2;
+
+    .dark & {
+      @apply border-grey-600 text-grey-200 hover:bg-grey-800;
+    }
+  }
+
+  // Outline Primary (hover becomes primary blue)
+  &--outline-primary {
+    @apply border bg-transparent;
+    @apply border-grey-300 text-grey-700;
+    @apply hover:bg-blue-600 hover:text-white hover:border-blue-600;
+    @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+
+    .dark & {
+      @apply border-grey-600 text-grey-200;
+      @apply hover:bg-white hover:text-grey-900 hover:border-white;
+    }
+
+    &:hover svg {
+      @apply text-white;
+    }
+  }
+
+  // Ghost
+  &--ghost {
+    @apply bg-transparent;
+    @apply text-grey-600;
+    @apply hover:bg-blue-600/10 hover:text-grey-900;
+
+    .dark & {
+      @apply text-grey-400 hover:bg-grey-800 hover:text-white;
+    }
+  }
+
+  // Danger
+  &--danger {
+    @apply bg-red-600 text-white;
+    @apply hover:bg-red-700 active:bg-red-800;
+    @apply focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+
+  // Ghost Danger (for delete actions - full red text, white text + red bg on hover)
+  &--ghost.btn--danger {
+    @apply bg-transparent text-red-600;
+    @apply hover:text-white hover:bg-red-600;
+
+    .dark & {
+      @apply text-red-400;
+      @apply hover:text-white hover:bg-red-600;
+    }
+  }
+
+  // Warning (amber/suspend)
+  &--warning {
+    @apply text-amber-600 border-amber-300;
+    @apply hover:bg-amber-50;
+
+    .dark & {
+      @apply text-amber-400 border-amber-600;
+      @apply hover:bg-amber-900/20;
+    }
+  }
+
+  // Sizes
+  &--sm {
+    @apply px-[1.2rem] py-[0.4rem] text-body-xs h-[1.6rem];
+    // Inherits rounded-sm from base
+  }
+
+  &--lg {
+    @apply px-[2.4rem] py-[1.2rem] text-body h-[3.2rem] rounded-md;
+  }
+
+  &--xl {
+    @apply px-[2.4rem] py-[1.6rem] text-body h-[4rem] rounded-md;
+  }
+
+  // Icon only
+  &--icon {
+    @apply p-[0.8rem];
+
+    &.btn--sm {
+      @apply p-[0.4rem];
+    }
+
+    &.btn--lg {
+      @apply p-[1.2rem];
+    }
+  }
+
+  // Full-width button
+  &--full {
+    @apply w-full;
+  }
+
+  // Cancel button (ghost with danger hover)
+  &--cancel {
+    @apply hover:text-red-600 hover:bg-red-50;
+
+    .dark & {
+      @apply hover:text-red-400 hover:bg-red-900/20;
+    }
+  }
+
+  &--spaced {
+    @apply mt-[1.6rem];
+  }
+
+  svg {
+    @apply w-[1.2rem] h-[1.2rem];
+  }
+}
+
+// Alias for backwards compatibility
+.button {
+  @extend .btn;
+}
+
+// Button Grouping (for filter bars, toolbars)
+.btn-group {
+  @apply flex gap-[0.8rem];
+}

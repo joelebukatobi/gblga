@@ -1,0 +1,29 @@
+// ============================================================================
+// Radio Atom
+// Radio input component - atomic element
+// ============================================================================
+
+input[type="radio"],
+.radio {
+  @apply w-[0.96rem] h-[0.96rem] cursor-pointer;
+  @apply rounded-full;
+  @apply border border-grey-300 text-blue-600;
+  @apply transition-colors duration-200;
+  @apply focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-0;
+
+  &:checked {
+    @apply bg-blue-600 border-blue-600;
+  }
+
+  .dark & {
+    @apply border-grey-600 bg-grey-800;
+
+    &:checked {
+      @apply bg-blue-500 border-blue-500;
+    }
+  }
+}
+
+.radio--lg {
+  @apply w-[1.2rem] h-[1.2rem];
+}

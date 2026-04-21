@@ -1,0 +1,60 @@
+// ============================================================================
+// Subscribers Page Styles
+// ============================================================================
+
+// Add Subscriber Modal - High z-index to appear above sticky headers
+#addSubscriberModal {
+  @apply z-100;
+
+  // Backdrop covers sidebar/header
+  > div:first-child {
+    @apply z-100;
+  }
+
+  // Modal content above backdrop
+  > div:nth-child(2) {
+    @apply z-101;
+  }
+}
+
+// Edit Subscriber Modal
+#editSubscriberModal {
+  @apply z-100;
+
+  > div:first-child {
+    @apply z-100;
+  }
+
+  > div:nth-child(2) {
+    @apply z-101;
+  }
+}
+
+// Delete Subscriber Modal
+#deleteSubscriberModal {
+  @apply z-100;
+
+  > div:first-child {
+    @apply z-100;
+  }
+
+  > div:nth-child(2) {
+    @apply z-101;
+  }
+}
+
+@media (max-width: 1023px) {
+  .subscribers__table-content {
+    @apply overflow-x-auto;
+
+    .table {
+      .table__tr {
+        @apply mb-[1.6rem] rounded-lg;
+      }
+
+      .table__tbody {
+        @apply mb-[1.6rem];
+      }
+    }
+  }
+}

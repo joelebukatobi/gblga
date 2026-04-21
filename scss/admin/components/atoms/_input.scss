@@ -1,0 +1,141 @@
+// ============================================================================
+// Input Atom - Base input element only
+// BEM-compliant, accessible, with Tailwind @apply directives
+// Root: 10px | Touch target: 44px minimum | Units: rem
+// ============================================================================
+
+// ============================================================================
+// Base Input Atom
+// ============================================================================
+
+.input {
+  @apply w-full;
+  @apply text-body-sm placeholder:text-body-sm;
+  @apply bg-white text-grey-900 placeholder-grey-400;
+  @apply border border-grey-100/50 rounded-md;
+  @apply outline-none;
+  @apply transition-all duration-200;
+
+  @apply h-[3.2rem] px-[1.2rem];
+
+  // States
+  &:hover:not(:disabled):not(:focus) {
+    @apply border-grey-300;
+  }
+
+  &:focus {
+    @apply border-blue-600 ring-2 ring-blue-600/20;
+  }
+
+  &:disabled {
+    @apply bg-grey-100 text-grey-400 cursor-not-allowed;
+  }
+
+  &:read-only {
+    @apply bg-grey-50;
+  }
+
+  // Dark mode
+  .dark & {
+    @apply bg-grey-900 text-white placeholder-grey-500;
+    @apply border-grey-700;
+
+    &:hover:not(:disabled):not(:focus) {
+      @apply border-grey-600;
+    }
+
+    &:focus {
+      @apply border-blue-600 ring-blue-600/20;
+    }
+
+    &:disabled {
+      @apply bg-grey-900 text-grey-600;
+    }
+
+    &:read-only {
+      @apply bg-grey-900;
+    }
+  }
+
+  // ========================================
+  // Size Variants
+  // ========================================
+  &--sm {
+    @apply h-[2.4rem] px-[.8rem] text-body-xs placeholder:text-body-xs;
+  }
+
+  &--lg {
+    @apply h-[4rem] px-[1.6rem] text-body placeholder:text-body;
+  }
+
+  // ========================================
+  // Icon Variants
+  // ========================================
+  &--icon-left {
+    @apply pl-[4.4rem];
+  }
+
+  &--icon-right {
+    @apply pr-[4.4rem];
+  }
+}
+
+// ============================================================================
+// Input Icon (absolute positioned inside input)
+// ============================================================================
+.input__icon {
+  @apply absolute top-1/2 -translate-y-1/2;
+  @apply w-[2rem] h-[2rem];
+  @apply text-grey-400 pointer-events-none;
+
+  .dark & {
+    @apply text-grey-500;
+  }
+
+  &--left {
+    @apply left-[1.2rem];
+  }
+
+  &--right {
+    @apply right-[1.2rem];
+  }
+
+  &--sm {
+    @apply w-[1.6rem] h-[1.6rem];
+  }
+
+  &--lg {
+    @apply w-[2.4rem] h-[2.4rem];
+  }
+}
+
+// ============================================================================
+// Input Addon Button (password toggle, clear, etc.)
+// ============================================================================
+.input__addon {
+  @apply absolute right-[0.8rem] top-1/2 -translate-y-1/2;
+  @apply flex items-center justify-center;
+  @apply w-[3.2rem] h-[3.2rem] rounded-[0.4rem];
+  @apply text-grey-400 cursor-pointer;
+  @apply transition-colors duration-200;
+
+  &:hover {
+    @apply text-grey-600 bg-grey-100;
+  }
+
+  .dark & {
+    @apply text-grey-500;
+
+    &:hover {
+      @apply text-grey-300 bg-grey-800;
+    }
+  }
+
+  svg {
+    @apply w-[2rem] h-[2rem];
+  }
+}
+
+// ============================================================================
+// Keyframes - Moved to css/theme.css as @utility animate-slide-in
+// ============================================================================

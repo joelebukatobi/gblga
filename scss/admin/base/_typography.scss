@@ -1,0 +1,205 @@
+// ============================================================================
+// Typography System
+// Industry-standard typographic scale and rhythm
+// Major Third Scale (1.25) with 16px base text
+// Root: 10px (62.5%) -> 1.6rem = 16px
+// ============================================================================
+
+// ============================================================================
+// Base Typography
+// ============================================================================
+
+html {
+  @apply antialiased;
+  // font-feature-settings has no Tailwind equivalent
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1;
+}
+
+body {
+  @apply font-sans text-grey-900 dark:text-grey-100 text-body;
+  @apply leading-relaxed;
+}
+
+h1,
+.h1 {
+  @apply font-bold tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[3.2rem] ;
+}
+
+h2,
+.h2 {
+  @apply font-bold tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[2.4rem] ;
+ 
+}
+
+h3,
+.h3 {
+  @apply font-semibold tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[1.6rem] ;
+
+}
+
+h4,
+.h4 {
+  @apply font-semibold tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[1.4rem] ;
+}
+
+h5,
+.h5 {
+  @apply font-medium tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[1.2rem] ;
+}
+
+h6,
+.h6 {
+  @apply font-medium tracking-tight leading-snug;
+  @apply text-grey-900 dark:text-white text-[1rem];
+ }
+
+// ============================================================================
+// Paragraph & Content
+// ============================================================================
+
+p {
+  @apply mb-[1.6rem] last:mb-0;
+}
+
+.lead {
+  @apply text-grey-600 dark:text-grey-400 leading-relaxed;
+  @apply text-[2rem]; // 20px
+}
+
+// ============================================================================
+// Links
+// ============================================================================
+
+// Apply interaction styling to all anchors.
+a {
+  @apply transition-colors duration-200;
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 rounded;
+  }
+}
+
+// Only plain anchors should receive the default link color.
+// Component links like sidebar, pagination, breadcrumbs, and buttons define
+// their own color through their component classes.
+a:not([class]) {
+  @apply text-blue-600 dark:text-white;
+  @apply hover:text-blue-700 dark:hover:text-grey-200;
+}
+
+// Plain link (no color change)
+.link-plain {
+  @apply text-inherit no-underline;
+}
+
+// ============================================================================
+// Lists
+// ============================================================================
+
+ul,
+ol {
+  @apply pl-[2.4rem] mb-[1.6rem];
+
+  li {
+    @apply mb-[0.8rem] last:mb-0;
+  }
+}
+
+ul {
+  @apply list-disc;
+}
+
+ol {
+  @apply list-decimal;
+}
+
+// Reset for navigation/menu lists
+nav ul,
+nav ol,
+.list-reset {
+  @apply pl-0 list-none;
+
+  li {
+    @apply mb-0;
+  }
+}
+
+// ============================================================================
+// Text Utilities
+// ============================================================================
+
+.text-muted {
+  @apply text-grey-500 dark:text-grey-400;
+}
+
+.text-subtle {
+  @apply text-grey-400 dark:text-grey-500;
+}
+
+strong,
+.font-bold {
+  @apply font-semibold;
+}
+
+small,
+.text-small {
+  // Relative to parent - no Tailwind equivalent for 'em' units
+  @apply text-[.8rem];
+}
+
+// ============================================================================
+// Code & Pre
+// ============================================================================
+
+code {
+  @apply px-[0.6rem] py-[0.2rem] font-mono;
+  @apply bg-grey-100 dark:bg-grey-800 rounded;
+  @apply text-pink-600 dark:text-pink-400;
+  @apply text-[.8rem];
+}
+
+pre {
+  @apply p-[1.6rem] mb-[1.6rem] overflow-x-auto;
+  @apply bg-grey-900 dark:bg-grey-900 rounded-lg;
+  @apply leading-relaxed;
+  @apply text-[1.4rem]; // 14px
+
+  code {
+    @apply p-0 bg-transparent text-grey-100;
+    @apply text-inherit;
+  }
+}
+
+// ============================================================================
+// Blockquote
+// ============================================================================
+
+blockquote {
+  @apply pl-[1.6rem] py-[0.8rem] mb-[1.6rem];
+  @apply border-l-4 border-grey-300 dark:border-grey-600;
+  @apply text-grey-600 dark:text-grey-400 italic;
+  @apply text-[1.8rem]; // Slightly larger for emphasis
+}
+
+// ============================================================================
+// Horizontal Rule
+// ============================================================================
+
+hr {
+  @apply my-[3.2rem] border-t border-grey-200 dark:border-grey-700;
+}
+
+// ============================================================================
+// Selection
+// ============================================================================
+
+::selection {
+  @apply bg-blue-600 text-white;
+}

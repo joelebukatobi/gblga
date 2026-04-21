@@ -1,0 +1,358 @@
+// ============================================================================
+// Page · Home
+// ============================================================================
+
+.home {
+  @apply flex flex-col bg-cream;
+}
+
+// ============================================================================
+// Home · Hero Section
+// ============================================================================
+
+.hero {
+  @apply relative w-full overflow-visible bg-maroon h-screen;
+
+  &__media {
+    @apply absolute inset-0 w-full h-full bg-placeholder bg-cover bg-center;
+    background-image: url('https://thumbs.6sqft.com/wp-content/uploads/2025/02/03112321/Fordham-University-Sculpture-Garden.jpg?format=webp');
+  }
+
+  &__overlay {
+    @apply absolute inset-0 bg-gradient-to-b from-transparent to-black/70;
+  }
+
+  &__inner {
+    @apply relative mx-auto flex flex-col justify-end h-full max-w-[120rem] px-[3.2rem] pb-[4.8rem] pt-[6.4rem];
+  }
+
+  &__content {
+    @apply flex flex-col gap-[1.6rem] w-full mb-[6.4rem];
+  }
+
+  &__title {
+    @apply text-white w-full m-0 leading-[1.1] tracking-[0.02em] font-forum text-[5.6rem];
+  }
+
+  &__subtitle {
+    @apply text-white w-3/4 m-0 leading-[1.6] text-[2.4rem] font-lato;
+  }
+}
+
+// ============================================================================
+// Home · About Section
+// ============================================================================
+
+.about {
+  @apply bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+  }
+
+  &__heading {
+    @apply text-[4.8rem] tracking-[0.02em] m-0 font-forum;
+  }
+
+  &__grid {
+    @apply grid gap-[4.8rem] items-center grid-cols-2;
+  }
+
+  &__left {
+    @apply relative flex flex-col items-center justify-center bg-maroon/95 h-full w-full p-[3.2rem] overflow-hidden rounded-[0.8rem];
+  }
+
+  &__seal-bg {
+    @apply absolute w-[104rem] h-[104rem] object-cover opacity-5;
+  }
+
+  &__seal {
+    @apply relative w-[40rem] h-[40rem] object-cover opacity-80;
+  }
+
+  &__right {
+    @apply flex flex-col gap-[1.2rem];
+  }
+
+  &__body {
+    @apply text-[1.6rem] leading-[1.6] opacity-90 m-0 max-w-[56rem] font-lato;
+  }
+
+  &__photos {
+    @apply grid gap-[1.6rem] mt-[0.8rem] grid-cols-2;
+  }
+
+  &__photo {
+    @apply w-full h-[48rem] object-cover rounded-[0.4rem];
+  }
+}
+
+// ============================================================================
+// Home · Upcoming Events Section
+// ============================================================================
+
+.upcoming-events {
+  @apply bg-cream-dark;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+  }
+
+  &__header {
+    @apply flex items-center justify-between mb-[4rem];
+  }
+
+  &__title {
+    @apply text-[4.8rem] tracking-[0.02em] text-maroon m-0 font-forum;
+  }
+
+  &__grid {
+    @apply grid gap-[2.4rem] grid-cols-3;
+  }
+
+  // Event cards - styled inline as children of the grid
+  &__grid > a {
+    @apply flex flex-col bg-white no-underline transition-all duration-200 border-[0.1rem] border-transparent shadow-md rounded-[0.8rem];
+
+    &:hover {
+      @apply border-maroon;
+    }
+
+    // Inner article
+    > article {
+      @apply flex flex-col h-full;
+    }
+
+    // Media section
+    > article > div:first-child {
+      @apply relative h-[32rem] overflow-hidden pt-[2.4rem] px-[2.4rem];
+
+      // Background layer
+      > [data-bg] {
+        @apply absolute inset-0 bg-cover bg-center;
+        background-image: url('/public/uploads/images/gblga-bhm-ig.png');
+      }
+
+      // Image - cover, centered from top
+      > img {
+        @apply w-full h-full object-cover;
+        object-position: center top;
+      }
+    }
+
+    // Body section
+    > article > div:last-child {
+      @apply flex flex-col gap-[1.6rem] p-[2.4rem];
+
+      // Title
+      h3 {
+        @apply text-[2rem] leading-[1.3] text-black m-0 font-lato;
+      }
+
+      // Description
+      > p {
+        @apply text-[1.4rem] leading-[1.6] text-black m-0 font-lato;
+      }
+
+      // Divider
+      > hr {
+        @apply w-full border-0 border-t-[0.1rem] border-plum/30 my-0;
+      }
+
+      // Meta (date/time/location)
+      > div {
+        @apply text-[1.2rem] leading-[1.5] text-black font-lato;
+      }
+
+      // CTA Button
+      > .btn {
+        @apply mt-auto;
+      }
+    }
+  }
+
+  &__see-all {
+    @apply flex items-center gap-[0.8rem];
+
+    i {
+      @apply text-[1.6rem] text-maroon;
+    }
+  }
+
+  &__see-all-link {
+    @apply text-[1.3rem] tracking-[0.08em] uppercase text-maroon no-underline font-forum transition-colors duration-200;
+
+    &:hover {
+      @apply text-plum;
+    }
+  }
+}
+
+// ============================================================================
+// Home · Gallery Section
+// ============================================================================
+
+.gallery {
+  @apply bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+  }
+
+  &__header {
+    @apply flex items-center justify-between mb-[4rem];
+  }
+
+  &__title {
+    @apply text-[3.6rem] tracking-[0.02em] text-maroon m-0 font-forum;
+  }
+
+  &__grid {
+    @apply grid gap-[1.6rem] auto-rows-fr grid-cols-3;
+  }
+
+  // Gallery items - styled inline as children
+  &__grid > figure {
+    @apply relative aspect-[4/3] overflow-hidden m-0 cursor-pointer;
+
+    // Media placeholder
+    > div {
+      @apply absolute inset-0 bg-cover bg-center bg-plum/20;
+    }
+
+    // Overlay with label
+    > figcaption {
+      @apply absolute inset-0 flex items-center justify-center bg-maroon/60 text-cream text-[2rem] font-forum opacity-0 transition-opacity duration-200;
+    }
+
+    &:hover > figcaption {
+      @apply opacity-100;
+    }
+  }
+
+  &__view-all {
+    @apply flex items-center gap-[0.8rem];
+
+    i {
+      @apply text-[1.6rem] text-maroon;
+    }
+  }
+
+  &__view-all-link {
+    @apply text-[1.3rem] tracking-[0.08em] uppercase text-maroon no-underline font-forum transition-colors duration-200;
+
+    &:hover {
+      @apply text-plum;
+    }
+  }
+}
+
+// ============================================================================
+// Home · Newsletter Section
+// ============================================================================
+
+.newsletter {
+  @apply relative overflow-hidden text-cream;
+
+  &__inner {
+    @apply relative mx-auto max-w-[120rem] mt-[3.2rem] mb-[12.8rem] rounded-[0.8rem] overflow-hidden;
+  }
+
+  &__media {
+    @apply relative w-full;
+
+    // Background image as actual img element
+    img {
+      @apply w-full h-[64rem] object-cover;
+      display: block;
+    }
+
+    // Dark overlay - covers full width
+    &::after {
+      @apply absolute inset-0 bg-black/70;
+      content: '';
+    }
+  }
+
+  &__content {
+    @apply absolute inset-0 flex flex-col items-center justify-center text-center px-[3.2rem];
+  }
+
+  &__eyebrow {
+    @apply text-[2.4rem] tracking-[0.08em] uppercase text-cream/70 mb-[1.2rem] mt-0 font-forum;
+  }
+
+  &__title {
+    @apply text-[4.8rem] tracking-[0.02em] text-white mb-[1.6rem] mt-0 font-forum;
+  }
+
+  &__quote {
+    @apply italic text-[1.8rem] leading-[1.6] text-cream/80 max-w-[64rem] mb-[3.2rem] m-0 font-lato;
+  }
+
+  // Newsletter form - styled inline
+  &__content > form {
+    @apply flex max-w-[48rem] w-full overflow-hidden;
+
+    // Input
+    input {
+      @apply flex-1;
+    }
+
+    // Submit button
+    button {
+      @apply flex-shrink-0;
+    }
+  }
+}
+
+// ============================================================================
+// Page Hero (Reusable for other pages)
+// ============================================================================
+
+.page-hero {
+  @apply relative overflow-hidden mt-[16rem];
+
+  &__inner {
+    @apply relative mx-auto max-w-[120rem] bg-maroon rounded-[0.8rem] overflow-hidden;
+    height: 40rem;
+  }
+
+  &__bg {
+    @apply absolute;
+    top: -36rem;
+    right: -35rem;
+
+    img {
+      @apply w-[72rem] h-[72rem] opacity-5;
+    }
+  }
+
+  &__content {
+    @apply relative flex flex-col items-start justify-center h-full px-[3.2rem];
+  }
+
+  &__title {
+    @apply text-[4.8rem] tracking-[0.02em] text-white m-0 font-forum;
+  }
+
+  &__subtitle {
+    @apply text-[1.6rem] leading-[1.6] text-white/80 m-0 font-lato;
+  }
+}
+
+// ============================================================================
+// Page · Blog
+// ============================================================================
+
+.blog-page {
+  @apply flex flex-col bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+  }
+
+  &__coming-soon {
+    @apply text-[2.4rem] text-center text-muted font-lato;
+  }
+}

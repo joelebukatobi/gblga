@@ -1,0 +1,20 @@
+// ============================================================================
+// App Base Styles
+// ============================================================================
+
+html {
+  @apply text-[62.5%] box-border;
+}
+
+// App shell wrapper
+.app {
+  @apply flex flex-col min-h-screen bg-cream;
+
+  &__main {
+    @apply flex-1 flex flex-col;
+  }
+}
+
+.visually-hidden {
+  @apply sr-only;
+}

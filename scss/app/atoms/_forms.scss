@@ -1,0 +1,45 @@
+// ============================================================================
+// Molecule · Form Groups
+// ============================================================================
+
+.form-group {
+  // Inline layout (input + button side-by-side)
+  &--inline {
+    @apply flex;
+  }
+
+  &--inline &__input {
+    @apply flex-1;
+  }
+
+  &--inline &__btn {
+    @apply flex-shrink-0;
+  }
+
+  // Stacked layout (vertical)
+  &--stacked {
+    @apply flex flex-col gap-[0.8rem];
+  }
+
+  // Search variant (input with icon button)
+  &--search {
+    @apply relative;
+  }
+
+  &--search &__input {
+    @apply pr-[4.8rem];
+  }
+
+  &--search &__btn {
+    @apply absolute right-0 top-0 h-full w-[4.8rem] p-0 flex items-center justify-center bg-transparent text-maroon/70;
+
+    &:hover {
+      @apply text-maroon;
+    }
+
+    // Target the icon directly - no class needed
+    i {
+      @apply text-[2rem];
+    }
+  }
+}

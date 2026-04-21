@@ -1,0 +1,228 @@
+// ============================================================================
+// Table Component
+// Reusable responsive table structure
+// Desktop: Standard HTML table | Mobile: Cards layout
+// This is PURELY STRUCTURAL - page-specific content styles should go elsewhere
+// ============================================================================
+
+// ============================================================================
+// BASE TABLE STYLES
+// ============================================================================
+
+.table {
+  @apply w-full overflow-x-auto;
+
+  // Supports both wrapper div and direct table element
+  &, table {
+    @apply block w-full;
+    @apply lg:table;
+    @apply lg:border-collapse;
+  }
+
+  // ========================================
+  // Table Label (Mobile specific)
+  // ========================================
+  &__label {
+    @apply lg:hidden;
+    @apply text-body-sm lg:text-body font-medium text-grey-500 lg:min-w-[8rem];
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  // ========================================
+  // Table Header (Hidden on mobile)
+  // ========================================
+  &__thead {
+    // Mobile: Hide header
+    @apply hidden;
+
+    // Desktop: Show header
+    @apply lg:table-header-group;
+
+    .dark & {
+      @apply bg-grey-900;
+    }
+
+    th {
+      @apply text-left px-[1.6rem] py-[1rem];
+      @apply text-body font-semibold capitalize tracking-normal;
+      @apply text-grey-500 border-b border-grey-200;
+
+      &:first-child {
+        @apply pl-0;
+      }
+
+      .dark & {
+        @apply text-grey-300 border-grey-700 bg-grey-900;
+      }
+
+      // Right-align last column (typically Actions)
+      &:last-child {
+        @apply text-right;
+      }
+    }
+  }
+
+  // ========================================
+  // Table Body
+  // ========================================
+  &__tbody {
+    // Mobile: Display as block
+    @apply block;
+
+    // Desktop: Table row group
+    @apply lg:table-row-group;
+  }
+
+  // ========================================
+  // Table Row
+  // ========================================
+  &__tr {
+    // Mobile: Card layout
+    @apply block p-[1.6rem] lg:mb-[1.2rem] rounded-xl;
+    @apply bg-white shadow-sm border border-grey-100;
+
+    // Desktop: Table row
+    @apply lg:table-row lg:p-0 lg:mb-0 lg:rounded-none;
+    @apply lg:bg-transparent lg:shadow-none lg:border-0;
+
+    .dark & {
+      @apply bg-grey-900 border-grey-800;
+      @apply lg:bg-transparent lg:border-0;
+    }
+
+    // Hover state (desktop)
+    &:hover {
+      @apply lg:bg-blue-600/5;
+
+      .dark & {
+        @apply lg:bg-grey-700/50;
+      }
+    }
+
+    &--muted {
+      @apply opacity-60;
+    }
+  }
+
+  // ========================================
+  // Table Cell (td)
+  // ========================================
+  &__td {
+    // Mobile: Stack with labels
+    @apply flex items-center gap-x-[.8rem];
+    @apply mb-[1rem] last:mb-0;
+
+    // Desktop: Table cell with vertical centering
+    @apply lg:table-cell lg:px-[1.6rem] lg:py-[1.2rem];
+    @apply lg:border-b lg:border-grey-100;
+    @apply lg:mb-0;
+
+    &:first-child {
+      @apply lg:pl-0;
+    }
+
+    // Critical: Force vertical-align middle on desktop
+    @media (min-width: 1024px) {
+      vertical-align: middle !important;
+    }
+
+    .dark & {
+      @apply lg:border-grey-800;
+    }
+
+    // Actions column modifier (right-aligned, no mobile separator)
+    &--actions {
+      // Mobile: Top border separator
+      @apply pt-[1.2rem] mt-[1.2rem] border-t border-grey-100;
+
+      // Desktop: Right-aligned, no separator
+      @apply lg:w-auto lg:pt-0 lg:mt-0 lg:mb-0 lg:pb-0 lg:border-t-0;
+
+      .dark & {
+        @apply border-grey-700 lg:border-grey-800;
+      }
+    }
+  }
+
+  // ========================================
+  // Table Cell Title
+  // ========================================
+  &__title {
+    @apply font-medium text-body-sm lg:text-body text-body text-grey-900;
+
+    .dark & {
+      @apply text-white;
+    }
+
+    a {
+      @apply text-grey-900 hover:text-blue-600 transition-colors duration-200;
+
+      .dark & {
+        @apply text-white hover:text-blue-400;
+      }
+    }
+
+    &--muted {
+      @apply text-grey-400;
+
+      .dark & {
+        @apply text-grey-500;
+      }
+
+      a {
+        @apply text-grey-400;
+
+        .dark & {
+          @apply text-grey-500;
+        }
+      }
+    }
+  }
+
+  &__subtitle {
+    @apply text-body-sm text-grey-500;
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  // Slug/code display
+  &__slug {
+    @apply text-body-sm lg:text-body text-grey-500 font-mono;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  // Content info container (avatar + name/email)
+  &__content-info {
+    @apply flex items-center gap-[1.2rem];
+  }
+
+  // Comments link in table
+  &__comments-link {
+    @apply inline-flex items-center gap-[0.6rem];
+    @apply text-body-sm text-grey-600;
+    @apply transition-colors duration-200;
+    @apply hover:text-blue-600;
+
+    .dark & {
+      @apply text-grey-400 hover:text-blue-400;
+    }
+
+    svg,
+    i {
+      @apply w-[1.6rem] h-[1.6rem];
+    }
+  }
+
+  // All icons in table have stroke-1
+  svg,
+  i {
+    @apply stroke-1;
+  }
+}

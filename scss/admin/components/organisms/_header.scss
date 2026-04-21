@@ -1,0 +1,175 @@
+// ============================================================================
+// Header Component - Refactored (DRY/KISS/SOLID)
+// Using maximum Tailwind utilities
+// ============================================================================
+
+.header {
+  @apply relative z-20 flex-shrink-0 flex items-center justify-between h-[5.6rem];
+  @apply px-[1.6rem] sm:px-[2.4rem];
+  @apply bg-white;
+
+  // Remove margin-bottom from search form group to center it vertically
+  .form__group--search {
+    @apply mb-0;
+  }
+  .dark & {
+    @apply bg-grey-900;
+  }
+  @apply border-b;
+  @apply border-grey-100;
+  .dark & {
+    @apply border-grey-700;
+  }
+
+  &__left {
+    @apply flex items-center gap-[0.8rem] sm:gap-[1.6rem];
+  }
+
+  &__right {
+    @apply flex items-center gap-[0.4rem] sm:gap-[0.8rem];
+  }
+
+  &__menu-toggle {
+    @apply lg:hidden p-[0] rounded-lg;
+    @apply text-grey-500 hover:text-grey-700;
+    @apply transition-colors duration-200;
+    @apply hover:bg-grey-100;
+    .dark & {
+      @apply hover:bg-grey-700/50;
+    }
+
+    .dark & {
+      @apply text-grey-400 hover:text-grey-200;
+    }
+
+    svg {
+      @apply w-[2.0rem] h-[2.0rem];
+    }
+  }
+
+  &__action {
+    @apply relative p-[0.8rem] rounded-lg;
+    @apply text-grey-500;
+    @apply transition-colors duration-200;
+    @apply hover:bg-blue-600/10 hover:text-grey-700;
+
+    .dark & {
+      @apply text-grey-400 hover:bg-grey-900 hover:text-grey-200;
+    }
+
+    svg {
+      @apply w-[2.0rem] h-[2.0rem];
+    }
+
+    // Notification badge
+    &--badge::after,
+    &[data-count]::after {
+      @apply content-[''] absolute top-[0.4rem] right-[0.4rem] w-[0.8rem] h-[0.8rem] bg-red-500 rounded-full;
+    }
+
+    &[data-count]::after {
+      @apply w-[1.6rem] h-[1.6rem] text-body-xs font-bold text-white flex items-center justify-center;
+      content: attr(data-count);
+    }
+  }
+
+  &__user {
+    @apply relative;
+  }
+
+  &__user-btn {
+    @apply flex items-center gap-[1.2rem] px-[0.8rem] py-[0.6rem] rounded-lg cursor-pointer;
+    @apply transition-colors duration-200;
+    @apply hover:bg-blue-600/10;
+    .dark & {
+      @apply hover:bg-grey-800;
+    }
+
+    &--condensed {
+      @apply sm:flex hidden;
+    }
+
+    &--mobile {
+      @apply flex sm:hidden;
+    }
+  }
+
+  &__user-avatar {
+    @apply w-[3.2rem] h-[3.2rem] rounded-full overflow-hidden border-2 border-grey-200;
+
+    .dark & {
+      @apply border-grey-700;
+    }
+
+    img {
+      @apply w-full h-full object-cover;
+    }
+  }
+
+  &__user-info {
+    @apply hidden sm:block;
+  }
+
+  &__user-name {
+    @apply text-body-sm font-medium leading-tight;
+    @apply text-grey-900;
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &__user-role {
+    @apply text-body-xs leading-tight;
+    @apply text-body-xs mt-[0.2rem] text-grey-500;
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+}
+
+// Mobile search toggle (shows search icon on mobile)
+.header__search-toggle {
+  @apply sm:hidden p-[0.8rem] text-grey-500 dark:text-grey-400 rounded-lg;
+  @apply hover:bg-grey-100/50 dark:hover:bg-grey-800 transition-colors;
+
+  svg {
+    @apply w-[2.0rem] h-[2.0rem];
+  }
+}
+
+// Mobile search overlay
+.mobile-search {
+  @apply relative z-10 px-[1.6rem] py-[1.2rem];
+  @apply lg:hidden;
+  @apply bg-white;
+  @apply w-full max-w-full box-border;
+  .dark & {
+    @apply bg-grey-900;
+  }
+  @apply border-b;
+  @apply border-grey-100;
+  .dark & {
+    @apply border-grey-700;
+  }
+  @apply hidden;
+  @apply transition-all duration-200;
+
+  &--open {
+    @apply block;
+  }
+
+  .form__wrapper {
+    @apply w-full;
+  }
+}
+
+// Theme toggle icons
+.theme-icon-light {
+  @apply block dark:hidden;
+  stroke-width: 1;
+}
+
+.theme-icon-dark {
+  @apply hidden dark:block;
+  stroke-width: 1;
+}

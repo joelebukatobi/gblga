@@ -1,0 +1,94 @@
+// ============================================================================
+// Modal Component - Simplified Structure
+// 5 levels instead of 8
+// ============================================================================
+
+// Modal container - visibility control + positioning
+.modal {
+  @apply fixed inset-0 z-50 hidden;
+
+  // Show when open
+  &.is-open {
+    @apply block;
+  }
+
+  // High z-index variant (for nested modals)
+  &--high {
+    @apply z-[100];
+  }
+}
+
+// Backdrop - dark overlay + click target
+.modal__backdrop {
+  @apply fixed inset-0 bg-black/50 transition-opacity opacity-0;
+
+  .modal.is-open & {
+    @apply opacity-100;
+  }
+}
+
+// Panel - white card container
+.modal__panel {
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  @apply w-full max-w-sm bg-white dark:bg-grey-800 rounded-xl shadow-xl;
+  @apply flex flex-col;
+
+  .dark & {
+    @apply border border-grey-700;
+  }
+}
+
+// Header - icon + title + description
+.modal__header {
+  @apply flex flex-col items-center text-center;
+  @apply pt-8 pb-4 px-6;
+}
+
+// Icon - circular background with symbol
+.modal__icon {
+  @apply flex items-center justify-center;
+  @apply w-12 h-12 rounded-full mb-4;
+
+  svg, i {
+    @apply w-6 h-6;
+  }
+
+  &--danger {
+    @apply bg-red-100 text-red-600;
+
+    .dark & {
+      @apply bg-red-900/30 text-red-400;
+    }
+  }
+
+  &--warning {
+    @apply bg-amber-100 text-amber-600;
+
+    .dark & {
+      @apply bg-amber-900/30 text-amber-400;
+    }
+  }
+}
+
+// Title
+.modal__title {
+  @apply text-body-lg font-semibold text-grey-900 mb-2;
+
+  .dark & {
+    @apply text-white;
+  }
+}
+
+// Description
+.modal__description {
+  @apply text-body-sm text-grey-500;
+
+  .dark & {
+    @apply text-grey-400;
+  }
+}
+
+// Footer - action buttons
+.modal__footer {
+  @apply flex flex-col gap-3 p-6 pt-2;
+}

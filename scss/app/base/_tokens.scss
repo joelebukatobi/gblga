@@ -1,0 +1,33 @@
+// ============================================================================
+// GBLGA Brand Tokens
+// ============================================================================
+
+:root {
+  // Brand colors
+  --cream: #f2f1ec;
+  --cream-dark: #F6EAD7;
+  --cream-80: rgba(242, 241, 236, 0.8);
+  --cream-60: rgba(242, 241, 236, 0.6);
+  --white: #ffffff;
+  --maroon: #3a1920;
+  --maroon-55: rgba(58, 25, 32, 0.55);
+  --maroon-70: rgba(58, 25, 32, 0.7);
+  --maroon-90: rgba(58, 25, 32, 0.9);
+  --plum: #562d3e;
+  --gold: linear-gradient(315deg, #C19E4F 11.11%, #EFD99E 49.22%, #C19E4F 88.89%);
+  --placeholder: #c9c7c0;
+  --placeholder-strong: #b5b2aa;
+  --muted: #8a8a8a;
+
+  // Font families
+  --font-forum: 'Forum', serif;
+  --font-lato: 'Lato', system-ui, sans-serif;
+
+  // Layout
+  --max-width: 120rem;
+}
+
+// Custom utilities for Tailwind @apply
+.bg-gold {
+  background: var(--gold);
+}

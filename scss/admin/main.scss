@@ -1,0 +1,71 @@
+// ============================================================================
+// Admin Dashboard SCSS Entry Point
+// Modern Blogging CMS Dashboard
+// These are pure SCSS components without Tailwind directives
+// ============================================================================
+
+// ============================================================================
+// BASE - Variables, typography, and minimal base styles
+// ============================================================================
+@use 'base/typography' as *;
+@use 'base/base' as *;
+
+// ============================================================================
+// COMPONENTS - Atomic Design Structure
+// ============================================================================
+
+// Atoms - Basic building blocks
+@use 'components/atoms/alert' as *;
+@use 'components/atoms/avatar' as *;
+@use 'components/atoms/badge' as *;
+@use 'components/atoms/button' as *;
+@use 'components/atoms/checkbox' as *;
+@use 'components/atoms/divider' as *;
+@use 'components/atoms/form-feedback' as *;
+@use 'components/atoms/input' as *;
+@use 'components/atoms/label' as *;
+@use 'components/atoms/radio' as *;
+@use 'components/atoms/select' as *;
+@use 'components/atoms/textarea' as *;
+@use 'components/atoms/tooltip' as *;
+
+// Molecules - Simple groups of atoms
+@use 'components/molecules/breadcrumb' as *;
+@use 'components/molecules/form' as *;
+@use 'components/molecules/pagination' as *;
+@use 'components/molecules/row-action' as *;
+
+@use 'components/molecules/toast' as *;
+
+// Organisms - Complex UI components
+@use 'components/organisms/card' as *;
+@use 'components/organisms/chart' as *;
+@use 'components/organisms/dropdown' as *;
+@use 'components/organisms/header' as *;
+@use 'components/organisms/modal' as *;
+@use 'components/organisms/sidebar' as *;
+@use 'components/organisms/table' as *;
+@use 'components/organisms/tabs' as *;
+@use 'components/organisms/widgets' as *;
+@use 'components/organisms/list-toolbar' as *;
+
+// Components - Specific feature components
+@use 'components/video-preview' as *;
+
+// Layouts - Page layouts and structures
+@use 'layouts/layout' as *;
+
+// Pages - Page-specific styles
+@use 'pages/index' as *;
+@use 'pages/login' as *;
+@use 'pages/dashboard' as *;
+@use 'pages/posts' as *;
+@use 'pages/categories' as *;
+@use 'pages/tags' as *;
+@use 'pages/media' as *;
+@use 'pages/comments' as *;
+@use 'pages/subscribers' as *;
+@use 'pages/users' as *;
+@use 'pages/settings' as *;
+@use 'pages/setup-wizard' as *;
+@use 'pages/coming-soon' as *;

@@ -1,0 +1,158 @@
+// ============================================================================
+// Dashboard Layout
+// Using maximum Tailwind utilities
+// ============================================================================
+
+.layout {
+  @apply h-screen bg-white dark:bg-grey-900;
+
+  & .main {
+    @apply relative h-screen flex flex-col transition-all duration-300;
+
+    // Ensure direct children (page wrappers like .posts, .users) fill the space
+    // Excludes modals/overlays so they don't participate in flex sizing
+    > div:not(.header):not(.mobile-search):not(.hs-overlay):not([id$="Modal"]) {
+      @apply flex-1 w-full flex flex-col min-h-0;
+    }
+
+    // Mobile: Natural scrolling without overflow restrictions
+    @apply ml-0 w-full overflow-x-hidden;
+
+    // Desktop: App-like feel with overflow control
+    @media (min-width: 1024px) {
+      @apply ml-[var(--sidebar-width)] w-[calc(100%_-_var(--sidebar-width))] overflow-hidden;
+    }
+  }
+
+  // Collapsed sidebar state - AFTER main rule for proper specificity
+  &--sidebar-collapsed .main {
+    @apply ml-[var(--sidebar-width-collapsed)] w-[calc(100%_-_var(--sidebar-width-collapsed))];
+  }
+
+  & .content {
+    @apply flex-1 w-full overflow-x-hidden min-h-0;
+    @apply p-[1.6rem] sm:p-[2.4rem] flex flex-col; 
+
+    // Fixed elements - don't shrink
+    > .page-header {
+      @apply shrink-0;
+    }
+
+    // Generic scrollable table content area (desktop only)
+    // Matches .posts__table-content, .categories__table-content, .tags__table-content, etc.
+    > [class$="__table-content"] {
+      @media (min-width: 1024px) {
+        @apply flex-1 min-h-0 overflow-y-auto pr-[1.6rem];
+      }
+
+      // Empty state within table content (list pages)
+      > .empty {
+        @apply text-center py-12;
+
+        > h3 {
+          @apply text-lg font-medium text-grey-900 mb-2;
+
+          .dark & {
+            @apply text-white;
+          }
+        }
+
+        > p {
+          @apply text-grey-500;
+
+          .dark & {
+            @apply text-grey-400;
+          }
+        }
+      }
+    }
+    
+    @media (min-width: 640px) {
+      @apply pl-[2.4rem];
+    }
+    
+    // Account for fixed page-footer (pagination) so last table row isn't hidden
+    @apply pb-[6.4rem];
+
+    // Height: fit between fixed header (5.6rem) and footer (6.4rem)
+    // Mobile only - desktop uses flex-1 naturally
+    @media (max-width: 1023px) {
+      @apply h-screen mb-[1.6rem];
+    }
+    
+ 
+
+    table {
+      & tbody {
+        & tr {
+          & td {
+            @apply text-body-sm lg:text-body;
+          }
+        }
+      }
+    }
+  }
+
+  // Page header
+  & .page-header {
+    @apply flex flex-row items-center justify-between gap-[1.6rem] mb-[1.6rem];
+
+    &__left {
+      @apply min-w-0;
+    }
+
+    &__title {
+      @apply font-bold text-grey-900 dark:text-white;
+    }
+
+    &__subtitle {
+      @apply text-body text-grey-500 dark:text-grey-400 mt-[0.4rem];
+    }
+
+    &__actions {
+      @apply flex items-center gap-[0.8rem] sm:gap-[1.2rem];
+      // Stack buttons on mobile
+      @apply flex-wrap;
+    }
+
+    &__toast-container {
+      @apply relative flex-1 flex items-center;
+      @apply min-h-[4rem] overflow-hidden pointer-events-none;
+
+      > div {
+        @apply pointer-events-auto;
+      }
+    }
+  }
+
+  // Page Footer (Pagination) - fixed at bottom
+  & .page-footer {
+    @apply fixed bottom-0 left-0 right-0 w-screen z-20 bg-white border-t-0 p-[1.6rem];
+    
+    .dark & {
+      @apply bg-grey-900;
+    }
+    
+    // Desktop: Account for sidebar width
+    @media (min-width: 1024px) {
+      @apply left-[var(--sidebar-width)] w-[calc(100vw_-_var(--sidebar-width))] pl-[2.4rem];
+    }
+    
+  }
+
+  // Page footer alignment for collapsed sidebar
+  &--sidebar-collapsed .page-footer {
+    @media (min-width: 1024px) {
+      @apply left-[var(--sidebar-width-collapsed)] w-[calc(100vw_-_var(--sidebar-width-collapsed))];
+    }
+  }
+
+  // Content wrapper
+  & .wrapper {
+    @apply max-w-8xl mx-auto w-full flex-1 flex flex-col;
+  }
+
+  &__stack {
+    @apply flex flex-col gap-[2.4rem]; // Matches space-y-6
+  }
+}

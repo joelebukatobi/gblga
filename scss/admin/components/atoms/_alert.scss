@@ -1,0 +1,49 @@
+// ============================================================================
+// Alert Component
+// Using Tailwind utilities
+// ============================================================================
+
+.alert {
+  @apply flex items-start gap-[1.2rem] p-[1.6rem] rounded-lg;
+
+  &__icon {
+    @apply flex-shrink-0 w-[2.0rem] h-[2.0rem] mt-[0.4rem];
+  }
+
+  &__content {
+    @apply flex-1 min-w-0;
+  }
+
+  &__title {
+    @apply font-semibold mb-[0.4rem];
+  }
+
+  &__message {
+    @apply text-body-sm;
+  }
+
+  &__close {
+    @apply flex-shrink-0 p-[0.4rem] rounded-lg opacity-70 hover:opacity-100 transition-opacity;
+  }
+
+  // Variants
+  &--info {
+    @apply bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200;
+    @apply border border-blue-200 dark:border-blue-800;
+  }
+
+  &--success {
+    @apply bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-200;
+    @apply border border-emerald-200 dark:border-emerald-800;
+  }
+
+  &--warning {
+    @apply bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-200;
+    @apply border border-amber-200 dark:border-amber-800;
+  }
+
+  &--danger {
+    @apply bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200;
+    @apply border border-red-200 dark:border-red-800;
+  }
+}

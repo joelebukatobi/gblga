@@ -1,0 +1,133 @@
+// ============================================================================
+// Badge Component - Refactored (DRY/KISS/SOLID)
+// Using maximum Tailwind utilities
+// ============================================================================
+
+.badge {
+  @apply inline-flex items-center gap-[0.4rem] px-[1.6rem] py-[0.4rem] text-body-sm font-medium rounded-full;
+
+  &--primary {
+    @apply bg-blue-100 text-blue-700;
+
+    .dark & {
+      @apply bg-blue-900/30 text-blue-400;
+    }
+  }
+
+  &--success {
+    @apply bg-emerald-100 text-emerald-700;
+
+    .dark & {
+      @apply bg-emerald-900/30 text-emerald-400;
+    }
+  }
+
+  &--warning {
+    @apply bg-amber-100 text-amber-700;
+
+    .dark & {
+      @apply bg-amber-900/30 text-amber-400;
+    }
+  }
+
+  &--danger {
+    @apply bg-red-100 text-red-700;
+
+    .dark & {
+      @apply bg-red-900/30 text-red-400;
+    }
+  }
+
+  &--info {
+    @apply bg-cyan-100 text-cyan-700;
+
+    .dark & {
+      @apply bg-cyan-900/30 text-cyan-400;
+    }
+  }
+
+  &--neutral {
+    @apply bg-grey-100 text-grey-700;
+
+    .dark & {
+      @apply bg-grey-700 text-grey-300;
+    }
+  }
+
+  &--purple {
+    @apply bg-purple-100 text-purple-700;
+    .dark & {
+      @apply bg-purple-900/30 text-purple-400;
+    }
+  }
+
+  &--pink {
+    @apply bg-pink-100 text-pink-700;
+    .dark & {
+      @apply bg-pink-900/30 text-pink-400;
+    }
+  }
+
+  // Dot variant
+  &--dot {
+    @apply pl-[0.8rem];
+
+    &::before {
+      @apply content-[''] w-[0.4rem] h-[0.4rem] rounded-full bg-current;
+    }
+  }
+
+  // Post count - blue with opacity, box matching action button size exactly
+  // Desktop action buttons: 0.4rem padding + 1.2rem icon + 0.4rem padding = 2.0rem
+  &--count {
+    @apply bg-blue-600/10 text-blue-600;
+    @apply w-[2.0rem] h-[2.0rem] p-0;
+    @apply justify-center text-body-xs;
+    @apply rounded-md;
+
+    .dark & {
+      @apply bg-blue-400/10 text-blue-400;
+    }
+  }
+}
+
+// ============================================================================
+// Status Indicator (Dot + Text, no background)
+// ============================================================================
+.status {
+  @apply inline-flex items-center gap-[0.5rem] text-body-sm lg:text-body font-medium;
+
+  &__dot {
+    @apply w-[0.6rem] h-[0.6rem] rounded-full;
+  }
+
+  &--success {
+    @apply text-emerald-600;
+    .dark & {
+      @apply text-emerald-400;
+    }
+    .status__dot {
+      @apply bg-emerald-500;
+    }
+  }
+
+  &--warning {
+    @apply text-amber-600;
+    .dark & {
+      @apply text-amber-400;
+    }
+    .status__dot {
+      @apply bg-amber-500;
+    }
+  }
+
+  &--neutral {
+    @apply text-grey-500;
+    .dark & {
+      @apply text-grey-400;
+    }
+    .status__dot {
+      @apply bg-grey-400;
+    }
+  }
+}

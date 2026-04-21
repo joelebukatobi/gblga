@@ -1,0 +1,46 @@
+// ============================================================================
+// Breadcrumb Component - Refactored (DRY/KISS/SOLID)
+// Using maximum Tailwind utilities
+// ============================================================================
+
+.breadcrumb {
+  @apply hidden sm:flex items-center flex-wrap gap-[0.8rem];
+
+  &__item {
+    @apply inline-flex items-center gap-[0.4rem] text-body-sm no-underline;
+    @apply text-black;
+    @apply transition-colors duration-200;
+    @apply hover:text-blue-600;
+
+    .dark & {
+      @apply text-grey-400 hover:text-blue-400;
+    }
+
+    svg {
+      @apply w-[1.6rem] h-[1.6rem];
+    }
+
+    &--current {
+      @apply font-medium pointer-events-none;
+      @apply text-grey-900;
+
+      .dark & {
+        @apply text-white;
+      }
+    }
+  }
+
+  &__separator {
+    @apply flex-shrink-0 flex items-center justify-center rounded-lg;
+    @apply size-[1.6rem];
+    @apply text-grey-300;
+
+    .dark & {
+      @apply text-grey-600;
+    }
+
+    svg {
+      @apply w-[1.2rem] h-[1.2rem];
+    }
+  }
+}

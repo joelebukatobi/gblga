@@ -1,0 +1,288 @@
+// ============================================================================
+// Login Page Styles - Page-specific styles only
+// Following Midori pattern (BEM + SCSS @apply)
+// ============================================================================
+
+// ============================================================================
+// Login Layout - Split screen with image and form
+// ============================================================================
+.login {
+  @apply min-h-screen flex;
+
+  // Left side - Image/branding panel
+  &__branding {
+    @apply hidden lg:flex lg:w-1/2;
+    @apply relative overflow-hidden z-[60];
+    background-image: url('https://images.unsplash.com/photo-1647559709298-c0e3dcb47092?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    @apply bg-cover bg-center;
+  }
+
+  // Right side - Form panel
+  &__form-panel {
+    @apply w-full lg:w-1/2;
+    @apply flex items-center justify-center;
+    @apply px-[2.4rem] py-[4rem];
+    @apply bg-white relative overflow-hidden;
+
+    .dark & {
+      @apply bg-grey-900;
+    }
+  }
+
+  &__container {
+    @apply w-full max-w-[44rem];
+  }
+
+  // Modal - Constrained to right panel only
+  &__modal {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    @apply z-50 flex items-center justify-center pointer-events-none;
+
+    &.open,
+    &:not(.hidden) {
+      @apply pointer-events-auto;
+
+      .login__modal-backdrop {
+        @apply opacity-100;
+      }
+
+      .login__modal-content {
+        @apply opacity-100 scale-100;
+      }
+    }
+  }
+
+  &__modal-backdrop {
+    @apply absolute inset-0;
+    @apply bg-white/70 opacity-0 transition-opacity duration-300;
+
+    .dark & {
+      @apply bg-grey-900/75;
+    }
+  }
+
+  &__modal-content {
+    @apply relative z-10 w-full max-w-[44rem] px-[2.4rem];
+    @apply opacity-0 scale-95 transition-all duration-300;
+  }
+}
+
+// ============================================================================
+// Form Input Wrapper (for password toggle)
+// ============================================================================
+.form__input-wrapper {
+  @apply relative;
+
+  .form__input--with-icon {
+    @apply pr-[4.8rem];
+  }
+}
+
+.form__toggle-password {
+  @apply absolute right-[1.2rem] top-1/2 -translate-y-1/2;
+  @apply p-[0.4rem] rounded cursor-pointer;
+  @apply text-grey-400 hover:text-grey-600;
+  @apply transition-colors duration-200;
+
+  .dark & {
+    @apply text-grey-500 hover:text-grey-300;
+  }
+
+  svg {
+    @apply w-[2rem] h-[2rem];
+  }
+}
+
+// ============================================================================
+// Auth Card - Login form container
+// ============================================================================
+.auth-card {
+  @apply bg-white;
+  .dark & {
+    @apply bg-grey-900;
+  }
+  @apply rounded-2xl shadow-lg;
+  @apply p-[3.2rem] sm:p-[4rem] space-y-[2.4rem];
+
+  &__header {
+    @apply text-center mb-[2.4rem];
+  }
+
+  &__title {
+    @apply font-bold mb-[.8rem];
+  }
+
+  &__subtitle {
+    @apply text-body-sm;
+  }
+
+  &__error {
+    @apply text-red-800 text-center text-[1.2rem] m-0 p-0;
+  }
+
+  &__form {
+    @apply space-y-[2rem];
+  }
+
+  &__footer {
+    @apply text-center text-body;
+
+    a:not(.btn) {
+      @apply text-blue-600 hover:underline font-medium;
+
+      .dark & {
+        @apply text-blue-400;
+      }
+    }
+  }
+
+  &__links {
+    @apply flex items-center justify-between mt-[1.6rem] text-body-sm;
+
+    a {
+      @apply text-blue-600 hover:underline;
+
+      .dark & {
+        @apply text-blue-400;
+      }
+    }
+  }
+
+  &__remember {
+    @apply flex items-center gap-[0.4rem];
+
+    & input {
+      @apply w-[1rem] h-[1rem] rounded-[.4rem];
+    }
+
+    label {
+      @apply text-body-sm cursor-pointer;
+      @apply text-grey-600;
+      .dark & {
+        @apply text-grey-300;
+      }
+    }
+  }
+
+  &__success {
+    @apply text-center p-[2.4rem] rounded-xl;
+    @apply bg-emerald-50 text-emerald-700;
+
+    .dark & {
+      @apply bg-emerald-900/20 text-emerald-400;
+    }
+
+    svg {
+      @apply w-[4.8rem] h-[4.8rem] mx-auto mb-[1.6rem];
+    }
+  }
+
+  &__info {
+    @apply text-center p-[2.4rem] rounded-xl space-y-[2.4rem];
+    @apply bg-blue-50;
+
+    .dark & {
+      @apply bg-blue-900/20;
+    }
+  }
+
+  &__info-icon {
+    @apply w-[6.4rem] h-[6.4rem] mx-auto mb-[2rem] rounded-full;
+    @apply bg-blue-100 text-blue-600 flex items-center justify-center;
+
+    .dark & {
+      @apply bg-blue-900/30 text-blue-400;
+    }
+
+    svg {
+      @apply w-[3.2rem] h-[3.2rem];
+    }
+  }
+
+  &__info-title {
+    @apply text-body-lg font-semibold mb-[0.8rem];
+    @apply text-grey-900;
+    .dark & {
+      @apply text-white;
+    }
+  }
+
+  &__info-text {
+    @apply text-body-xs leading-relaxed mb-[2rem];
+    @apply mt-[0.2rem] text-grey-500;
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+
+  &__email-btn {
+    @apply inline-flex items-center gap-[0.8rem] px-[2rem] py-[1rem];
+    @apply bg-blue-600 text-white rounded-lg font-medium text-body-sm;
+    @apply hover:bg-blue-700 cursor-pointer;
+    @apply transition-colors duration-200;
+
+    .dark & {
+      @apply bg-white text-grey-900 hover:bg-grey-100;
+    }
+
+    i,
+    svg {
+      @apply w-4 h-4;
+    }
+  }
+}
+
+// ============================================================================
+// Social Button - Google SSO
+// ============================================================================
+.social-btn {
+  @apply w-full flex items-center justify-center gap-[1.2rem];
+  @apply px-[2.4rem] py-[1.2rem] text-body font-medium rounded-lg;
+  @apply border cursor-pointer;
+  @apply transition-all duration-200;
+
+  &--google {
+    @apply bg-white text-grey-700 border-grey-300;
+    @apply hover:bg-grey-50 hover:border-grey-400;
+
+    .dark & {
+      @apply bg-grey-900 text-white border-grey-600;
+      @apply hover:bg-grey-800 hover:border-grey-500;
+    }
+  }
+
+  &__icon {
+    @apply w-[2.4rem] h-[2.4rem] flex-shrink-0;
+
+    svg {
+      @apply w-full h-full;
+    }
+  }
+}
+
+// ============================================================================
+// Auth Divider - "or continue with"
+// ============================================================================
+.auth-divider {
+  @apply flex items-center gap-[1.6rem] my-[2.4rem];
+
+  &::before,
+  &::after {
+    @apply content-[''] flex-1 h-px bg-grey-200;
+
+    .dark & {
+      @apply bg-grey-700;
+    }
+  }
+
+  &__text {
+    @apply text-body-sm text-grey-500;
+
+    .dark & {
+      @apply text-grey-400;
+    }
+  }
+}

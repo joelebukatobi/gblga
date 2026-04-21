@@ -1,0 +1,59 @@
+// ============================================================================
+// Tooltip Component
+// Using Tailwind utilities - works with Preline hs-tooltip
+// ============================================================================
+
+.tooltip {
+  @apply relative inline-block;
+
+  &__content {
+    @apply absolute z-50 px-[1.2rem] py-[0.4rem];
+    @apply text-body-xs font-medium text-white;
+    @apply bg-grey-900 dark:bg-grey-700 rounded-lg;
+    @apply opacity-0 invisible transition-all duration-200;
+    @apply whitespace-nowrap;
+
+    // Arrow
+    &::before {
+      @apply content-[''] absolute w-[0.8rem] h-[0.8rem];
+      @apply bg-grey-900 dark:bg-grey-700 rotate-45;
+    }
+  }
+
+  &:hover .tooltip__content {
+    @apply opacity-100 visible;
+  }
+
+  // Positions
+  &--top .tooltip__content {
+    @apply bottom-full left-1/2 -translate-x-1/2 mb-[0.8rem];
+
+    &::before {
+      @apply -bottom-[0.4rem] left-1/2 -translate-x-1/2;
+    }
+  }
+
+  &--bottom .tooltip__content {
+    @apply top-full left-1/2 -translate-x-1/2 mt-[0.8rem];
+
+    &::before {
+      @apply -top-[0.4rem] left-1/2 -translate-x-1/2;
+    }
+  }
+
+  &--left .tooltip__content {
+    @apply right-full top-1/2 -translate-y-1/2 mr-[0.8rem];
+
+    &::before {
+      @apply -right-[0.4rem] top-1/2 -translate-y-1/2;
+    }
+  }
+
+  &--right .tooltip__content {
+    @apply left-full top-1/2 -translate-y-1/2 ml-[0.8rem];
+
+    &::before {
+      @apply -left-[0.4rem] top-1/2 -translate-y-1/2;
+    }
+  }
+}

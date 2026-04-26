@@ -9,9 +9,10 @@ import { escapeHtml } from '../../../utils/helpers.js';
  * @param {Object} options.user - Current user
  * @param {Object} options.video - Video data
  * @param {Array} options.posts - Posts for attachment dropdown
+ * @param {Array} options.albums - Albums for dropdown
  * @returns {string} - HTML string
  */
-export function videosEditPage({ user, video, posts }) {
+export function videosEditPage({ user, video, posts, albums = [] }) {
   const content = `
     <div class="media">
       <div class="content">
@@ -101,6 +102,29 @@ export function videosEditPage({ user, video, posts }) {
                       <strong>Format:</strong> ${video.mimeType.split('/')[1].toUpperCase()}
                     </p>
                   </div>
+                </div>
+
+                <!-- Album -->
+                <div class="form__group form__group--spaced">
+                  <label class="label">Album (Optional)</label>
+                  <select 
+                    name="albumId" 
+                    class="form__select-native"
+                    data-hs-select='{
+                      "hasSearch": true,
+                      "searchPlaceholder": "Search albums...",
+                      "placeholder": "None",
+                      "toggleClasses": "form__select-toggle",
+                      "dropdownClasses": "form__select-dropdown",
+                      "optionClasses": "form__select-option",
+                      "searchClasses": "form__select-search__input"
+                    }'
+                  >
+                    <option value="">None</option>
+                    ${albums.map(album => `
+                      <option value="${album.id}" ${video.albumId === album.id ? 'selected' : ''}>${escapeHtml(album.title)}</option>
+                    `).join('')}
+                  </select>
                 </div>
 
                 <!-- Attach to Post -->

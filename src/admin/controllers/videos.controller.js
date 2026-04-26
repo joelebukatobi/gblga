@@ -2,6 +2,7 @@
 // Videos controller - handles video HTTP requests
 
 import { videosService } from '../../services/videos.service.js';
+import { albumsService } from '../../services/albums.service.js';
 import { successToast, errorToast } from '../templates/partials/alerts.js';
 
 /**
@@ -101,8 +102,9 @@ class VideosController {
     try {
       const user = request.user;
 
-      // Get all posts for attachment dropdown
+      // Get all posts and albums for dropdowns
       const posts = await videosService.getAllPostsForAttachment();
+      const albums = await albumsService.getAllForDropdown();
 
       // Import new video template
       const { videosNewPage } = await import('../templates/pages/media/videos/index.js');
@@ -111,6 +113,7 @@ class VideosController {
         videosNewPage({
           user,
           posts,
+          albums,
         })
       );
     } catch (error) {
@@ -136,6 +139,7 @@ class VideosController {
       let postId = null;
       let title = null;
       let altText = null;
+      let albumId = null;
       
       for await (const part of parts) {
         if (part.type === 'file') {
@@ -145,6 +149,7 @@ class VideosController {
           if (part.fieldname === 'postId') postId = value;
           if (part.fieldname === 'title') title = value;
           if (part.fieldname === 'altText') altText = value;
+          if (part.fieldname === 'albumId') albumId = value;
         }
       }
       
@@ -159,6 +164,7 @@ class VideosController {
       const video = await videosService.upload(file, {
         title: title || file.filename,
         altText: altText || '',
+        albumId: albumId || null,
       }, user.id);
 
       // Attach to post if postId provided
@@ -197,8 +203,9 @@ class VideosController {
         }));
       }
 
-      // Get all posts for attachment dropdown
+      // Get all posts and albums for dropdowns
       const posts = await videosService.getAllPostsForAttachment();
+      const albums = await albumsService.getAllForDropdown();
 
       // Import edit video template
       const { videosEditPage } = await import('../templates/pages/media/videos/index.js');
@@ -213,6 +220,7 @@ class VideosController {
             durationFormatted: videosService.formatDuration(video.duration),
           },
           posts,
+          albums,
         })
       );
     } catch (error) {
@@ -247,6 +255,7 @@ class VideosController {
       await videosService.update(id, {
         title,
         altText,
+        albumId: request.body.albumId,
       });
 
       // Return success with toast

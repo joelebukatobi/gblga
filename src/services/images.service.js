@@ -180,6 +180,7 @@ class ImagesService {
         path: `/public/uploads/images/${filename}`,
         thumbnailPath: `/public/uploads/images/thumbs/${thumbFilename}`,
         uploadedBy: userId,
+        albumId: metadata.albumId || null,
       });
 
     const [imageRecord] = await db
@@ -203,13 +204,18 @@ class ImagesService {
       throw new Error('Image not found');
     }
 
+    const updateData = {
+      title: data.title,
+      altText: data.altText,
+      updatedAt: new Date(),
+    };
+    if (data.albumId !== undefined) {
+      updateData.albumId = data.albumId || null;
+    }
+
     await db
       .update(mediaItems)
-      .set({
-        title: data.title,
-        altText: data.altText,
-        updatedAt: new Date(),
-      })
+      .set(updateData)
       .where(eq(mediaItems.id, id));
 
     const [image] = await db

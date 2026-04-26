@@ -3,6 +3,7 @@
 
 import { imagesService } from '../../services/images.service.js';
 import { postsService } from '../../services/posts.service.js';
+import { albumsService } from '../../services/albums.service.js';
 import { successToast, errorToast } from '../templates/partials/alerts.js';
 
 /**
@@ -103,6 +104,7 @@ class ImagesController {
 
       // Get all posts for attachment dropdown
       const posts = await imagesService.getAllPostsForAttachment();
+      const albums = await albumsService.getAllForDropdown();
 
       // Import new image template
       const { imagesNewPage } = await import('../templates/pages/media/images/index.js');
@@ -111,6 +113,7 @@ class ImagesController {
         imagesNewPage({
           user,
           posts,
+          albums,
         })
       );
     } catch (error) {
@@ -141,6 +144,7 @@ class ImagesController {
       let title = null;
       let altText = null;
       
+      let albumId = null;
       for await (const part of parts) {
         if (part.type === 'file') {
           file = part;
@@ -149,6 +153,7 @@ class ImagesController {
           if (part.fieldname === 'postId') postId = value;
           if (part.fieldname === 'title') title = value;
           if (part.fieldname === 'altText') altText = value;
+          if (part.fieldname === 'albumId') albumId = value;
         }
       }
       
@@ -163,6 +168,7 @@ class ImagesController {
       const image = await imagesService.upload(file, {
         title: title || file.filename,
         altText: altText || '',
+        albumId: albumId || null,
       }, user.id);
 
       // Attach to post if postId provided
@@ -201,8 +207,9 @@ class ImagesController {
         }));
       }
 
-      // Get all posts for attachment dropdown
+      // Get all posts and albums for dropdowns
       const posts = await imagesService.getAllPostsForAttachment();
+      const albums = await albumsService.getAllForDropdown();
 
       // Import edit image template
       const { imagesEditPage } = await import('../templates/pages/media/images/index.js');
@@ -216,6 +223,7 @@ class ImagesController {
             dateFormatted: formatDate(image.createdAt),
           },
           posts,
+          albums,
         })
       );
     } catch (error) {
@@ -250,6 +258,7 @@ class ImagesController {
       await imagesService.update(id, {
         title,
         altText,
+        albumId: request.body.albumId,
       });
 
       // Return success with toast

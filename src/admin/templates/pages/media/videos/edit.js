@@ -20,7 +20,7 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
         <div class="page-header">
           <div class="page-header__left">
             <h1 class="page-header__title">Edit Video</h1>
-            <p class="page-header__subtitle">${escapeHtml(video.originalName)} • ${video.durationFormatted}</p>
+            <p class="page-header__subtitle">${escapeHtml(video.originalName)} &bull; ${video.durationFormatted}</p>
           </div>
           <div class="page-header__toast-container"></div>
         </div>
@@ -55,118 +55,125 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
           <!-- Right: Form -->
           <div class="media-layout__sidebar">
             <div class="card card__panel">
-              <form 
-                id="editForm"
-                hx-put="/admin/media/videos/${video.id}"
-                hx-target="#form-response"
-                hx-swap="innerHTML"
-              >
-                <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
-                
-                <!-- File Name -->
-                <div class="form__group">
-                  <label class="label">File Name</label>
-                  <input 
-                    type="text" 
-                    name="title" 
-                    id="fileName" 
-                    class="input"
-                    value="${escapeHtml(video.title || '')}"
-                    placeholder="Enter file name"
-                    required 
-                  />
-                </div>
-
-                <!-- Alt Text -->
-                <div class="form__group">
-                  <label class="label">Alt Text *</label>
-                  <input 
-                    type="text" 
-                    name="altText" 
-                    class="input"
-                    value="${escapeHtml(video.altText || '')}"
-                    placeholder="Describe the video for accessibility"
-                    required 
-                  />
-                  <p class="form-feedback form-feedback--hint">Describe the video for screen readers</p>
-                </div>
-
-                <!-- Video Info -->
-                <div class="form__group form__group--spaced">
-                  <label class="label">Video Information</label>
-                  <div class="card card__panel media-info-card">
-                    <p>
-                      <strong>Duration:</strong> ${video.durationFormatted}<br>
-                      <strong>Dimensions:</strong> ${video.width || 'N/A'} x ${video.height || 'N/A'}<br>
-                      <strong>Size:</strong> ${video.sizeFormatted}<br>
-                      <strong>Format:</strong> ${video.mimeType.split('/')[1].toUpperCase()}
-                    </p>
+              <div class="card__body">
+                <form 
+                  id="editForm"
+                  class="form"
+                  hx-put="/admin/media/videos/${video.id}"
+                  hx-target="#form-response"
+                  hx-swap="innerHTML"
+                >
+                  <div id="form-response"></div>
+                  <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
+                  
+                  <!-- File Name -->
+                  <div class="form__group">
+                    <label class="label label--required" for="fileName">File Name</label>
+                    <input 
+                      type="text" 
+                      name="title" 
+                      id="fileName" 
+                      class="input"
+                      value="${escapeHtml(video.title || '')}"
+                      placeholder="Enter file name"
+                      required 
+                    />
                   </div>
-                </div>
 
-                <!-- Album -->
-                <div class="form__group form__group--spaced">
-                  <label class="label">Album (Optional)</label>
-                  <select 
-                    name="albumId" 
-                    class="form__select-native"
-                    data-hs-select='{
-                      "hasSearch": true,
-                      "searchPlaceholder": "Search albums...",
-                      "placeholder": "None",
-                      "toggleClasses": "form__select-toggle",
-                      "dropdownClasses": "form__select-dropdown",
-                      "optionClasses": "form__select-option",
-                      "searchClasses": "form__select-search__input"
-                    }'
-                  >
-                    <option value="">None</option>
-                    ${albums.map(album => `
-                      <option value="${album.id}" ${video.albumId === album.id ? 'selected' : ''}>${escapeHtml(album.title)}</option>
-                    `).join('')}
-                  </select>
-                </div>
+                  <!-- Alt Text -->
+                  <div class="form__group">
+                    <label class="label label--required" for="altText">Alt Text</label>
+                    <input 
+                      type="text" 
+                      name="altText" 
+                      id="altText"
+                      class="input"
+                      value="${escapeHtml(video.altText || '')}"
+                      placeholder="Describe the video for accessibility"
+                      required 
+                    />
+                    <p class="form-feedback form-feedback--hint">Describe the video for screen readers</p>
+                  </div>
 
-                <!-- Attach to Post -->
-                <div class="form__group form__group--spaced">
-                  <label class="label">Attach to Post (Optional)</label>
-                  <select 
-                    name="postId" 
-                    class="form__select-native"
-                    data-hs-select='{
-                      "hasSearch": true,
-                      "searchPlaceholder": "Search posts...",
-                      "placeholder": "None",
-                      "toggleClasses": "form__select-toggle",
-                      "dropdownClasses": "form__select-dropdown",
-                      "optionClasses": "form__select-option",
-                      "searchClasses": "form__select-search__input"
-                    }'
-                  >
-                    <option value="">None</option>
-                    ${posts.map(post => `
-                      <option value="${post.id}">${escapeHtml(post.title)}</option>
-                    `).join('')}
-                  </select>
-                </div>
+                  <!-- Video Info -->
+                  <div class="form__group">
+                    <label class="label">Video Information</label>
+                    <div class="card card__panel media-info-card">
+                      <p>
+                        <strong>Duration:</strong> ${video.durationFormatted}<br>
+                        <strong>Dimensions:</strong> ${video.width || 'N/A'} x ${video.height || 'N/A'}<br>
+                        <strong>Size:</strong> ${video.sizeFormatted}<br>
+                        <strong>Format:</strong> ${video.mimeType.split('/')[1].toUpperCase()}
+                      </p>
+                    </div>
+                  </div>
 
-                <!-- Form Response -->
-                <div id="form-response"></div>
+                  <!-- Album -->
+                  <div class="form__group">
+                    <label class="label" for="albumId">Album (Optional)</label>
+                    <select 
+                      name="albumId" 
+                      id="albumId"
+                      class="form__select-native"
+                      data-hs-select='{
+                        "hasSearch": true,
+                        "searchPlaceholder": "Search albums...",
+                        "placeholder": "None",
+                        "toggleClasses": "form__select-toggle",
+                        "dropdownClasses": "form__select-dropdown",
+                        "optionClasses": "form__select-option",
+                        "searchClasses": "form__select-search__input"
+                      }'
+                    >
+                      <option value="">None</option>
+                      ${albums.map(album => `
+                        <option value="${album.id}" ${video.albumId === album.id ? 'selected' : ''}>${escapeHtml(album.title)}</option>
+                      `).join('')}
+                    </select>
+                  </div>
 
-                <!-- Submit Button -->
-                <div class="form__group form__group--tight">
-                  <button type="submit" class="btn btn--primary btn--full">
+                  <!-- Attach to Post -->
+                  <div class="form__group">
+                    <label class="label" for="postId">Attach to Post (Optional)</label>
+                    <select 
+                      name="postId" 
+                      id="postId"
+                      class="form__select-native"
+                      data-hs-select='{
+                        "hasSearch": true,
+                        "searchPlaceholder": "Search posts...",
+                        "placeholder": "None",
+                        "toggleClasses": "form__select-toggle",
+                        "dropdownClasses": "form__select-dropdown",
+                        "optionClasses": "form__select-option",
+                        "searchClasses": "form__select-search__input"
+                      }'
+                    >
+                      <option value="">None</option>
+                      ${posts.map(post => `
+                        <option value="${post.id}">${escapeHtml(post.title)}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                </form>
+              </div>
+              <div class="card__footer">
+                <div class="form__field-group">
+                  <button type="submit" form="editForm" class="btn btn--primary">
+                    <i data-lucide="check"></i>
                     Save Changes
                   </button>
+                  <a href="/admin/media/videos" class="btn btn--ghost btn--cancel">Cancel</a>
                   <button 
                     type="button" 
-                    class="btn btn--danger btn--outline btn--full btn--spaced"
+                    class="btn btn--danger btn--outline"
                     onclick="openDeleteModal(event)"
                   >
+                    <i data-lucide="trash-2"></i>
                     Delete Video
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -271,7 +278,7 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
       { label: 'Dashboard', url: '/admin' },
       { label: 'Media', url: '/admin/media/videos' },
       { label: 'Videos', url: '/admin/media/videos' },
-      { label: video.title || 'Edit', url: `/admin/media/videos/${video.id}/edit` },
+      { label: video.title || 'Edit Video', url: `/admin/media/videos/${video.id}/edit` },
     ],
   });
 }

@@ -49,76 +49,80 @@ export function videosNewPage({ user, posts }) {
           <!-- Right: Form -->
           <div class="media-layout__sidebar">
             <div class="card card__panel">
-              <form 
-                id="uploadForm"
-                hx-post="/admin/media/videos" 
-                enctype="multipart/form-data"
-                hx-target="#form-response"
-                hx-swap="innerHTML"
-              >
-                <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
-                
-                <!-- File Name -->
-                <div class="form__group">
-                  <label class="label">File Name</label>
-                  <input 
-                    type="text" 
-                    name="title" 
-                    id="fileName" 
-                    class="input"
-                    placeholder="Enter file name"
-                    required 
-                  />
-                </div>
+              <div class="card__body">
+                <form 
+                  id="uploadForm"
+                  class="form"
+                  hx-post="/admin/media/videos" 
+                  enctype="multipart/form-data"
+                  hx-target="#form-response"
+                  hx-swap="innerHTML"
+                >
+                  <div id="form-response"></div>
+                  <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
+                  
+                  <!-- File Name -->
+                  <div class="form__group">
+                    <label class="label label--required" for="fileName">File Name</label>
+                    <input 
+                      type="text" 
+                      name="title" 
+                      id="fileName" 
+                      class="input"
+                      placeholder="Enter file name"
+                      required 
+                    />
+                  </div>
 
-                <!-- Alt Text -->
-                <div class="form__group">
-                  <label class="label">Alt Text *</label>
-                  <input 
-                    type="text" 
-                    name="altText" 
-                    class="input"
-                    placeholder="Describe the video for accessibility"
-                    required 
-                  />
-                  <p class="form-feedback form-feedback--hint">Describe the video for screen readers</p>
-                </div>
+                  <!-- Alt Text -->
+                  <div class="form__group">
+                    <label class="label label--required" for="altText">Alt Text</label>
+                    <input 
+                      type="text" 
+                      name="altText" 
+                      id="altText"
+                      class="input"
+                      placeholder="Describe the video for accessibility"
+                      required 
+                    />
+                    <p class="form-feedback form-feedback--hint">Describe the video for screen readers</p>
+                  </div>
 
-                <!-- Attach to Post -->
-                <div class="form__group form__group--spaced">
-                  <label class="label">Attach to Post (Optional)</label>
-                  <select 
-                    name="postId" 
-                    class="form__select-native"
-                    data-hs-select='{
-                      "hasSearch": true,
-                      "searchPlaceholder": "Search posts...",
-                      "placeholder": "None",
-                      "toggleClasses": "form__select-toggle",
-                      "dropdownClasses": "form__select-dropdown",
-                      "optionClasses": "form__select-option",
-                      "searchClasses": "form__select-search__input"
-                    }'
-                  >
-                    <option value="">None</option>
-                    ${posts.map(post => `
-                      <option value="${post.id}">${escapeHtml(post.title)}</option>
-                    `).join('')}
-                  </select>
-                  <p class="form-feedback form-feedback--hint">Sets this as the post's featured video</p>
-                </div>
-
-                <!-- Form Response -->
-                <div id="form-response"></div>
-
-                <!-- Submit Button -->
-                <div class="form__group form__group--spaced">
-                  <button type="submit" class="btn btn--primary btn--full">
+                  <!-- Attach to Post -->
+                  <div class="form__group">
+                    <label class="label" for="postId">Attach to Post (Optional)</label>
+                    <select 
+                      name="postId" 
+                      id="postId"
+                      class="form__select-native"
+                      data-hs-select='{
+                        "hasSearch": true,
+                        "searchPlaceholder": "Search posts...",
+                        "placeholder": "None",
+                        "toggleClasses": "form__select-toggle",
+                        "dropdownClasses": "form__select-dropdown",
+                        "optionClasses": "form__select-option",
+                        "searchClasses": "form__select-search__input"
+                      }'
+                    >
+                      <option value="">None</option>
+                      ${posts.map(post => `
+                        <option value="${post.id}">${escapeHtml(post.title)}</option>
+                      `).join('')}
+                    </select>
+                    <p class="form-feedback form-feedback--hint">Sets this as the post's featured video</p>
+                  </div>
+                </form>
+              </div>
+              <div class="card__footer">
+                <div class="form__field-group">
+                  <button type="submit" form="uploadForm" class="btn btn--primary">
+                    <i data-lucide="upload"></i>
                     Upload Video
                   </button>
-                  <a href="/admin/media/videos" class="btn btn--outline btn--full btn--cancel">Cancel</a>
+                  <a href="/admin/media/videos" class="btn btn--ghost btn--cancel">Cancel</a>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -179,7 +183,7 @@ export function videosNewPage({ user, posts }) {
       { label: 'Dashboard', url: '/admin' },
       { label: 'Media', url: '/admin/media/videos' },
       { label: 'Videos', url: '/admin/media/videos' },
-      { label: 'New', url: '/admin/media/videos/new' },
+      { label: 'New Video', url: '/admin/media/videos/new' },
     ],
   });
 }

@@ -26,29 +26,29 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
 
               <div class="form__row form__row--2col">
                 <div class="form__group ${errors.name ? 'form__group--error' : ''}">
-                  <label class="label label--required">Name</label>
+                  <label class="label label--required" for="memberName">Name</label>
                   <input type="text" class="input" id="memberName" name="name" value="${escapeHtml(member.name)}" required />
                 </div>
                 <div class="form__group ${errors.role ? 'form__group--error' : ''}">
-                  <label class="label label--required">Role</label>
+                  <label class="label label--required" for="memberRole">Role</label>
                   <input type="text" class="input" id="memberRole" name="role" value="${escapeHtml(member.role)}" required />
                 </div>
               </div>
 
               <div class="form__row form__row--2col">
                 <div class="form__group">
-                  <label class="label">Email</label>
+                  <label class="label" for="memberEmail">Email</label>
                   <input type="email" class="input" id="memberEmail" name="email" value="${escapeHtml(member.email || '')}" placeholder="e.g. alex@example.com" />
                 </div>
                 <div class="form__group">
-                  <label class="label label--required">Year</label>
+                  <label class="label label--required" for="memberYear">Year</label>
                   <input type="number" class="input" id="memberYear" name="year" value="${member.year}" required />
                 </div>
               </div>
 
               <div class="form__row form__row--2col">
                 <div class="form__group">
-                  <label class="label">Type</label>
+                  <label class="label" for="memberType">Type</label>
                   <select
                     name="type"
                     id="memberType"
@@ -65,19 +65,19 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                   </select>
                 </div>
                 <div class="form__group">
-                  <label class="label">Display Order</label>
+                  <label class="label" for="memberOrder">Display Order</label>
                   <input type="number" class="input" id="memberOrder" name="order" value="${member.order}" />
                 </div>
               </div>
 
               <div class="form__group">
-                <label class="label">Bio</label>
+                <label class="label" for="memberBio">Bio</label>
                 <textarea class="textarea" id="memberBio" name="bio" rows="4" placeholder="Enter member bio...">${escapeHtml(member.bio || '')}</textarea>
               </div>
 
               <div class="form__group">
-                <label class="label flex items-center gap-[0.8rem] cursor-pointer">
-                  <input type="checkbox" name="isActive" value="true" ${member.isActive ? 'checked' : ''} class="w-[1.6rem] h-[1.6rem]" />
+                <label class="label flex items-center gap-[0.8rem] cursor-pointer" for="memberIsActive">
+                  <input type="checkbox" id="memberIsActive" name="isActive" value="true" ${member.isActive ? 'checked' : ''} class="w-[1.6rem] h-[1.6rem]" />
                   <span>Active</span>
                 </label>
               </div>

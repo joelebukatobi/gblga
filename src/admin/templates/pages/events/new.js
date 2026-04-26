@@ -25,12 +25,12 @@ export function eventNewPage({ user, errors = {} }) {
 
               <div class="form__row form__row--2col">
                 <div class="form__group ${errors.title ? 'form__group--error' : ''}">
-                  <label class="label label--required">Title</label>
+                  <label class="label label--required" for="eventTitle">Title</label>
                   <input type="text" class="input" id="eventTitle" name="title" placeholder="e.g. Cultural Exchange Night" required />
                   ${errors.title ? `<p class="form-feedback form-feedback--error">${errors.title}</p>` : ''}
                 </div>
                 <div class="form__group ${errors.slug ? 'form__group--error' : ''}">
-                  <label class="label">Slug</label>
+                  <label class="label" for="eventSlug">Slug</label>
                   <input type="text" class="input" id="eventSlug" name="slug" placeholder="e.g. cultural-exchange-night" />
                   <p class="form-feedback form-feedback--hint">Leave blank to generate from title</p>
                 </div>
@@ -38,7 +38,7 @@ export function eventNewPage({ user, errors = {} }) {
 
               <div class="form__row form__row--2col">
                 <div class="form__group">
-                  <label class="label">Event Date</label>
+                  <label class="label" for="eventDate">Event Date</label>
                   <input
                     type="text"
                     class="input"
@@ -53,18 +53,18 @@ export function eventNewPage({ user, errors = {} }) {
                   />
                 </div>
                 <div class="form__group">
-                  <label class="label">Event Time</label>
+                  <label class="label" for="eventTime">Event Time</label>
                   <input type="text" class="input" id="eventTime" name="eventTime" placeholder="e.g. 6:00 PM" />
                 </div>
               </div>
 
               <div class="form__group">
-                <label class="label">Location</label>
+                <label class="label" for="eventLocation">Location</label>
                 <input type="text" class="input" id="eventLocation" name="location" placeholder="e.g. Gabelli Commons" />
               </div>
 
               <div class="form__group">
-                <label class="label">Description</label>
+                <label class="label" for="eventDescription">Description</label>
                 <textarea class="textarea" id="eventDescription" name="description" rows="4" placeholder="Enter event description..."></textarea>
               </div>
 

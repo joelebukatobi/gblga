@@ -124,6 +124,13 @@ export default async function app(fastify, opts) {
     decorateReply: false,
   });
 
+  // Serve vanilla-calendar-pro for Preline datepicker
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../node_modules/vanilla-calendar-pro'),
+    prefix: '/vendor/vanilla-calendar-pro/',
+    decorateReply: false,
+  });
+
   // Serve ApexCharts
   await fastify.register(fastifyStatic, {
     root: path.join(__dirname, '../node_modules/apexcharts/dist'),

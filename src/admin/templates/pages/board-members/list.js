@@ -65,19 +65,13 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
             <tbody class="table__tbody">
               ${members.map((member) => {
                 const typeClass = member.type === 'SENIOR' ? 'badge--primary' : 'badge--info';
-                const photoPreview = member.photo?.thumbnailPath
-                  ? `<img src="${member.photo.thumbnailPath}" alt="" class="w-[3.2rem] h-[3.2rem] rounded-full object-cover">`
-                  : `<div class="w-[3.2rem] h-[3.2rem] rounded-full bg-gray-200 flex items-center justify-center text-gray-500"><i data-lucide="user" class="h-[1.6rem] w-[1.6rem]"></i></div>`;
 
                 return `
                   <tr class="table__tr">
                     <td class="table__td">
                       <span class="table__label">Name</span>
-                      <div class="flex items-center gap-[1.2rem]">
-                        ${photoPreview}
-                        <div class="table__title">
-                          <a href="/admin/board-members/${member.id}/edit">${escapeHtml(member.name)}</a>
-                        </div>
+                      <div class="table__title">
+                        <a href="/admin/board-members/${member.id}/edit">${escapeHtml(member.name)}</a>
                       </div>
                     </td>
                     <td class="table__td">

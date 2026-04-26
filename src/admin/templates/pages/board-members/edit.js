@@ -49,7 +49,17 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
               <div class="form__row form__row--2col">
                 <div class="form__group">
                   <label class="label">Type</label>
-                  <select class="input" id="memberType" name="type">
+                  <select
+                    name="type"
+                    id="memberType"
+                    data-hs-select='{
+                      "placeholder": "Select type...",
+                      "toggleClasses": "form__select-toggle",
+                      "dropdownClasses": "form__select-dropdown",
+                      "optionClasses": "form__select-option"
+                    }'
+                    class="hidden"
+                  >
                     <option value="SENIOR" ${member.type === 'SENIOR' ? 'selected' : ''}>Senior</option>
                     <option value="JUNIOR" ${member.type === 'JUNIOR' ? 'selected' : ''}>Junior</option>
                   </select>

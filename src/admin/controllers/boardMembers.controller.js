@@ -185,7 +185,7 @@ function membersTableFragment({ members, pagination }) {
     const typeClass = member.type === 'SENIOR' ? 'badge--primary' : 'badge--info';
     const photoPreview = member.photo?.thumbnailPath
       ? `<img src="${member.photo.thumbnailPath}" alt="" class="w-[3.2rem] h-[3.2rem] rounded-full object-cover">`
-      : `<div class="w-[3.2rem] h-[3.2rem] rounded-full bg-gray-200 flex items-center justify-center text-[1.2rem] font-bold text-gray-500">${member.name.charAt(0)}</div>`;
+      : `<div class="w-[3.2rem] h-[3.2rem] rounded-full bg-gray-200 flex items-center justify-center text-gray-500"><i data-lucide="user" class="h-[1.6rem] w-[1.6rem]"></i></div>`;
 
     return `
       <tr class="table__tr">

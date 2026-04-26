@@ -171,12 +171,12 @@ export function postEditPage({ categories, tags, post, user }) {
         <div class="card__footer">
           <div class="form__field-group">
             <button type="button" class="btn btn--primary" onclick="submitForm('PUBLISHED')">
-              ${post.status === 'PUBLISHED' ? 'Update Post' : 'Publish Post'}
+              Save
             </button>
             <button type="button" class="btn btn--outline-primary" onclick="submitForm('DRAFT')">
               Save Draft
             </button>
-            <a href="/admin/posts" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/posts" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

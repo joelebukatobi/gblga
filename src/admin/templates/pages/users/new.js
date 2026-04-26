@@ -164,7 +164,7 @@ export function usersNewPage({ user, errors = {} }) {
                   <button type="button" class="btn btn--primary" onclick="submitForm()">
                     Add User
                   </button>
-                  <a href="/admin/users" class="btn btn--ghost btn--cancel">Cancel</a>
+                  <a href="/admin/users" class="btn btn--outline btn--cancel">Cancel</a>
                 </div>
               </div>
             </div>

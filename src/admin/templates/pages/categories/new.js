@@ -86,7 +86,7 @@ export function categoryNewPage({ user, errors = {} }) {
             <button type="button" class="btn btn--primary" onclick="submitForm()">
               Create Category
             </button>
-            <a href="/admin/categories" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/categories" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

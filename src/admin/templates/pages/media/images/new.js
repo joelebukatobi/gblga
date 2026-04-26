@@ -120,7 +120,7 @@ export function imagesNewPage({ user, posts }) {
                     <i data-lucide="upload"></i>
                     Upload Image
                   </button>
-                  <a href="/admin/media/images" class="btn btn--ghost btn--cancel">Cancel</a>
+                  <a href="/admin/media/images" class="btn btn--outline btn--cancel">Cancel</a>
                 </div>
               </div>
             </div>

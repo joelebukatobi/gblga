@@ -85,9 +85,9 @@ export function tagEditPage({ tag, user, errors = {} }) {
           <div class="form__field-group">
             <button type="button" class="btn btn--primary" onclick="submitForm()">
               <i data-lucide="check"></i>
-              Update Tag
+              Save
             </button>
-            <a href="/admin/tags" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/tags" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

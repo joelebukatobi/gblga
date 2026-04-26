@@ -86,7 +86,7 @@ export function tagNewPage({ user, errors = {} }) {
               <i data-lucide="plus"></i>
               Create Tag
             </button>
-            <a href="/admin/tags" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/tags" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

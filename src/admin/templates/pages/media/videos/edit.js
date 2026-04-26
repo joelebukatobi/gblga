@@ -161,9 +161,9 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
                 <div class="form__field-group">
                   <button type="submit" form="editForm" class="btn btn--primary">
                     <i data-lucide="check"></i>
-                    Save Changes
+                    Save
                   </button>
-                  <a href="/admin/media/videos" class="btn btn--ghost btn--cancel">Cancel</a>
+                  <a href="/admin/media/videos" class="btn btn--outline btn--cancel">Cancel</a>
                   <button 
                     type="button" 
                     class="btn btn--danger btn--outline"

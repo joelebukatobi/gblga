@@ -89,9 +89,9 @@ export function editSubscriberPage({ user, subscriber, error }) {
           <div class="card__footer">
             <div class="form__field-group">
               <button type="submit" form="editSubscriberForm" class="btn btn--primary">
-                Save Changes
+                Save
               </button>
-              <a href="/admin/subscribers" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/subscribers" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

@@ -89,9 +89,9 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             <div class="form__field-group">
               <button type="button" class="btn btn--primary" onclick="submitForm()">
                 <i data-lucide="check"></i>
-                Update Member
+                Save
               </button>
-              <a href="/admin/board-members" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/board-members" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

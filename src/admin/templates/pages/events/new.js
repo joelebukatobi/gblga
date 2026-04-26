@@ -77,7 +77,7 @@ export function eventNewPage({ user, errors = {} }) {
                 <i data-lucide="plus"></i>
                 Create Event
               </button>
-              <a href="/admin/events" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/events" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

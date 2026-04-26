@@ -84,7 +84,7 @@ export function newSubscriberPage({ user, error }) {
                 <i data-lucide="plus"></i>
                 Add Subscriber
               </button>
-              <a href="/admin/subscribers" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/subscribers" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

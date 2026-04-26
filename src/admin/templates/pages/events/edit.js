@@ -80,9 +80,9 @@ export function eventEditPage({ event, user, errors = {} }) {
             <div class="form__field-group">
               <button type="button" class="btn btn--primary" onclick="submitForm()">
                 <i data-lucide="check"></i>
-                Update Event
+                Save
               </button>
-              <a href="/admin/events" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/events" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

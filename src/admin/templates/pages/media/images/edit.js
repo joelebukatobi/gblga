@@ -134,9 +134,9 @@ export function imagesEditPage({ user, image, posts, albums = [] }) {
                 <div class="form__field-group">
                   <button type="submit" form="editForm" class="btn btn--primary">
                     <i data-lucide="check"></i>
-                    Save Changes
+                    Save
                   </button>
-                  <a href="/admin/media/images" class="btn btn--ghost btn--cancel">Cancel</a>
+                  <a href="/admin/media/images" class="btn btn--outline btn--cancel">Cancel</a>
                   <button 
                     type="button" 
                     class="btn btn--danger btn--outline"

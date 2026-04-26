@@ -73,9 +73,9 @@ export function albumEditPage({ user, album }) {
             <div class="form__field-group">
               <button type="button" class="btn btn--primary" onclick="submitForm()">
                 <i data-lucide="check"></i>
-                Update Album
+                Save
               </button>
-              <a href="/admin/media/albums" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/media/albums" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

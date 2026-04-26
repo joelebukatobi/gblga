@@ -183,7 +183,7 @@ export function postNewPage({ categories, tags, user }) {
             <button type="button" class="btn btn--outline-primary" onclick="submitForm('DRAFT')">
               Save Draft
             </button>
-            <a href="/admin/posts" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/posts" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

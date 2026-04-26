@@ -85,9 +85,9 @@ export function categoryEditPage({ category, user, errors = {} }) {
         <div class="card__footer">
           <div class="form__field-group">
             <button type="button" class="btn btn--primary" onclick="submitForm()">
-              Update Category
+              Save
             </button>
-            <a href="/admin/categories" class="btn btn--ghost btn--cancel">Cancel</a>
+            <a href="/admin/categories" class="btn btn--outline btn--cancel">Cancel</a>
           </div>
         </div>
       </div>

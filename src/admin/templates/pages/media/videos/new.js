@@ -120,7 +120,7 @@ export function videosNewPage({ user, posts }) {
                     <i data-lucide="upload"></i>
                     Upload Video
                   </button>
-                  <a href="/admin/media/videos" class="btn btn--ghost btn--cancel">Cancel</a>
+                  <a href="/admin/media/videos" class="btn btn--outline btn--cancel">Cancel</a>
                 </div>
               </div>
             </div>

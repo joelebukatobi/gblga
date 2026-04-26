@@ -90,7 +90,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
                 <i data-lucide="plus"></i>
                 Create Member
               </button>
-              <a href="/admin/board-members" class="btn btn--ghost btn--cancel">Cancel</a>
+              <a href="/admin/board-members" class="btn btn--outline btn--cancel">Cancel</a>
             </div>
           </div>
         </div>

@@ -71,6 +71,11 @@ cookies.txt
 .opencode/
 .playwright-mcp/
 .tmp/
+.cursor/
+
+# AI assistant prompts
+dashboard-prompt.json
+session*.json
 
 # Session exports from AI assistants
 session*.json

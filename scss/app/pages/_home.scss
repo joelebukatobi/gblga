@@ -125,13 +125,7 @@
 
     // Media section
     > article > div:first-child {
-      @apply relative h-[32rem] overflow-hidden pt-[2.4rem] px-[2.4rem];
-
-      // Background layer
-      > [data-bg] {
-        @apply absolute inset-0 bg-cover bg-center;
-        background-image: url('/public/uploads/images/gblga-bhm-ig.png');
-      }
+      @apply relative h-[32rem] overflow-hidden;
 
       // Image - cover, centered from top
       > img {
@@ -161,7 +155,7 @@
 
       // Meta (date/time/location)
       > div {
-        @apply text-[1.2rem] leading-[1.5] text-black font-lato;
+        @apply text-[1.4rem] leading-[1.5] text-black font-lato;
       }
 
       // CTA Button
@@ -212,21 +206,44 @@
   }
 
   // Gallery items - styled inline as children
-  &__grid > figure {
+  &__grid > figure,
+  &__grid > .gallery-item {
     @apply relative aspect-[4/3] overflow-hidden m-0 cursor-pointer;
 
-    // Media placeholder
-    > div {
-      @apply absolute inset-0 bg-cover bg-center bg-plum/20;
+    // Media container
+    > div,
+    .gallery-item__media {
+      @apply absolute inset-0 bg-plum/20;
+
+      img {
+        @apply w-full h-full object-cover;
+      }
     }
 
     // Overlay with label
-    > figcaption {
-      @apply absolute inset-0 flex items-center justify-center bg-maroon/60 text-cream text-[2rem] font-forum opacity-0 transition-opacity duration-200;
+    > figcaption,
+    .gallery-item__overlay {
+      @apply absolute inset-0 flex flex-col items-center justify-center bg-maroon/60 text-cream opacity-0 transition-opacity duration-200;
     }
 
-    &:hover > figcaption {
+    &:hover > figcaption,
+    &:hover .gallery-item__overlay {
       @apply opacity-100;
+    }
+  }
+
+  // Album card specific styles
+  .gallery-item--album {
+    a {
+      @apply block w-full h-full no-underline;
+    }
+
+    .gallery-item__year {
+      @apply text-[2.4rem] font-forum text-white;
+    }
+
+    .gallery-item__count {
+      @apply text-[1.4rem] font-lato text-white/80 mt-[0.4rem];
     }
   }
 
@@ -339,6 +356,26 @@
   &__subtitle {
     @apply text-[1.6rem] leading-[1.6] text-white/80 m-0 font-lato;
   }
+
+  &__meta {
+    @apply flex items-center gap-[1.2rem] mt-[1.6rem];
+
+    time {
+      @apply text-[1.4rem] text-white/80 font-lato;
+    }
+
+    a {
+      @apply px-[1.2rem] py-[0.4rem] bg-white/10 text-white text-[1.2rem] rounded-[0.4rem] no-underline font-lato transition-colors duration-200;
+
+      &:hover {
+        @apply bg-white text-maroon;
+      }
+    }
+
+    span {
+      @apply text-[1.4rem] text-white/80 font-lato;
+    }
+  }
 }
 
 // ============================================================================
@@ -349,10 +386,837 @@
   @apply flex flex-col bg-cream;
 
   &__inner {
-    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[6.4rem];
   }
 
-  &__coming-soon {
-    @apply text-[2.4rem] text-center text-muted font-lato;
+  // Filter row
+  &__filters {
+    @apply flex items-start gap-[2.4rem] mb-[4rem];
+  }
+
+  // Tag buttons - uses .btn .btn--outline .btn--sm as base
+  &__tags {
+    @apply flex items-start gap-[1.2rem] flex-wrap max-w-[50%];
+
+    // Additional styles for active state
+    .blog-page__tag--active {
+      @apply bg-maroon text-cream;
+    }
+  }
+
+  // Category dropdown
+  &__dropdown {
+    @apply relative ml-auto;
+
+    // Dropdown trigger button - uses .btn .btn--outline .btn--sm as base
+    &-trigger {
+      @apply gap-[0.8rem];
+
+      i {
+        @apply text-[1.2rem] transition-transform duration-200;
+      }
+
+      &[aria-expanded="true"] i {
+        @apply rotate-180;
+      }
+    }
+
+    // Dropdown menu
+    &-menu {
+      @apply absolute right-0 top-full mt-[0.8rem] min-w-[16rem] bg-cream border-[0.1rem] border-maroon/20 rounded-[0.4rem] shadow-lg z-10;
+      @apply opacity-0 invisible;
+
+      // Preline opens by adding .open class to parent .hs-dropdown
+      .hs-dropdown.open & {
+        @apply opacity-100 visible;
+      }
+
+      a {
+        @apply block px-[1.6rem] py-[1.2rem] text-[1.4rem] font-lato text-black no-underline transition-colors duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+  }
+
+  // Blog grid - 3 columns like events
+  &__grid {
+    @apply grid gap-[2.4rem] grid-cols-3;
+  }
+
+  // Blog post cards - inline styling via parent
+  &__grid > article {
+    @apply flex flex-col bg-white rounded-[0.8rem] overflow-hidden shadow-md transition-all duration-200;
+
+    &:hover {
+      @apply shadow-lg;
+    }
+
+    // Image container
+    > a:first-child {
+      @apply relative h-[24rem] overflow-hidden block;
+
+      img {
+        @apply w-full h-full object-cover transition-transform duration-300;
+      }
+
+      &:hover img {
+        @apply scale-105;
+      }
+    }
+
+    // Content area
+    > div {
+      @apply flex flex-col p-[2.4rem];
+
+      // Meta (date · category)
+      > p:first-child {
+        @apply text-[1.2rem] text-maroon/70 font-lato m-0 mb-[0.8rem];
+      }
+
+      // Title
+      h2 {
+        @apply text-[2rem] leading-[1.3] text-black m-0 mb-[1.2rem] font-forum line-clamp-2;
+      }
+
+      // Divider
+      hr {
+        @apply w-full border-0 border-t-[0.1rem] border-maroon/20 my-0 mb-[1.2rem];
+      }
+
+      // Excerpt - no margin-bottom (last element)
+      > p:last-of-type {
+        @apply text-[1.4rem] leading-[1.6] text-black/80 m-0 font-lato line-clamp-3;
+      }
+    }
+  }
+
+  // Continue reading link (inline with excerpt)
+  &__continue {
+    @apply text-[1.4rem] font-lato text-maroon font-semibold no-underline transition-all duration-200;
+
+    &:hover {
+      @apply text-plum underline;
+    }
+  }
+
+  // Empty state
+  &__empty {
+    @apply text-center py-[6.4rem];
+
+    p {
+      @apply text-[1.8rem] text-muted font-lato;
+    }
+  }
+
+  // Pagination
+  &__pagination {
+    @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    &-info {
+      @apply text-[1.4rem] text-maroon/70 font-lato;
+    }
+
+    &-controls {
+      @apply flex items-center gap-[1.2rem];
+    }
+
+    // Pagination buttons - uses .btn .btn--outline .btn--sm as base
+    &-btn {
+      // Additional styles beyond button base
+      @apply no-underline gap-[0.4rem];
+
+      &--disabled {
+        @apply opacity-50 pointer-events-none cursor-not-allowed;
+      }
+
+      i {
+        @apply text-[1.2rem];
+      }
+    }
+
+    &-numbers {
+      @apply flex items-center gap-[0.4rem];
+
+      a {
+        @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+
+    &-num--active {
+      @apply bg-maroon text-cream;
+
+      &:hover {
+        @apply bg-maroon;
+      }
+    }
+  }
+}
+
+// ============================================================================
+// Page · Blog Post Detail
+// ============================================================================
+
+.blog-post {
+  @apply flex flex-col bg-cream;
+
+  &__inner {
+    @apply w-full max-w-[120rem] mx-auto px-[3.2rem] py-[8rem];
+  }
+
+  // Back to blog link
+  &__back {
+    @apply mb-[2.4rem];
+
+    a {
+      @apply inline-flex items-center gap-[0.8rem] text-[1.4rem] font-lato text-maroon no-underline transition-colors duration-200;
+
+      &:hover {
+        @apply text-plum;
+      }
+
+      i {
+        @apply text-[1.6rem];
+      }
+    }
+  }
+
+  // Featured image
+  &__image {
+    @apply w-full h-[48rem] object-cover rounded-[0.8rem] mb-[4rem];
+  }
+
+  // Meta bar
+  &__meta {
+    @apply flex items-center gap-[2.4rem] mb-[3.2rem] pb-[3.2rem] border-b-[0.1rem] border-maroon/20;
+
+    // Date
+    time {
+      @apply text-[1.4rem] text-maroon/70 font-lato;
+    }
+
+    // Category
+    a {
+      @apply px-[1.2rem] py-[0.4rem] bg-plum/10 text-plum text-[1.2rem] rounded-[0.4rem] no-underline font-lato transition-colors duration-200;
+
+      &:hover {
+        @apply bg-plum text-cream;
+      }
+    }
+
+    // Author
+    span {
+      @apply text-[1.4rem] text-black font-lato;
+    }
+  }
+
+  // Article content
+  &__content {
+    @apply flex flex-col gap-[2.4rem];
+
+    p {
+      @apply text-[1.8rem] leading-[1.8] text-black m-0 font-lato;
+    }
+
+    h2 {
+      @apply text-[3.2rem] tracking-[0.02em] text-black mt-[4rem] mb-[1.6rem] font-forum;
+    }
+
+    h3 {
+      @apply text-[2.4rem] tracking-[0.02em] text-black mt-[3.2rem] mb-[1.2rem] font-forum;
+    }
+
+    ul, ol {
+      @apply pl-[2.4rem] m-0;
+
+      li {
+        @apply text-[1.8rem] leading-[1.8] text-black mb-[0.8rem] font-lato;
+      }
+    }
+
+    blockquote {
+      @apply pl-[2.4rem] border-l-[0.4rem] border-plum my-[3.2rem];
+
+      p {
+        @apply text-[2rem] italic text-maroon m-0 font-forum;
+      }
+    }
+
+    img {
+      @apply w-full rounded-[0.8rem] my-[2.4rem];
+    }
+  }
+
+  // Author bio
+  &__author {
+    @apply mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    // Author header
+    > div {
+      @apply flex items-center gap-[1.6rem];
+
+      img {
+        @apply w-[6.4rem] h-[6.4rem] rounded-full object-cover;
+      }
+
+      h3 {
+        @apply text-[2rem] text-black m-0 font-forum;
+      }
+
+      p {
+        @apply text-[1.4rem] text-maroon/70 m-0 font-lato;
+      }
+    }
+
+    // Bio text
+    > p {
+      @apply text-[1.6rem] leading-[1.7] text-black/80 mt-[1.6rem] m-0 font-lato;
+    }
+  }
+
+  // Tags section
+  &__tags {
+    @apply mt-[4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    h3 {
+      @apply text-[2rem] text-black m-0 mb-[1.6rem] font-forum;
+    }
+  }
+
+  &__tag-list {
+    @apply flex items-center gap-[1.2rem] flex-wrap;
+
+    a {
+      @apply px-[1.6rem] py-[0.8rem] text-[1.4rem] font-lato text-maroon bg-transparent border-[0.1rem] border-maroon rounded-[0.4rem] no-underline transition-all duration-200;
+
+      &:hover {
+        @apply bg-maroon text-cream;
+      }
+    }
+  }
+
+  // Related posts section
+  &__related {
+    @apply mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    h3 {
+      @apply text-[2.4rem] text-black m-0 mb-[2.4rem] font-forum;
+    }
+  }
+
+  &__related-grid {
+    @apply grid gap-[2.4rem] grid-cols-3;
+
+    article {
+      @apply flex flex-col;
+
+      a {
+        @apply relative block no-underline overflow-hidden rounded-[0.8rem];
+
+        img {
+          @apply w-full h-[24rem] object-cover transition-transform duration-300;
+        }
+
+        &:hover img {
+          @apply scale-105;
+        }
+      }
+    }
+  }
+
+  &__related-overlay {
+    @apply absolute inset-0 flex flex-col justify-end p-[2rem];
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+
+    .blog-post__related-category {
+      @apply inline-block self-start px-[1rem] py-[0.4rem] bg-white/20 text-white text-[1.2rem] rounded-[0.4rem] font-lato mb-[1.2rem] backdrop-blur-sm;
+    }
+
+    h4 {
+      @apply text-[1.8rem] leading-[1.3] text-white m-0 mb-[0.8rem] font-forum;
+    }
+
+    .blog-post__related-author {
+      @apply text-[1.3rem] text-white/70 font-lato;
+    }
+  }
+}
+
+// ============================================================
+// BOARD PAGE
+// ============================================================
+.board-page {
+  @apply bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[6.4rem];
+  }
+
+  &__filters {
+    @apply flex items-start gap-[2.4rem] mb-[4rem];
+  }
+
+  &__tags {
+    @apply flex items-start gap-[1.2rem] flex-wrap max-w-[50%];
+  }
+
+  &__tag--active {
+    @apply bg-maroon text-cream;
+  }
+
+  &__dropdown {
+    @apply relative ml-auto;
+
+    &-trigger {
+      @apply gap-[0.8rem];
+
+      i {
+        @apply text-[1.2rem] transition-transform duration-200;
+      }
+
+      &[aria-expanded="true"] i {
+        @apply rotate-180;
+      }
+    }
+
+    &-menu {
+      @apply absolute right-0 top-full mt-[0.8rem] min-w-[16rem] bg-cream border-[0.1rem] border-maroon/20 rounded-[0.4rem] shadow-lg z-10;
+      @apply opacity-0 invisible;
+
+      .hs-dropdown.open & {
+        @apply opacity-100 visible;
+      }
+
+      a {
+        @apply block px-[1.6rem] py-[1.2rem] text-[1.4rem] font-lato text-black no-underline transition-colors duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+  }
+
+  &__dropdown-item--active {
+    @apply bg-maroon/10 text-maroon font-bold;
+  }
+
+  &__grid {
+    @apply grid gap-[3.2rem] grid-cols-3;
+  }
+
+  &__empty {
+    @apply text-center text-[1.6rem] text-black/60 py-[8rem] font-lato col-span-3;
+  }
+
+  // Pagination
+  &__pagination {
+    @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    &-info {
+      @apply text-[1.4rem] text-maroon/70 font-lato;
+    }
+
+    &-controls {
+      @apply flex items-center gap-[1.2rem];
+    }
+
+    &-btn {
+      @apply no-underline gap-[0.4rem];
+
+      &--disabled {
+        @apply opacity-50 pointer-events-none cursor-not-allowed;
+      }
+
+      i {
+        @apply text-[1.2rem];
+      }
+    }
+
+    &-numbers {
+      @apply flex items-center gap-[0.4rem];
+
+      a {
+        @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+
+    &-num--active {
+      @apply bg-maroon text-cream;
+
+      &:hover {
+        @apply bg-maroon;
+      }
+    }
+  }
+}
+
+// Board member card
+.board-member {
+  @apply flex flex-col bg-white rounded-[0.8rem] overflow-hidden shadow-md transition-all duration-200;
+
+  &:hover {
+    @apply shadow-lg;
+  }
+
+  &__photo {
+    @apply h-[28rem] bg-maroon/5 flex items-center justify-center p-[4rem];
+
+    img {
+      @apply w-full h-full object-contain;
+    }
+  }
+
+  &__info {
+    @apply flex flex-col gap-[0.8rem] p-[2.4rem];
+  }
+
+  &__name {
+    @apply text-[2.2rem] leading-[1.3] text-black m-0 font-forum;
+  }
+
+  &__role {
+    @apply text-[1.4rem] leading-[1.4] text-maroon font-lato font-bold m-0 uppercase tracking-[0.05em];
+  }
+
+  &__bio {
+    @apply text-[1.4rem] leading-[1.6] text-black/70 font-lato m-0;
+  }
+}
+
+// ============================================================
+// EVENTS PAGE
+// ============================================================
+.events-page {
+  @apply bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[6.4rem];
+  }
+
+  &__filters {
+    @apply flex items-start gap-[2.4rem] mb-[4rem];
+  }
+
+  &__dropdown {
+    @apply relative ml-auto;
+
+    &-trigger {
+      @apply gap-[0.8rem];
+
+      i {
+        @apply text-[1.2rem] transition-transform duration-200;
+      }
+
+      &[aria-expanded="true"] i {
+        @apply rotate-180;
+      }
+    }
+
+    &-menu {
+      @apply absolute right-0 top-full mt-[0.8rem] min-w-[16rem] bg-cream border-[0.1rem] border-maroon/20 rounded-[0.4rem] shadow-lg z-10;
+      @apply opacity-0 invisible;
+
+      .hs-dropdown.open & {
+        @apply opacity-100 visible;
+      }
+
+      a {
+        @apply block px-[1.6rem] py-[1.2rem] text-[1.4rem] font-lato text-black no-underline transition-colors duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+  }
+
+  &__dropdown-item--active {
+    @apply bg-maroon/10 text-maroon font-bold;
+  }
+
+  &__grid {
+    @apply grid gap-[2.4rem] grid-cols-3;
+  }
+
+  &__empty {
+    @apply text-center text-[1.6rem] text-black/60 py-[8rem] font-lato col-span-3;
+  }
+
+  // Pagination
+  &__pagination {
+    @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    &-info {
+      @apply text-[1.4rem] text-maroon/70 font-lato;
+    }
+
+    &-controls {
+      @apply flex items-center gap-[1.2rem];
+    }
+
+    &-btn {
+      @apply no-underline gap-[0.4rem];
+
+      &--disabled {
+        @apply opacity-50 pointer-events-none cursor-not-allowed;
+      }
+
+      i {
+        @apply text-[1.2rem];
+      }
+    }
+
+    &-numbers {
+      @apply flex items-center gap-[0.4rem];
+
+      a {
+        @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+
+    &-num--active {
+      @apply bg-maroon text-cream;
+
+      &:hover {
+        @apply bg-maroon;
+      }
+    }
+  }
+}
+
+// Event card (standalone, used on home and events pages)
+.event-card {
+  @apply flex flex-col bg-white rounded-[0.8rem] overflow-hidden shadow-md transition-all duration-200;
+
+  &:hover {
+    @apply shadow-lg;
+  }
+
+  &__media {
+    @apply relative h-[32rem] overflow-hidden;
+
+    img {
+      @apply w-full h-full object-cover;
+      object-position: center top;
+    }
+  }
+
+  &__body {
+    @apply flex flex-col gap-[1.6rem] p-[2.4rem];
+  }
+
+  &__title {
+    @apply text-[2rem] leading-[1.3] text-black m-0 font-lato;
+  }
+
+  &__description {
+    @apply text-[1.4rem] leading-[1.6] text-black m-0 font-lato;
+  }
+
+  &__divider {
+    @apply w-full border-0 border-t-[0.1rem] border-plum/30 my-0;
+  }
+
+  &__meta {
+    @apply text-[1.4rem] leading-[1.5] text-black font-lato;
+  }
+
+  &__cta {
+    @apply mt-auto;
+  }
+}
+
+// ============================================================
+// GALLERY PAGE
+// ============================================================
+.gallery-page {
+  @apply bg-cream;
+
+  &__inner {
+    @apply mx-auto max-w-[120rem] px-[3.2rem] py-[6.4rem];
+  }
+
+  &__filters {
+    @apply flex items-start gap-[2.4rem] mb-[4rem];
+  }
+
+  &__dropdown {
+    @apply relative ml-auto;
+
+    &-trigger {
+      @apply gap-[0.8rem];
+
+      i {
+        @apply text-[1.2rem] transition-transform duration-200;
+      }
+
+      &[aria-expanded="true"] i {
+        @apply rotate-180;
+      }
+    }
+
+    &-menu {
+      @apply absolute right-0 top-full mt-[0.8rem] min-w-[16rem] bg-cream border-[0.1rem] border-maroon/20 rounded-[0.4rem] shadow-lg z-10;
+      @apply opacity-0 invisible;
+
+      .hs-dropdown.open & {
+        @apply opacity-100 visible;
+      }
+
+      a {
+        @apply block px-[1.6rem] py-[1.2rem] text-[1.4rem] font-lato text-black no-underline transition-colors duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+  }
+
+  &__dropdown-item--active {
+    @apply bg-maroon/10 text-maroon font-bold;
+  }
+
+  &__grid {
+    @apply grid gap-[2.4rem] grid-cols-4;
+  }
+
+  &__albums {
+    @apply grid gap-[2.4rem] grid-cols-3;
+  }
+
+  &__empty {
+    @apply text-center text-[1.6rem] text-black/60 py-[8rem] font-lato col-span-4;
+  }
+
+  // Pagination
+  &__pagination {
+    @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
+
+    &-info {
+      @apply text-[1.4rem] text-maroon/70 font-lato;
+    }
+
+    &-controls {
+      @apply flex items-center gap-[1.2rem];
+    }
+
+    &-btn {
+      @apply no-underline gap-[0.4rem];
+
+      &--disabled {
+        @apply opacity-50 pointer-events-none cursor-not-allowed;
+      }
+
+      i {
+        @apply text-[1.2rem];
+      }
+    }
+
+    &-numbers {
+      @apply flex items-center gap-[0.4rem];
+
+      a {
+        @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        &:hover {
+          @apply bg-maroon/10;
+        }
+      }
+    }
+
+    &-num--active {
+      @apply bg-maroon text-cream;
+
+      &:hover {
+        @apply bg-maroon;
+      }
+    }
+  }
+}
+
+// Gallery album card
+.gallery-album {
+  @apply relative overflow-hidden rounded-[0.8rem] shadow-md transition-all duration-200;
+
+  &:hover {
+    @apply shadow-lg;
+
+    img {
+      @apply scale-105;
+    }
+  }
+
+  a {
+    @apply block h-[32rem];
+  }
+
+  img {
+    @apply w-full h-full object-cover transition-transform duration-300;
+  }
+
+  &__overlay {
+    @apply absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity duration-200;
+
+    &:hover {
+      @apply opacity-100;
+    }
+  }
+
+  &__title {
+    @apply text-[2.4rem] text-white m-0 font-forum;
+  }
+
+  &__count {
+    @apply text-[1.4rem] text-white/80 m-0 font-lato mt-[0.8rem];
+  }
+}
+
+// Gallery card
+.gallery-card {
+  @apply relative overflow-hidden rounded-[0.8rem] shadow-md transition-all duration-200;
+
+  &:hover {
+    @apply shadow-lg;
+
+    img {
+      @apply scale-105;
+    }
+
+    .gallery-card__overlay {
+      @apply opacity-100;
+    }
+  }
+
+  a {
+    @apply block h-[24rem];
+  }
+
+  img {
+    @apply w-full h-full object-cover transition-transform duration-300;
+  }
+
+  &__overlay {
+    @apply absolute inset-0 flex items-end p-[1.6rem] opacity-0 transition-opacity duration-200 pointer-events-none;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+
+    h3 {
+      @apply text-[1.6rem] text-white m-0 font-lato;
+    }
   }
 }

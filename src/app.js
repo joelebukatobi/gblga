@@ -103,10 +103,24 @@ export default async function app(fastify, opts) {
     decorateReply: false,
   });
 
+  // Serve node_modules/htmx.org for HTMX
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../node_modules/htmx.org/dist'),
+    prefix: '/vendor/htmx/',
+    decorateReply: false,
+  });
+
   // Serve node_modules/preline/dist for Preline JS
   await fastify.register(fastifyStatic, {
     root: path.join(__dirname, '../node_modules/preline/dist'),
     prefix: '/vendor/preline/',
+    decorateReply: false,
+  });
+
+  // Serve fslightbox
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../node_modules/fslightbox'),
+    prefix: '/vendor/fslightbox/',
     decorateReply: false,
   });
 
@@ -145,6 +159,8 @@ export default async function app(fastify, opts) {
   await fastify.register(import('./admin/routes/api/categories.routes.js'), { prefix: '/api/v1/categories' });
   await fastify.register(import('./admin/routes/api/tags.routes.js'), { prefix: '/api/v1/tags' });
   await fastify.register(import('./admin/routes/api/comments.routes.js'), { prefix: '/api/v1' });
+  await fastify.register(import('./admin/routes/api/images.routes.js'), { prefix: '/api/v1/images' });
+  await fastify.register(import('./admin/routes/api/videos.routes.js'), { prefix: '/api/v1/videos' });
 
   // Register public app routes
   await fastify.register(import('./app/routes/home.routes.js'));

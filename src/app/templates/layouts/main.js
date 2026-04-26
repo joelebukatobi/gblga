@@ -17,7 +17,22 @@ export function renderAppLayout({ title = 'GBLGA', bodyClass = '', content = '',
     />
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
     <link rel="stylesheet" href="/dist/css/app.css" />
+    <script src="/vendor/htmx/htmx.min.js"></script>
+    <script src="/vendor/preline/preline.js"></script>
+    <script src="/vendor/fslightbox/index.js"></script>
     <script>
+      function initPlugins() {
+        if (typeof HSAccordion !== 'undefined' && HSAccordion.autoInit) {
+          HSAccordion.autoInit();
+        }
+        if (typeof HSDropdown !== 'undefined' && HSDropdown.autoInit) {
+          HSDropdown.autoInit();
+        }
+        if (typeof refreshFsLightbox === 'function') {
+          refreshFsLightbox();
+        }
+      }
+
       // Navbar scroll effect
       document.addEventListener('DOMContentLoaded', function() {
         const nav = document.querySelector('.site-nav');
@@ -30,6 +45,14 @@ export function renderAppLayout({ title = 'GBLGA', bodyClass = '', content = '',
             }
           });
         }
+
+        // Initialize plugins on page load
+        initPlugins();
+      });
+
+      // Reinitialize plugins after HTMX content swaps
+      document.addEventListener('htmx:afterSwap', function() {
+        initPlugins();
       });
     </script>
   </head>

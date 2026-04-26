@@ -51,7 +51,7 @@ export function mainLayout({ title = 'Dashboard', description = 'BlogCMS Dashboa
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="/vendor/htmx/htmx.min.js"></script>
   </head>
   <body>
     <!-- Admin Namespace Wrapper -->

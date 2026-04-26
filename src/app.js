@@ -150,17 +150,21 @@ export default async function app(fastify, opts) {
    await fastify.register(import('./admin/routes/tags.routes.js'), { prefix: '/admin/tags' });
      await fastify.register(import('./admin/routes/users.routes.js'), { prefix: '/admin/users' });
      await fastify.register(import('./admin/routes/subscribers.routes.js'), { prefix: '/admin/subscribers' });
-    await fastify.register(import('./admin/routes/images.routes.js'), { prefix: '/admin/media/images' });
-   await fastify.register(import('./admin/routes/videos.routes.js'), { prefix: '/admin/media/videos' });
-    await fastify.register(import('./admin/routes/settings.routes.js'), { prefix: '/admin/settings' });
+     await fastify.register(import('./admin/routes/images.routes.js'), { prefix: '/admin/media/images' });
+    await fastify.register(import('./admin/routes/videos.routes.js'), { prefix: '/admin/media/videos' });
+    await fastify.register(import('./admin/routes/events.routes.js'), { prefix: '/admin/events' });
+    await fastify.register(import('./admin/routes/boardMembers.routes.js'), { prefix: '/admin/board-members' });
+     await fastify.register(import('./admin/routes/settings.routes.js'), { prefix: '/admin/settings' });
 
   // Register public API routes (v1)
   await fastify.register(import('./admin/routes/api/posts.routes.js'), { prefix: '/api/v1/posts' });
   await fastify.register(import('./admin/routes/api/categories.routes.js'), { prefix: '/api/v1/categories' });
   await fastify.register(import('./admin/routes/api/tags.routes.js'), { prefix: '/api/v1/tags' });
   await fastify.register(import('./admin/routes/api/comments.routes.js'), { prefix: '/api/v1' });
-  await fastify.register(import('./admin/routes/api/images.routes.js'), { prefix: '/api/v1/images' });
-  await fastify.register(import('./admin/routes/api/videos.routes.js'), { prefix: '/api/v1/videos' });
+   await fastify.register(import('./admin/routes/api/images.routes.js'), { prefix: '/api/v1/images' });
+   await fastify.register(import('./admin/routes/api/videos.routes.js'), { prefix: '/api/v1/videos' });
+   await fastify.register(import('./admin/routes/api/events.routes.js'), { prefix: '/api/v1/events' });
+   await fastify.register(import('./admin/routes/api/boardMembers.routes.js'), { prefix: '/api/v1/board-members' });
 
   // Register public app routes
   await fastify.register(import('./app/routes/home.routes.js'));

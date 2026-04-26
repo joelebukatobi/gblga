@@ -80,6 +80,22 @@ export function sidebar({ activeRoute = '/', user } = {}) {
                 <span class="sidebar__item-text">Tags</span>
               </a>
             </li>
+            <li>
+              <a href="/admin/events" class="sidebar__item ${isActive('/admin/events')}">
+                <span class="sidebar__item-icon">
+                  <i data-lucide="calendar"></i>
+                </span>
+                <span class="sidebar__item-text">Events</span>
+              </a>
+            </li>
+            <li>
+              <a href="/admin/board-members" class="sidebar__item ${isActive('/admin/board-members')}">
+                <span class="sidebar__item-icon">
+                  <i data-lucide="users"></i>
+                </span>
+                <span class="sidebar__item-text">Board Members</span>
+              </a>
+            </li>
           </ul>
         </div>
 

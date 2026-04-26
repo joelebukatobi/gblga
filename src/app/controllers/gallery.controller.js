@@ -1,81 +1,62 @@
 // src/app/controllers/gallery.controller.js
 import { appGalleryIndexPage, appGalleryIndexPartial, appGalleryAlbumPage, appGalleryAlbumPartial } from '../templates/pages/gallery/gallery.js';
+import albumsService from '../../services/albums.service.js';
 
-const CURRENT_YEAR = new Date().getFullYear().toString();
-const YEARS = [2026, 2025, 2024];
+async function getAlbumsWithCounts() {
+  const { data: albums } = await albumsService.getAll({ limit: 100 });
 
-async function fetchImages(fastify, year = '') {
-  const imagesResponse = await fastify.inject({
-    method: 'GET',
-    url: `/api/v1/images?limit=100${year ? `&year=${year}` : ''}`,
-  });
-
-  if (imagesResponse.statusCode === 200) {
-    const payload = imagesResponse.json();
-    return payload?.data || [];
-  }
-  return [];
-}
-
-export function groupImagesByYear(images) {
-  const albums = {};
-
-  images.forEach((img) => {
-    const imgYear = img.createdAt ? new Date(img.createdAt).getFullYear().toString() : 'Unknown';
-    if (!albums[imgYear]) {
-      albums[imgYear] = {
-        year: imgYear,
-        images: [],
-        coverImage: null,
+  // Get media count for each album
+  const albumsWithCounts = await Promise.all(
+    albums.map(async (album) => {
+      const mediaResult = await albumsService.getAlbumMedia(album.id, { limit: 1000 });
+      const coverImage = album.coverImage;
+      return {
+        ...album,
+        mediaCount: mediaResult.pagination.total,
+        coverImage,
       };
-    }
-    albums[imgYear].images.push(img);
-    if (!albums[imgYear].coverImage) {
-      albums[imgYear].coverImage = img;
-    }
-  });
+    })
+  );
 
-  // Sort by year descending
-  return Object.values(albums).sort((a, b) => parseInt(b.year) - parseInt(a.year));
+  return albumsWithCounts;
 }
 
 export const galleryController = {
-  // Gallery index - shows album cards grouped by year
+  // Gallery index - shows real album cards
   index: async (request, reply) => {
-    let year = request.query?.year || '';
-
-    if (!year) {
-      year = CURRENT_YEAR;
-    } else if (year === 'all') {
-      year = '';
-    }
-
     const isHtmxRequest = request.headers['hx-request'] === 'true';
-
-    // Fetch all images to build albums
-    const images = await fetchImages(request.server, year);
-    const albums = groupImagesByYear(images);
+    const albums = await getAlbumsWithCounts();
 
     if (isHtmxRequest) {
-      return reply.type('text/html').send(appGalleryIndexPartial({ albums, year }));
+      return reply.type('text/html').send(appGalleryIndexPartial({ albums }));
     }
 
-    return reply.type('text/html').send(appGalleryIndexPage({ albums, year }));
+    return reply.type('text/html').send(appGalleryIndexPage({ albums }));
   },
 
-  // Album detail - shows images for a specific year
+  // Album detail - shows media for a specific album (by slug)
   album: async (request, reply) => {
-    const { year } = request.params;
+    const { slug } = request.params;
     const page = Number.parseInt(request.query?.page || '1', 10) || 1;
     const isHtmxRequest = request.headers['hx-request'] === 'true';
 
-    // Fetch images for this year
-    const images = await fetchImages(request.server, year);
+    const album = await albumsService.getBySlug(slug);
 
-    if (isHtmxRequest) {
-      return reply.type('text/html').send(appGalleryAlbumPartial({ images, year, page }));
+    if (!album) {
+      return reply.status(404).send('Album not found');
     }
 
-    return reply.type('text/html').send(appGalleryAlbumPage({ images, year, page }));
+    // Fetch media (images + videos) in this album
+    const mediaResult = await albumsService.getAlbumMedia(album.id, { page, limit: 9 });
+
+    if (isHtmxRequest) {
+      return reply.type('text/html').send(
+        appGalleryAlbumPartial({ album, media: mediaResult.data, pagination: mediaResult.pagination })
+      );
+    }
+
+    return reply.type('text/html').send(
+      appGalleryAlbumPage({ album, media: mediaResult.data, pagination: mediaResult.pagination })
+    );
   },
 };

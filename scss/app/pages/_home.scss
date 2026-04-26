@@ -1219,4 +1219,37 @@
       @apply text-[1.6rem] text-white m-0 font-lato;
     }
   }
+
+  &__video-thumbnail {
+    @apply relative w-full h-full;
+
+    img {
+      @apply w-full h-full object-cover;
+    }
+  }
+
+  &__play-icon {
+    @apply absolute inset-0 flex items-center justify-center;
+
+    i {
+      @apply text-[4.8rem] text-white/90 drop-shadow-lg;
+    }
+  }
+}
+
+// Gallery page back link
+.gallery-page__back {
+  @apply mb-[1.6rem];
+
+  &-link {
+    @apply inline-flex items-center gap-[0.8rem] text-[1.4rem] text-maroon font-lato no-underline transition-colors duration-200;
+
+    &:hover {
+      color: #6b1c23;
+    }
+
+    i {
+      @apply text-[1.2rem];
+    }
+  }
 }

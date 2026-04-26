@@ -79,16 +79,17 @@ function gallery({ albums = [] } = {}) {
         const coverImage = album.coverImage
           ? (album.coverImage.thumbnailPath || album.coverImage.path)
           : '/public/uploads/images/featured-posts.jpg';
-        const imageCount = album.images.length;
+        const mediaCount = album.mediaCount || 0;
+        const itemLabel = mediaCount === 1 ? 'item' : 'items';
         return `
           <article class="gallery-item gallery-item--album">
-            <a href="/gallery/${album.year}" aria-label="View ${album.year} album" hx-get="/gallery/${album.year}" hx-target=".app__main" hx-push-url="true">
+            <a href="/gallery/${album.slug}" aria-label="View ${album.title}" hx-get="/gallery/${album.slug}" hx-target=".app__main" hx-push-url="true">
               <div class="gallery-item__media" aria-hidden="true">
-                <img src="${coverImage}" alt="${album.year} album cover" loading="lazy" />
+                <img src="${coverImage}" alt="${album.title} album cover" loading="lazy" />
               </div>
               <div class="gallery-item__overlay">
-                <span class="gallery-item__year">${album.year}</span>
-                <span class="gallery-item__count">${imageCount} photo${imageCount !== 1 ? 's' : ''}</span>
+                <span class="gallery-item__year">${album.title}</span>
+                <span class="gallery-item__count">${mediaCount} ${itemLabel}</span>
               </div>
             </a>
           </article>

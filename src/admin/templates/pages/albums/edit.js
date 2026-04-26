@@ -22,7 +22,7 @@ export function albumEditPage({ user, album }) {
           hx-swap="none"
         >
           <div class="form__group">
-            <label class="form__label" for="title">Title *</label>
+            <label class="label label--required" for="title">Title</label>
             <input
               type="text"
               id="title"
@@ -34,7 +34,7 @@ export function albumEditPage({ user, album }) {
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="slug">Slug</label>
+            <label class="label" for="slug">Slug</label>
             <input
               type="text"
               id="slug"
@@ -46,7 +46,7 @@ export function albumEditPage({ user, album }) {
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="description">Description</label>
+            <label class="label" for="description">Description</label>
             <textarea
               id="description"
               name="description"
@@ -57,7 +57,7 @@ export function albumEditPage({ user, album }) {
           </div>
 
           <div class="form__actions">
-            <a href="/admin/media/albums" class="btn btn--ghost">Cancel</a>
+            <a href="/admin/media/albums" class="btn btn--ghost btn--danger">Cancel</a>
             <button type="submit" class="btn btn--primary">Update Album</button>
           </div>
         </form>

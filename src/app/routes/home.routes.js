@@ -11,5 +11,5 @@ export default async function homeRoutes(fastify) {
   fastify.get('/board', boardController.index.bind(boardController));
   fastify.get('/events', eventsController.index.bind(eventsController));
   fastify.get('/gallery', galleryController.index.bind(galleryController));
-  fastify.get('/gallery/:year', galleryController.album.bind(galleryController));
+  fastify.get('/gallery/:slug', galleryController.album.bind(galleryController));
 }

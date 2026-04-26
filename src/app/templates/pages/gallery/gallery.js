@@ -1,37 +1,61 @@
 import { renderAppLayout } from '../../layouts/main.js';
 import { pageHero } from '../../components/page-hero.js';
-import { renderFilterBar, renderFilterDropdown } from '../../components/filter-bar.js';
+import { renderFilterBar } from '../../components/filter-bar.js';
 
-const YEARS = [2026, 2025, 2024];
-const IMAGES_PER_PAGE = 9;
+const MEDIA_PER_PAGE = 9;
 
 function renderAlbumCard(album) {
   const coverImage = album.coverImage
     ? (album.coverImage.thumbnailPath || album.coverImage.path)
     : '/public/uploads/images/featured-posts.jpg';
-  const imageCount = album.images.length;
+  const mediaCount = album.mediaCount || 0;
+  const itemLabel = mediaCount === 1 ? 'item' : 'items';
 
   return `
     <article class="gallery-album">
-      <a href="/gallery/${album.year}" aria-label="View ${album.year} album" hx-get="/gallery/${album.year}" hx-target=".app__main" hx-push-url="true">
-        <img src="${coverImage}" alt="${album.year} album cover" loading="lazy" />
+      <a href="/gallery/${album.slug}" aria-label="View ${album.title}" hx-get="/gallery/${album.slug}" hx-target=".app__main" hx-push-url="true">
+        <img src="${coverImage}" alt="${album.title} album cover" loading="lazy" />
         <div class="gallery-album__overlay">
-          <h3 class="gallery-album__title">${album.year}</h3>
-          <p class="gallery-album__count">${imageCount} photo${imageCount !== 1 ? 's' : ''}</p>
+          <h3 class="gallery-album__title">${album.title}</h3>
+          <p class="gallery-album__count">${mediaCount} ${itemLabel}</p>
         </div>
       </a>
     </article>
   `;
 }
 
-function renderGalleryCard(image) {
-  const imageUrl = image.path || image.thumbnailPath || '/public/uploads/images/featured-posts.jpg';
-  const title = image.title || image.originalName || 'Gallery Image';
+function isVideo(media) {
+  return media.mimeType && media.mimeType.startsWith('video/');
+}
+
+function renderMediaCard(media, albumSlug) {
+  const isVideoFile = isVideo(media);
+  const mediaUrl = media.path || media.thumbnailPath || '/public/uploads/images/featured-posts.jpg';
+  const title = media.title || media.originalName || 'Gallery Media';
+  const lightboxGroup = `gallery-${albumSlug}`;
+
+  if (isVideoFile) {
+    return `
+      <article class="gallery-card gallery-card--video">
+        <a href="${media.path}" data-fslightbox="${lightboxGroup}" data-caption="${title}">
+          <div class="gallery-card__video-thumbnail">
+            <img src="${media.thumbnailPath || '/public/uploads/images/featured-posts.jpg'}" alt="${title}" loading="lazy" />
+            <div class="gallery-card__play-icon">
+              <i class="ph ph-play-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </a>
+        <div class="gallery-card__overlay">
+          <h3>${title}</h3>
+        </div>
+      </article>
+    `;
+  }
 
   return `
     <article class="gallery-card">
-      <a href="${image.path}" data-fslightbox="gallery-${image.year || 'all'}" data-caption="${title}">
-        <img src="${imageUrl}" alt="${title}" loading="lazy" />
+      <a href="${media.path}" data-fslightbox="${lightboxGroup}" data-caption="${title}">
+        <img src="${mediaUrl}" alt="${title}" loading="lazy" />
       </a>
       <div class="gallery-card__overlay">
         <h3>${title}</h3>
@@ -40,67 +64,42 @@ function renderGalleryCard(image) {
   `;
 }
 
-function renderFilters(activeYear = '') {
-  const yearOptions = YEARS.map((year) => ({
-    label: String(year),
-    href: `/gallery?year=${year}`,
-    hxGet: `/gallery?year=${year}`,
-    active: String(year) === activeYear,
-  }));
-
-  const yearDropdown = renderFilterDropdown({
-    page: 'gallery',
-    label: activeYear || 'All Years',
-    options: [
-      { label: 'All Years', href: '/gallery?year=all', hxGet: '/gallery?year=all', active: !activeYear },
-      ...yearOptions,
-    ],
-  });
-
-  return renderFilterBar({ page: 'gallery', right: yearDropdown });
+function renderBackLink() {
+  return `
+    <div class="gallery-page__back">
+      <a href="/gallery" hx-get="/gallery" hx-target=".app__main" hx-push-url="true" class="gallery-page__back-link">
+        <i class="ph ph-arrow-left" aria-hidden="true"></i> Back to Gallery
+      </a>
+    </div>
+  `;
 }
 
-function paginateImages(images, page = 1) {
-  const totalImages = images.length;
-  const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
-  const currentPage = Math.min(Math.max(page, 1), totalPages || 1);
-  const start = (currentPage - 1) * IMAGES_PER_PAGE;
-  const paginatedImages = images.slice(start, start + IMAGES_PER_PAGE);
-
-  return {
-    images: paginatedImages,
-    currentPage,
-    totalPages,
-    totalImages,
-  };
-}
-
-function renderPagination(currentPage, totalPages, totalImages, year) {
+function renderPagination({ page, totalPages, total, albumSlug }) {
   if (totalPages <= 1) return '';
 
-  const prevDisabled = currentPage === 1 ? 'gallery-page__pagination-btn--disabled' : '';
-  const nextDisabled = currentPage === totalPages ? 'gallery-page__pagination-btn--disabled' : '';
+  const prevDisabled = page === 1 ? 'gallery-page__pagination-btn--disabled' : '';
+  const nextDisabled = page === totalPages ? 'gallery-page__pagination-btn--disabled' : '';
 
   let pageNumbers = '';
   for (let i = 1; i <= totalPages; i++) {
-    const activeClass = i === currentPage ? 'gallery-page__pagination-num--active' : '';
-    pageNumbers += `<a href="/gallery/${year}?page=${i}" class="${activeClass}" hx-get="/gallery/${year}?page=${i}" hx-target=".app__main" hx-push-url="true">${i}</a>`;
+    const activeClass = i === page ? 'gallery-page__pagination-num--active' : '';
+    pageNumbers += `<a href="/gallery/${albumSlug}?page=${i}" class="${activeClass}" hx-get="/gallery/${albumSlug}?page=${i}" hx-target=".app__main" hx-push-url="true">${i}</a>`;
   }
 
   return `
     <div class="gallery-page__pagination">
       <div class="gallery-page__pagination-info">
-        Showing ${(currentPage - 1) * IMAGES_PER_PAGE + 1}-${Math.min(currentPage * IMAGES_PER_PAGE, totalImages)} of ${totalImages} photos
+        Showing ${(page - 1) * MEDIA_PER_PAGE + 1}-${Math.min(page * MEDIA_PER_PAGE, total)} of ${total} items
       </div>
       <div class="gallery-page__pagination-controls">
-        <a href="${currentPage > 1 ? `/gallery/${year}?page=${currentPage - 1}` : '#'}" class="btn btn--outline btn--sm gallery-page__pagination-btn ${prevDisabled}" ${currentPage > 1 ? `hx-get="/gallery/${year}?page=${currentPage - 1}" hx-target=".app__main" hx-push-url="true"` : ''}>
+        <a href="${page > 1 ? `/gallery/${albumSlug}?page=${page - 1}` : '#'}" class="btn btn--outline btn--sm gallery-page__pagination-btn ${prevDisabled}" ${page > 1 ? `hx-get="/gallery/${albumSlug}?page=${page - 1}" hx-target=".app__main" hx-push-url="true"` : ''}>
           <i class="ph ph-caret-left" aria-hidden="true"></i>
           Previous
         </a>
         <div class="gallery-page__pagination-numbers">
           ${pageNumbers}
         </div>
-        <a href="${currentPage < totalPages ? `/gallery/${year}?page=${currentPage + 1}` : '#'}" class="btn btn--outline btn--sm gallery-page__pagination-btn ${nextDisabled}" ${currentPage < totalPages ? `hx-get="/gallery/${year}?page=${currentPage + 1}" hx-target=".app__main" hx-push-url="true"` : ''}>
+        <a href="${page < totalPages ? `/gallery/${albumSlug}?page=${page + 1}` : '#'}" class="btn btn--outline btn--sm gallery-page__pagination-btn ${nextDisabled}" ${page < totalPages ? `hx-get="/gallery/${albumSlug}?page=${page + 1}" hx-target=".app__main" hx-push-url="true"` : ''}>
           Next
           <i class="ph ph-caret-right" aria-hidden="true"></i>
         </a>
@@ -113,17 +112,16 @@ function renderPagination(currentPage, totalPages, totalImages, year) {
 // GALLERY INDEX - Album Cards
 // ============================================================================
 
-export function appGalleryIndexPartial({ albums = [], year = '' } = {}) {
+export function appGalleryIndexPartial({ albums = [] } = {}) {
   const albumCards = albums.map(renderAlbumCard).join('');
   const emptyState = albums.length === 0
-    ? '<p class="gallery-page__empty">No albums found.</p>'
+    ? '<p class="gallery-page__empty">No albums found yet. Check back soon!</p>'
     : '';
 
   return `
     ${pageHero({ title: 'Gallery', subtitle: 'Moments from our events and community' })}
     <div class="gallery-page">
       <div class="gallery-page__inner">
-        ${renderFilters(year)}
         <div class="gallery-page__albums">
           ${albumCards}
           ${emptyState}
@@ -133,8 +131,8 @@ export function appGalleryIndexPartial({ albums = [], year = '' } = {}) {
   `;
 }
 
-export function appGalleryIndexPage({ albums = [], year = '' } = {}) {
-  const content = appGalleryIndexPartial({ albums, year });
+export function appGalleryIndexPage({ albums = [] } = {}) {
+  const content = appGalleryIndexPartial({ albums });
 
   return renderAppLayout({
     title: 'Gallery - GBLGA',
@@ -145,39 +143,37 @@ export function appGalleryIndexPage({ albums = [], year = '' } = {}) {
 }
 
 // ============================================================================
-// GALLERY ALBUM DETAIL - Image Grid with Lightbox
+// GALLERY ALBUM DETAIL - Media Grid with Lightbox
 // ============================================================================
 
-export function appGalleryAlbumPartial({ images = [], year = '', page = 1 } = {}) {
-  const { images: paginatedImages, currentPage, totalPages, totalImages } = paginateImages(images, page);
-  const imageCards = paginatedImages.map(renderGalleryCard).join('');
-  const emptyState = images.length === 0
-    ? '<p class="gallery-page__empty">No images found in this album.</p>'
+export function appGalleryAlbumPartial({ album, media = [], pagination } = {}) {
+  const { page, totalPages, total } = pagination || {};
+  const mediaCards = media.map((m) => renderMediaCard(m, album.slug)).join('');
+  const emptyState = media.length === 0
+    ? '<p class="gallery-page__empty">No media found in this album yet.</p>'
     : '';
 
-  const albumMeta = `
-    <a href="/gallery" hx-get="/gallery" hx-target=".app__main" hx-push-url="true">Back to Gallery</a>
-  `;
+  const albumMeta = renderBackLink();
 
   return `
-    ${pageHero({ title: year, meta: albumMeta })}
+    ${pageHero({ title: album.title, subtitle: album.description || '', meta: albumMeta })}
     <div class="gallery-page">
       <div class="gallery-page__inner">
         <div class="gallery-page__grid">
-          ${imageCards}
+          ${mediaCards}
           ${emptyState}
         </div>
-        ${renderPagination(currentPage, totalPages, totalImages, year)}
+        ${renderPagination({ page, totalPages, total, albumSlug: album.slug })}
       </div>
     </div>
   `;
 }
 
-export function appGalleryAlbumPage({ images = [], year = '', page = 1 } = {}) {
-  const content = appGalleryAlbumPartial({ images, year, page });
+export function appGalleryAlbumPage({ album, media = [], pagination } = {}) {
+  const content = appGalleryAlbumPartial({ album, media, pagination });
 
   return renderAppLayout({
-    title: `${year} Album - GBLGA`,
+    title: `${album.title} - Gallery - GBLGA`,
     bodyClass: 'gallery-page',
     content,
     activeRoute: '/gallery',

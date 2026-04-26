@@ -103,26 +103,35 @@ function upcomingEvents({ events = SAMPLE_EVENTS } = {}) {
 }
 
 // Gallery Section
-const SAMPLE_ITEMS = [
-  { label: 'Cultural Night' },
-  { label: 'Panel Series' },
-  { label: 'Mentorship' },
-  { label: 'Graduation' },
-  { label: 'Alumni Mixer' },
-  { label: 'Community Service' },
-];
-
-function gallery({ items = SAMPLE_ITEMS } = {}) {
-  const tiles = items
-    .map(
-      (item) => `
-      <figure class="gallery-item">
-        <div class="gallery-item__media" aria-hidden="true"></div>
-        <figcaption class="gallery-item__overlay">${item.label}</figcaption>
-      </figure>
-    `,
-    )
-    .join('');
+function gallery({ albums = [] } = {}) {
+  const tiles = albums.length > 0
+    ? albums.map((album) => {
+        const coverImage = album.coverImage
+          ? (album.coverImage.thumbnailPath || album.coverImage.path)
+          : '/public/uploads/images/featured-posts.jpg';
+        const imageCount = album.images.length;
+        return `
+          <article class="gallery-item gallery-item--album">
+            <a href="/gallery/${album.year}" aria-label="View ${album.year} album" hx-get="/gallery/${album.year}" hx-target=".app__main" hx-push-url="true">
+              <div class="gallery-item__media" aria-hidden="true">
+                <img src="${coverImage}" alt="${album.year} album cover" loading="lazy" />
+              </div>
+              <div class="gallery-item__overlay">
+                <span class="gallery-item__year">${album.year}</span>
+                <span class="gallery-item__count">${imageCount} photo${imageCount !== 1 ? 's' : ''}</span>
+              </div>
+            </a>
+          </article>
+        `;
+      }).join('')
+    : `
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Cultural Night</figcaption></figure>
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Panel Series</figcaption></figure>
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Mentorship</figcaption></figure>
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Graduation</figcaption></figure>
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Alumni Mixer</figcaption></figure>
+      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Community Service</figcaption></figure>
+    `;
 
   return `
     <section class="gallery" aria-labelledby="gallery-title">
@@ -175,13 +184,13 @@ function newsletter() {
 }
 
 // Home Page Composer
-export function appHomePage() {
+export function appHomePage({ albums = [] } = {}) {
   const content = `
     ${hero()}
     <div class="home">
       ${about()}
       ${upcomingEvents()}
-      ${gallery()}
+      ${gallery({ albums })}
       ${newsletter()}
     </div>
   `;

@@ -2,104 +2,29 @@ import { renderAppLayout } from '../../layouts/main.js';
 import { pageHero } from '../../components/page-hero.js';
 import { renderFilterBar, renderFilterTag, renderFilterDropdown } from '../../components/filter-bar.js';
 
-const BOARD_MEMBERS = [
-  {
-    name: 'Alexandra Morales',
-    role: 'President',
-    bio: 'Second-year MBA student passionate about creating inclusive spaces in business education and fostering community across cultures.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'senior',
-    year: 2026,
-  },
-  {
-    name: 'Marcus Johnson',
-    role: 'Vice President',
-    bio: 'Focused on professional development initiatives and building bridges between students and industry leaders.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'senior',
-    year: 2026,
-  },
-  {
-    name: 'Isabella Reyes',
-    role: 'Treasurer',
-    bio: 'Managing budgets and funding to support events, scholarships, and community outreach programs.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'senior',
-    year: 2026,
-  },
-  {
-    name: 'David Okonkwo',
-    role: 'Secretary',
-    bio: 'Keeping the organization running smoothly with detailed records and clear communication across all teams.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'junior',
-    year: 2026,
-  },
-  {
-    name: 'Sofia Martinez',
-    role: 'Events Chair',
-    bio: 'Curating memorable experiences that celebrate Black and LatinX culture while building lasting professional networks.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'junior',
-    year: 2026,
-  },
-  {
-    name: 'James Williams',
-    role: 'Marketing Chair',
-    bio: 'Telling the GBLGA story through creative campaigns that amplify our mission and engage the broader community.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'junior',
-    year: 2025,
-  },
-  {
-    name: 'Camila Rodriguez',
-    role: 'Community Outreach',
-    bio: 'Building partnerships with local organizations and creating volunteer opportunities for members.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'senior',
-    year: 2025,
-  },
-  {
-    name: 'Jordan Thompson',
-    role: 'Mentorship Coordinator',
-    bio: 'Pairing underclassmen with experienced mentors to guide academic and career journeys.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'junior',
-    year: 2025,
-  },
-  {
-    name: 'Nia Johnson',
-    role: 'President',
-    bio: 'Leading strategic vision and organizational growth with a focus on long-term sustainability.',
-    image: '/dist/images/gblga-logo-icon.svg',
-    type: 'senior',
-    year: 2024,
-  },
-];
-
 const YEARS = [2026, 2025, 2024];
 const MEMBERS_PER_PAGE = 9;
 
 function renderBoardMember(member) {
+  const imageSrc = member.photo?.path || '/dist/images/gblga-logo-icon.svg';
+
   return `
     <article class="board-member">
       <div class="board-member__photo">
-        <img src="${member.image}" alt="${member.name}" />
+        <img src="${imageSrc}" alt="${member.name}" />
       </div>
       <div class="board-member__info">
         <h3 class="board-member__name">${member.name}</h3>
         <p class="board-member__role">${member.role}</p>
-        <p class="board-member__bio">${member.bio}</p>
+        <p class="board-member__bio">${member.bio || ''}</p>
       </div>
     </article>
   `;
 }
 
 function renderFilters(activeType = '', activeYear = '') {
-  // Build query strings preserving filters
   const typeParam = activeType ? `type=${activeType}` : '';
 
-  // Tag buttons using shared component
   const tagButtons = [
     renderFilterTag({
       label: 'All',
@@ -124,7 +49,6 @@ function renderFilters(activeType = '', activeYear = '') {
     }),
   ].join('');
 
-  // Year dropdown options preserving type filter
   const yearOptions = YEARS.map((year) => {
     const qs = [typeParam, `year=${year}`].filter(Boolean).join('&');
     return {
@@ -158,29 +82,6 @@ function renderBoardGrid(members) {
       ${members.map(renderBoardMember).join('')}
     </div>
   `;
-}
-
-function filterMembers(type = '', year = '') {
-  return BOARD_MEMBERS.filter(m => {
-    const typeMatch = !type || m.type === type;
-    const yearMatch = !year || String(m.year) === year;
-    return typeMatch && yearMatch;
-  });
-}
-
-function paginateMembers(members, page = 1) {
-  const totalMembers = members.length;
-  const totalPages = Math.ceil(totalMembers / MEMBERS_PER_PAGE);
-  const currentPage = Math.min(Math.max(page, 1), totalPages || 1);
-  const start = (currentPage - 1) * MEMBERS_PER_PAGE;
-  const paginatedMembers = members.slice(start, start + MEMBERS_PER_PAGE);
-
-  return {
-    members: paginatedMembers,
-    currentPage,
-    totalPages,
-    totalMembers,
-  };
 }
 
 function buildBoardQs(type = '', year = '', page = '') {
@@ -229,9 +130,7 @@ function renderPagination(currentPage, totalPages, totalMembers, type = '', year
   `;
 }
 
-function renderBoardContent(type = '', year = '', page = 1) {
-  const filtered = filterMembers(type, year);
-  const { members, currentPage, totalPages, totalMembers } = paginateMembers(filtered, page);
+function renderBoardContent(members, currentPage, totalPages, totalMembers, type = '', year = '') {
   return `
     ${renderFilters(type, year)}
     ${renderBoardGrid(members)}
@@ -240,24 +139,38 @@ function renderBoardContent(type = '', year = '', page = 1) {
 }
 
 // Partial HTML for HTMX requests
-export function appBoardPartial({ type = '', year = '', page = 1 } = {}) {
+export function appBoardPartial({
+  members = [],
+  currentPage = 1,
+  totalPages = 1,
+  totalMembers = 0,
+  type = '',
+  year = '',
+} = {}) {
   return `
     ${pageHero({ title: 'Board', subtitle: 'Meet the leaders driving our mission forward' })}
     <div class="board-page">
       <div class="board-page__inner">
-        ${renderBoardContent(type, year, page)}
+        ${renderBoardContent(members, currentPage, totalPages, totalMembers, type, year)}
       </div>
     </div>
   `;
 }
 
 // Full page render
-export function appBoardPage({ type = '', year = '', page = 1 } = {}) {
+export function appBoardPage({
+  members = [],
+  currentPage = 1,
+  totalPages = 1,
+  totalMembers = 0,
+  type = '',
+  year = '',
+} = {}) {
   const content = `
     ${pageHero({ title: 'Board', subtitle: 'Meet the leaders driving our mission forward' })}
     <div class="board-page">
       <div class="board-page__inner">
-        ${renderBoardContent(type, year, page)}
+        ${renderBoardContent(members, currentPage, totalPages, totalMembers, type, year)}
       </div>
     </div>
   `;

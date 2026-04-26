@@ -14,7 +14,6 @@ export function renderEventCard(event = {}) {
     <a class="event-card" href="${href}">
       <article class="event-card__inner">
         <div class="event-card__media">
-          <div class="event-card__media-bg" data-bg="/public/uploads/images/gblga-bhm-ig.png"></div>
           <img class="event-card__media-img" src="/public/uploads/images/gblga-bhm-ig.png" alt="${title}" />
         </div>
         <div class="event-card__body">

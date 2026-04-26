@@ -50,42 +50,9 @@ function about() {
   `;
 }
 
-// Sample Events Data
-const SAMPLE_EVENTS = [
-  {
-    title: 'Cultural Exchange Night',
-    description: 'An evening celebrating the traditions, food, and art of our Black and LatinX communities.',
-    day: '28',
-    month: 'February',
-    year: '2026',
-    location: 'Gabelli Commons 62nd West Lincoln Center Manhattan',
-    time: '6:00 PM',
-  },
-  {
-    title: 'Industry Panel & Screening',
-    description: 'Hear from alumni leaders across finance, consulting, and tech about navigating early career.',
-    day: '30',
-    month: 'March',
-    year: '2026',
-    location: 'Hughes Hall 202',
-    time: '5:30 PM',
-  },
-  {
-    title: 'Alumni Mixer',
-    description: 'A curated networking night connecting current students with GBLGA alumni across industries.',
-    day: '28',
-    month: 'April',
-    year: '2026',
-    location: 'Lincoln Center',
-    time: '7:00 PM',
-  },
-];
-
 // Upcoming Events Section
 function upcomingEvents({ events = [] } = {}) {
-  // Use real events if available, otherwise fall back to sample data
-  const displayEvents = events.length > 0 ? events : SAMPLE_EVENTS;
-  const cards = displayEvents.map(renderEventCard).join('');
+  const cards = events.map(renderEventCard).join('');
   return `
     <section class="upcoming-events" aria-labelledby="upcoming-events-title">
       <div class="upcoming-events__inner">
@@ -96,9 +63,10 @@ function upcomingEvents({ events = [] } = {}) {
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
           </div>
         </div>
-        <div class="upcoming-events__grid">
-          ${cards}
-        </div>
+        ${events.length > 0
+          ? `<div class="upcoming-events__grid">${cards}</div>`
+          : `<p class="upcoming-events__empty">No upcoming events at the moment. Check back soon!</p>`
+        }
       </div>
     </section>
   `;

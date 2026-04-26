@@ -65,6 +65,7 @@ export function listToolbar({
         <i data-lucide="search" class="list-toolbar__search-icon"></i>
         <input
           type="text"
+          name="search"
           class="list-toolbar__search-input"
           placeholder="${searchPlaceholder}"
           value="${searchValue}"
@@ -110,6 +111,7 @@ export function listToolbarMinimal({
         <i data-lucide="search" class="list-toolbar__search-icon"></i>
         <input
           type="text"
+          name="search"
           class="list-toolbar__search-input"
           placeholder="${searchPlaceholder}"
           value="${searchValue}"

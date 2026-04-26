@@ -59,8 +59,16 @@ export const activityTypeEnum = [
   'SETTINGS_UPDATED',
   'COMMENT_CREATED',
   'SUBSCRIBER_CREATED',
+  'EVENT_CREATED',
+  'EVENT_UPDATED',
+  'EVENT_DELETED',
+  'BOARD_MEMBER_CREATED',
+  'BOARD_MEMBER_UPDATED',
+  'BOARD_MEMBER_DELETED',
 ];
 export const subscriberStatusEnum = ['ACTIVE', 'PENDING', 'UNSUBSCRIBED', 'BOUNCED'];
+export const eventStatusEnum = ['UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED'];
+export const boardMemberTypeEnum = ['SENIOR', 'JUNIOR'];
 
 // ============================================
 // USERS
@@ -372,6 +380,57 @@ export const subscribers = mysqlTable('subscribers', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+// ============================================
+// EVENTS
+// ============================================
+
+export const events = mysqlTable('events', {
+  id: idColumn().primaryKey(),
+  title: varchar('title', { length: 200 }).notNull(),
+  slug: varchar('slug', { length: 200 }).notNull().unique(),
+  description: text('description'),
+  location: varchar('location', { length: 255 }),
+  eventDate: timestamp('event_date'),
+  eventTime: varchar('event_time', { length: 20 }),
+  status: mysqlEnum('status', eventStatusEnum).default('UPCOMING').notNull(),
+  featuredImageId: idColumn('featured_image_id').references(() => mediaItems.id),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const eventsRelations = relations(events, ({ one }) => ({
+  featuredImage: one(mediaItems, {
+    fields: [events.featuredImageId],
+    references: [mediaItems.id],
+  }),
+}));
+
+// ============================================
+// BOARD MEMBERS
+// ============================================
+
+export const boardMembers = mysqlTable('board_members', {
+  id: idColumn().primaryKey(),
+  name: varchar('name', { length: 200 }).notNull(),
+  role: varchar('role', { length: 100 }).notNull(),
+  email: varchar('email', { length: 255 }),
+  bio: text('bio'),
+  type: mysqlEnum('type', boardMemberTypeEnum).default('SENIOR').notNull(),
+  year: int('year').notNull(),
+  photoId: idColumn('photo_id').references(() => mediaItems.id),
+  order: int('order').default(0).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const boardMembersRelations = relations(boardMembers, ({ one }) => ({
+  photo: one(mediaItems, {
+    fields: [boardMembers.photoId],
+    references: [mediaItems.id],
+  }),
+}));
 
 // ============================================
 // OAUTH ACCOUNTS

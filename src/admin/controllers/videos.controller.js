@@ -312,37 +312,35 @@ function videosGridFragment({ videos, pagination }) {
     const sizeFormatted = formatFileSize(video.size);
     const extension = video.filename.split('.').pop().toUpperCase();
     const durationFormatted = videosService.formatDuration(video.duration);
-    
+    const imgPath = (video.thumbnailPath || video.path).startsWith('/public')
+      ? (video.thumbnailPath || video.path)
+      : '/public' + (video.thumbnailPath || video.path);
+
     return `
-      <div class="media-card group">
-        ${video.tag ? `<span class="media-card__tag">${video.tag}</span>` : ''}
+      <a href="/admin/media/videos/${video.id}/edit" class="media-card">
         <div class="media-card__thumbnail">
           <img
-            src="${video.thumbnailPath || video.path}"
+            src="${imgPath}"
             alt="${video.altText || video.title}"
-            loading="lazy"
           />
           <div class="media-card__thumbnail-badge">${durationFormatted}</div>
-          <div class="media-card__actions">
-            <a href="/admin/media/videos/${video.id}/edit" class="media-card__action-btn" title="Edit">
-              <i data-lucide="pencil" class="size-4"></i>
-            </a>
-            <button 
-              class="media-card__action-btn media-card__action-btn--delete" 
-              title="Delete"
+          <div class="media-card__details">
+            <h3>${video.originalName}</h3>
+            <span>${sizeFormatted} • ${extension}</span>
+          </div>
+          <div class="media-card__actions-overlay">
+            <button
+              type="button"
+              class="media-card__action-btn"
               data-video-id="${video.id}"
               data-video-name="${video.originalName}"
-              onclick="openDeleteModal(this)"
+              onclick="event.preventDefault(); event.stopPropagation(); openDeleteModal(this)"
             >
-              <i data-lucide="trash-2" class="size-4"></i>
+              <i data-lucide="trash-2"></i>
             </button>
           </div>
         </div>
-        <div class="media-card__details">
-          <h3 class="media-card__title">${video.originalName}</h3>
-          <span class="media-card__meta">${sizeFormatted} • ${extension}</span>
-        </div>
-      </div>
+      </a>
     `;
   }).join('');
 
@@ -358,12 +356,7 @@ function videosGridFragment({ videos, pagination }) {
     `;
   }
 
-  return `
-    <div class="media-grid">
-      ${cards}
-    </div>
-    ${paginationHtml}
-  `;
+  return cards;
 }
 
 export const videosController = new VideosController();

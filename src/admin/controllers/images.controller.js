@@ -314,36 +314,34 @@ function imagesGridFragment({ images, pagination }) {
   const cards = images.map((image) => {
     const sizeFormatted = formatFileSize(image.size);
     const extension = image.filename.split('.').pop().toUpperCase();
-    
+    const imgPath = (image.thumbnailPath || image.path).startsWith('/public')
+      ? (image.thumbnailPath || image.path)
+      : '/public' + (image.thumbnailPath || image.path);
+
     return `
-      <div class="media-card group">
-        ${image.tag ? `<span class="media-card__tag">${image.tag}</span>` : ''}
+      <a href="/admin/media/images/${image.id}/edit" class="media-card">
         <div class="media-card__thumbnail">
           <img
-            src="${image.thumbnailPath || image.path}"
+            src="${imgPath}"
             alt="${image.altText || image.title}"
-            loading="lazy"
           />
-          <div class="media-card__actions">
-            <a href="/admin/media/images/${image.id}/edit" class="media-card__action-btn" title="Edit">
-              <i data-lucide="pencil" class="size-4"></i>
-            </a>
-            <button 
-              class="media-card__action-btn media-card__action-btn--delete" 
-              title="Delete"
+          <div class="media-card__details">
+            <h3>${image.originalName}</h3>
+            <span>${sizeFormatted} • ${extension}</span>
+          </div>
+          <div class="media-card__actions-overlay">
+            <button
+              type="button"
+              class="media-card__action-btn"
               data-image-id="${image.id}"
               data-image-name="${image.originalName}"
-              onclick="openDeleteModal(this)"
+              onclick="event.preventDefault(); event.stopPropagation(); openDeleteModal(this)"
             >
-              <i data-lucide="trash-2" class="size-4"></i>
+              <i data-lucide="trash-2"></i>
             </button>
           </div>
         </div>
-        <div class="media-card__details">
-          <h3 class="media-card__title">${image.originalName}</h3>
-          <span class="media-card__meta">${sizeFormatted} • ${extension}</span>
-        </div>
-      </div>
+      </a>
     `;
   }).join('');
 
@@ -359,12 +357,7 @@ function imagesGridFragment({ images, pagination }) {
     `;
   }
 
-  return `
-    <div class="media-grid">
-      ${cards}
-    </div>
-    ${paginationHtml}
-  `;
+  return cards;
 }
 
 export const imagesController = new ImagesController();

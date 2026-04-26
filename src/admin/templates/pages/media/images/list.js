@@ -59,16 +59,17 @@ export function imagesListPage({ user, images, pagination, stats, filters, toast
 
         <!-- Data Filter -->
         ${listToolbar({
+          searchUrl: '/admin/media/images',
+          searchTarget: '#images-table-container',
           searchPlaceholder: 'Search images...',
           searchValue: filters.search || '',
           filters: [],
           hasAddButton: true,
           addButtonUrl: '/admin/media/images/new',
-          addButtonText: 'New Image',
+          addButtonText: 'Upload Image',
         })}
 
-        <!-- Media Grid -->
-        <div class="media-grid">
+        <div id="images-table-container" class="media-grid">
           ${images && images.length > 0 ? images.map((image) => {
             const extension = image.filename.split('.').pop().toUpperCase();
             return `

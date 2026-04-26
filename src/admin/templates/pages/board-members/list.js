@@ -41,6 +41,8 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
         </div>
 
         ${listToolbar({
+          searchUrl: '/admin/board-members',
+          searchTarget: '#board-members-table-container',
           searchPlaceholder: 'Search board members...',
           searchValue: filters.search || '',
           filters: [],
@@ -49,7 +51,7 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
           addButtonText: members.length === 0 ? 'Create First Member' : 'New Member',
         })}
 
-        <div class="board-members__table-content">
+        <div id="board-members-table-container" class="board-members__table-content">
         ${members.length === 0 ? emptyState() : `
           <table class="table">
             <thead class="table__thead">

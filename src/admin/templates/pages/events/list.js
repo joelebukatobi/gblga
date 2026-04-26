@@ -41,6 +41,8 @@ export function eventsListPage({ events, total, page, totalPages, filters, user,
         </div>
 
         ${listToolbar({
+          searchUrl: '/admin/events',
+          searchTarget: '#events-table-container',
           searchPlaceholder: 'Search events...',
           searchValue: filters.search || '',
           filters: [],
@@ -49,7 +51,7 @@ export function eventsListPage({ events, total, page, totalPages, filters, user,
           addButtonText: events.length === 0 ? 'Create First Event' : 'New Event',
         })}
 
-        <div class="events__table-content">
+        <div id="events-table-container" class="events__table-content">
         ${events.length === 0 ? emptyState() : `
           <table class="table">
             <thead class="table__thead">

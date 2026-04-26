@@ -75,15 +75,14 @@ export function subscribersListPage({ subscribers, pagination, filters, user, to
 
         <!-- Data Filter -->
         ${listToolbar({
+          searchUrl: '/admin/subscribers',
+          searchTarget: '#subscribers-table-container',
           searchPlaceholder: 'Search subscribers...',
           searchValue: filters.search || '',
-          filters: toolbarFilters,
-          hasAddButton: true,
-          addButtonUrl: '/admin/subscribers/new',
-          addButtonText: 'Add Subscriber',
+          filters: [],
+          hasAddButton: false,
         })}
 
-        <!-- Subscribers Table -->
         <div id="subscribers-table-container" class="subscribers__table-content">
           ${subscribers.length === 0
             ? emptyState()

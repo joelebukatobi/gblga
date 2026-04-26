@@ -43,11 +43,18 @@ class SubscribersController {
       // Check if HTMX request for partial update
       const isHtmx = request.headers['hx-request'] === 'true';
 
-      if (isHtmx && query.partial === 'table') {
-        // Return just the table rows for HTMX updates
+      if (isHtmx) {
+        // Return table fragment matching what's inside #subscribers-table-container
         return reply
           .type('text/html')
-          .send(this.renderSubscriberRows(result.subscribers, user));
+          .send(subscribersTableFragment({
+            subscribers: result.subscribers,
+            pagination: {
+              page: result.page,
+              totalPages: result.totalPages,
+            },
+            filters: { status, search },
+          }));
       }
 
       // Render full page
@@ -285,6 +292,41 @@ class SubscribersController {
   renderSubscriberRows(subscribers, user) {
     return subscribers.map(sub => renderSubscriberRow(sub, user)).join('');
   }
+}
+
+/**
+ * Generate subscribers table HTML fragment for HTMX updates
+ * Matches what's inside #subscribers-table-container in list.js
+ */
+function subscribersTableFragment({ subscribers, pagination, filters }) {
+  if (!subscribers || subscribers.length === 0) {
+    return `
+      <div class="empty">
+        <h3>No Subscribers Yet</h3>
+        <p>You don't have any subscribers yet. Click "Add Subscriber" to add one manually.</p>
+      </div>
+    `;
+  }
+
+  const rows = subscribers.map(subscriber => renderSubscriberRow(subscriber)).join('');
+
+  return `
+    <table class="table">
+      <thead class="table__thead">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Confirmed</th>
+          <th>Subscribed</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table__tbody">
+        ${rows}
+      </tbody>
+    </table>
+  `;
 }
 
 export const subscribersController = new SubscribersController();

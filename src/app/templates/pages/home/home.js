@@ -82,8 +82,10 @@ const SAMPLE_EVENTS = [
 ];
 
 // Upcoming Events Section
-function upcomingEvents({ events = SAMPLE_EVENTS } = {}) {
-  const cards = events.map(renderEventCard).join('');
+function upcomingEvents({ events = [] } = {}) {
+  // Use real events if available, otherwise fall back to sample data
+  const displayEvents = events.length > 0 ? events : SAMPLE_EVENTS;
+  const cards = displayEvents.map(renderEventCard).join('');
   return `
     <section class="upcoming-events" aria-labelledby="upcoming-events-title">
       <div class="upcoming-events__inner">
@@ -184,12 +186,12 @@ function newsletter() {
 }
 
 // Home Page Composer
-export function appHomePage({ albums = [] } = {}) {
+export function appHomePage({ albums = [], events = [] } = {}) {
   const content = `
     ${hero()}
     <div class="home">
       ${about()}
-      ${upcomingEvents()}
+      ${upcomingEvents({ events })}
       ${gallery({ albums })}
       ${newsletter()}
     </div>

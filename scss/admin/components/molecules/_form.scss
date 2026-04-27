@@ -69,7 +69,19 @@
     @apply relative flex items-center;
 
     .input__icon {
-      @apply absolute top-1/2 -translate-y-1/2;
+      @apply absolute top-1/2 -translate-y-1/2 text-grey-400 pointer-events-none;
+
+      &--right {
+        @apply right-[1.2rem];
+      }
+
+      &--left {
+        @apply left-[1.2rem];
+      }
+    }
+
+    .input {
+      @apply pr-[3.6rem];
     }
   }
 

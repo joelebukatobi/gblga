@@ -39,18 +39,23 @@ export function eventNewPage({ user, errors = {} }) {
               <div class="form__row form__row--2col">
                 <div class="form__group">
                   <label class="label" for="eventDate">Event Date</label>
-                  <input
-                    type="text"
-                    class="input"
-                    id="eventDate"
-                    name="eventDate"
-                    placeholder="Select date..."
-                    data-hs-datepicker='{
-                      "placeholder": "Select date...",
-                      "autoApply": true,
-                      "mode": "single"
-                    }'
-                  />
+                  <div class="form__wrapper">
+                    <input
+                      type="text"
+                      class="input"
+                      id="eventDate"
+                      name="eventDate"
+                      placeholder="Select date..."
+                      readonly
+                      data-hs-datepicker='{
+                        "type": "default",
+                        "applyUtilityClasses": true,
+                        "autoApply": true,
+                        "mode": "single"
+                      }'
+                    />
+                    <i data-lucide="calendar" class="input__icon input__icon--right"></i>
+                  </div>
                 </div>
                 <div class="form__group">
                   <label class="label" for="eventTime">Event Time</label>

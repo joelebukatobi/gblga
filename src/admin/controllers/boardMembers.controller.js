@@ -14,7 +14,6 @@ class BoardMembersController {
         search,
         type,
         year,
-        isActive,
         sortBy = 'order',
         sortOrder = 'asc',
         page = 1,
@@ -25,7 +24,6 @@ class BoardMembersController {
         search,
         type,
         year,
-        isActive,
         sortBy,
         sortOrder,
         page: parseInt(page, 10) || 1,
@@ -47,7 +45,7 @@ class BoardMembersController {
           total: pagination.total,
           page: pagination.page,
           totalPages: pagination.totalPages,
-          filters: { search, type, year, isActive },
+          filters: { search, type, year },
           toast,
         })
       );
@@ -73,7 +71,7 @@ class BoardMembersController {
   async create(request, reply) {
     try {
       const user = request.user;
-      const { name, role, email, bio, type, year, photoId, order, isActive } = request.body;
+      const { name, role, email, bio, type, year, photoId } = request.body;
 
       if (!name || !role || !year) {
         reply.code(400);
@@ -88,8 +86,6 @@ class BoardMembersController {
         type: type || 'SENIOR',
         year,
         photoId,
-        order,
-        isActive: isActive !== undefined ? isActive === 'true' || isActive === true : true,
       }, user.id);
 
       reply.header('HX-Location', `/admin/board-members/${member.id}/edit`);
@@ -126,7 +122,7 @@ class BoardMembersController {
     try {
       const user = request.user;
       const { id } = request.params;
-      const { name, role, email, bio, type, year, photoId, order, isActive } = request.body;
+      const { name, role, email, bio, type, year, photoId } = request.body;
 
       const existing = await boardMembersService.getById(id);
       if (!existing) {
@@ -142,8 +138,6 @@ class BoardMembersController {
         type,
         year,
         photoId,
-        order,
-        isActive: isActive !== undefined ? isActive === 'true' || isActive === true : undefined,
       }, user.id);
 
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Board member updated successfully!', type: 'success' } }));
@@ -152,6 +146,50 @@ class BoardMembersController {
       request.log.error(error);
       reply.code(400);
       return reply.type('text/html').send(errorFragment({ message: error.message || 'Failed to update board member.' }));
+    }
+  }
+
+  async uploadPhoto(request, reply) {
+    try {
+      const { id } = request.params;
+
+      const member = await boardMembersService.getById(id);
+      if (!member) {
+        reply.code(404);
+        return reply.type('text/html').send(errorFragment({ message: 'Board member not found.' }));
+      }
+
+      const data = await request.file();
+      if (!data) {
+        reply.code(400);
+        return reply.type('text/html').send(errorFragment({ message: 'No file uploaded.' }));
+      }
+
+      const { mimetype } = data;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+      if (!allowedTypes.includes(mimetype)) {
+        reply.code(400);
+        return reply.type('text/html').send(errorFragment({ message: 'Invalid file type. Only JPEG, PNG and WebP are allowed.' }));
+      }
+
+      const photoUrl = await boardMembersService.uploadPhoto(id, data);
+      const updatedMember = await boardMembersService.updatePhoto(id, photoUrl);
+
+      return reply.type('text/html').send(`
+        <div id="photoPreview">
+          <img src="${photoUrl}?t=${Date.now()}" alt="${updatedMember.name}" />
+        </div>
+        <div id="photo-toast"></div>
+        <script>
+          document.body.dispatchEvent(new CustomEvent('htmx:toast', {
+            detail: { message: 'Photo updated successfully!', type: 'success' }
+          }));
+        </script>
+      `);
+    } catch (error) {
+      request.log.error(error);
+      reply.code(400);
+      return reply.type('text/html').send(errorFragment({ message: error.message || 'Failed to upload photo.' }));
     }
   }
 
@@ -203,10 +241,6 @@ function membersTableFragment({ members, pagination }) {
           <span class="table__label">Year</span>
           ${member.year}
         </td>
-        <td class="table__td">
-          <span class="table__label">Active</span>
-          ${member.isActive ? '<span class="badge badge--success">Yes</span>' : '<span class="badge badge--neutral">No</span>'}
-        </td>
         <td class="table__td table__td--actions">
           <div class="row-actions">
             <a href="/admin/board-members/${member.id}/edit" class="btn btn--ghost row-action row-action--edit">
@@ -237,7 +271,6 @@ function membersTableFragment({ members, pagination }) {
           <th>Role</th>
           <th>Type</th>
           <th>Year</th>
-          <th>Active</th>
           <th>Actions</th>
         </tr>
       </thead>

@@ -40,8 +40,7 @@ function about() {
               a network where Black and LatinX graduate students can thrive together.
             </p>
             <div class="about__photos">
-              <img class="about__photo" src="https://images.unsplash.com/photo-1694175271713-a6e2cc378980?q=80&w=765&auto=format&fit=crop" alt="GBLGA Event" aria-hidden="true" />
-              <img class="about__photo" src="https://images.unsplash.com/photo-1661461793337-a060b7c5db15?q=80&w=688&auto=format&fit=crop" alt="GBLGA Community" aria-hidden="true" />
+              <img class="about__photo" src="/dist/images/0eafb3e0-b391-43c3-a75e-4777f2d54898.jpeg" alt="GBLGA Community" />
             </div>
           </div>
         </div>

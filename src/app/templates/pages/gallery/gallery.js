@@ -6,7 +6,7 @@ const MEDIA_PER_PAGE = 9;
 
 function renderAlbumCard(album) {
   const coverImage = album.coverImage
-    ? (album.coverImage.thumbnailPath || album.coverImage.path)
+    ? album.coverImage.path
     : '/public/uploads/images/featured-posts.jpg';
   const mediaCount = album.mediaCount || 0;
   const itemLabel = mediaCount === 1 ? 'item' : 'items';

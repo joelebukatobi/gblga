@@ -82,11 +82,7 @@ export function mainLayout({ title = 'Dashboard', description = 'BlogCMS Dashboa
     <link rel="stylesheet" href="/vendor/apexcharts/apexcharts.css">
     <script src="/vendor/apexcharts/apexcharts.min.js"></script>
 
-    <!-- Vanilla Calendar Pro (required by Preline datepicker) -->
-    <script src="/vendor/vanilla-calendar-pro/index.js"></script>
-    <script>window.VanillaCalendarPro = window.Calendar;</script>
-
-    <!-- Preline UI JS -->
+    <!-- Preline UI JS (includes vanilla-calendar-pro bundled) -->
     <script src="/vendor/preline/preline.js"></script>
 
     <!-- Dashboard JavaScript -->
@@ -94,13 +90,6 @@ export function mainLayout({ title = 'Dashboard', description = 'BlogCMS Dashboa
       // Initialize Lucide Icons
       document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
-
-        // Initialize Preline datepickers on initial page load
-        if (typeof HSDatepicker !== 'undefined') {
-          document.querySelectorAll('[data-hs-datepicker]').forEach(function(el) {
-            new HSDatepicker(el);
-          });
-        }
 
         // Re-initialize icons when Preline dropdowns open
         document.querySelectorAll('.hs-dropdown').forEach((dropdown) => {
@@ -264,17 +253,6 @@ export function mainLayout({ title = 'Dashboard', description = 'BlogCMS Dashboa
           });
         }
 
-        // Re-initialize Preline datepickers after HTMX swap
-        if (typeof HSDatepicker !== 'undefined') {
-          document.querySelectorAll('[data-hs-datepicker]').forEach(function(el) {
-            var instance = HSDatepicker.getInstance(el);
-            if (instance) {
-              instance.destroy();
-            }
-            new HSDatepicker(el);
-          });
-        }
-        
         // Charts that need initialization will have inline scripts that run automatically
         // This event ensures any global cleanup/setup happens after swap
       });

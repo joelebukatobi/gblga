@@ -21,6 +21,7 @@ function formatEventForCard(event) {
     location: event.location || '',
     time: event.eventTime || '',
     href: '/events',
+    image: event.featuredImage?.path || '',
   };
 }
 

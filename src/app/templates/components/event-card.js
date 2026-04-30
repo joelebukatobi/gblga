@@ -8,6 +8,7 @@ export function renderEventCard(event = {}) {
     location = '',
     time = '',
     href = '#',
+    image = '',
   } = event;
 
   const dateStr = [day, month, year].filter(Boolean).join(' ');
@@ -19,7 +20,9 @@ export function renderEventCard(event = {}) {
   return `
     <a class="event-card" href="${href}">
       <article class="event-card__inner">
-        <div class="event-card__media"></div>
+        <div class="event-card__media">
+          ${image ? `<img src="${image}" alt="${title}" />` : ''}
+        </div>
         <div class="event-card__body">
           <h3 class="event-card__title">${title}</h3>
           <p class="event-card__description">${description}</p>

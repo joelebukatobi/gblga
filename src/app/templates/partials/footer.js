@@ -1,44 +1,7 @@
 import { renderLogo } from '../components/logo.js';
 
-const COLUMNS = [
-  {
-    title: 'About Us',
-    links: [
-      { label: 'Our Mission', href: '/about#mission' },
-      { label: 'History', href: '/about#history' },
-    ],
-  },
-  {
-    title: 'Explore',
-    links: [
-      { label: 'Events', href: '/events' },
-      { label: 'Gallery', href: '/gallery' },
-      { label: 'Blog', href: '/blog' },
-    ],
-  },
-  {
-    title: 'Support',
-    links: [
-      { label: 'Membership', href: '/membership' },
-      { label: 'Volunteer', href: '/volunteer' },
-      { label: 'Donations', href: '/donate' },
-    ],
-  },
-];
-
 export function footer() {
-  const columns = COLUMNS.map(
-    (col) => `
-      <div class="site-footer__column">
-        <h3 class="site-footer__column-title">${col.title}</h3>
-        <ul class="site-footer__column-list">
-          ${col.links
-            .map((l) => `<li><a class="site-footer__column-link" href="${l.href}">${l.label}</a></li>`)
-            .join('')}
-        </ul>
-      </div>
-    `,
-  ).join('');
+  const year = new Date().getFullYear();
 
   return `
     <footer class="site-footer">
@@ -47,14 +10,45 @@ export function footer() {
           <div class="site-footer__brand">
             <a class="site-footer__logo" href="/">${renderLogo()}</a>
           </div>
-          ${columns}
+          <div class="site-footer__right">
+            <div class="site-footer__section">
+              <h3 class="site-footer__social-title">Follow Us</h3>
+              <ul class="site-footer__social" aria-label="Follow Us">
+                <li>
+                  <a class="site-footer__social-link" href="https://www.instagram.com/blacklatinxgsb" aria-label="Instagram">
+                    <i class="ph ph-instagram-logo" aria-hidden="true"></i>
+                  </a>
+                </li>
+                <li>
+                  <a class="site-footer__social-link" href="https://www.linkedin.com/in/gblga/" aria-label="LinkedIn">
+                    <i class="ph ph-linkedin-logo" aria-hidden="true"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="site-footer__section">
+              <h3 class="site-footer__social-title">Contact Us</h3>
+              <ul class="site-footer__social" aria-label="Contact Us">
+                <li>
+                  <a class="site-footer__social-link" href="mailto:gsbblacklatinx@fordham.edu" aria-label="Email">
+                    <i class="ph ph-envelope-simple" aria-hidden="true"></i>
+                  </a>
+                </li>
+                <li>
+                  <a class="site-footer__social-link" href="#" aria-label="Phone">
+                    <i class="ph ph-phone" aria-hidden="true"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
         <hr class="site-footer__divider" />
         <div class="site-footer__bottom">
-          <ul class="site-footer__social" aria-label="Social media">
-            <li><a class="site-footer__social-link" href="#" aria-label="Instagram"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a></li>
-            <li><a class="site-footer__social-link" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo" aria-hidden="true"></i></a></li>
-          </ul>
+          <div class="site-footer__bottom-inner">
+            <p class="site-footer__credit">Designed and Developed by Joel Onwuanaku</p>
+            <p class="site-footer__copyright">© Gabelli Black and LatinX Graduate Association ${year}</p>
+          </div>
         </div>
       </div>
     </footer>

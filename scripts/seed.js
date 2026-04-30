@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readdirSync, statSync, existsSync, mkdirSync, copyFileSync } from 'fs';
 import sharp from 'sharp';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,6 +35,8 @@ const stats = {
   comments: 0,
   subscribers: 0,
   activities: 0,
+  events: 0,
+  boardMembers: 0,
 };
 
 async function seed() {
@@ -41,7 +44,7 @@ async function seed() {
   const startTime = Date.now();
 
   // Dynamic imports after env is loaded
-  const { db, users, categories, tags, settings, posts, postTags, comments, mediaItems, subscribers, activities } = await import('../src/db/index.js');
+  const { db, users, categories, tags, settings, posts, postTags, comments, mediaItems, subscribers, activities, events, boardMembers } = await import('../src/db/index.js');
   const { eq, sql } = await import('drizzle-orm');
   const { default: bcrypt } = await import('bcryptjs');
 
@@ -61,6 +64,8 @@ async function seed() {
       console.log('🗑️  Clearing existing data...');
       if (dialect === 'mysql') {
         await db.execute(sql`SET FOREIGN_KEY_CHECKS = 0`);
+        await db.execute(sql`TRUNCATE TABLE board_members`);
+        await db.execute(sql`TRUNCATE TABLE events`);
         await db.execute(sql`TRUNCATE TABLE activities`);
         await db.execute(sql`TRUNCATE TABLE analytics_events`);
         await db.execute(sql`TRUNCATE TABLE comments`);
@@ -78,7 +83,7 @@ async function seed() {
         await db.execute(sql`TRUNCATE TABLE users`);
         await db.execute(sql`SET FOREIGN_KEY_CHECKS = 1`);
       } else {
-        await db.execute(sql`TRUNCATE TABLE activities, analytics_events, comments, daily_page_views, media_items, post_tags, posts, settings, subscribers, tags, categories, sessions, password_resets, oauth_accounts, users CASCADE`);
+        await db.execute(sql`TRUNCATE TABLE activities, analytics_events, comments, daily_page_views, media_items, post_tags, posts, settings, subscribers, tags, categories, events, board_members, sessions, password_resets, oauth_accounts, users CASCADE`);
       }
       console.log('✅ Data cleared\n');
     }
@@ -562,6 +567,96 @@ async function seed() {
     }
     console.log(`✅ ${stats.activities} activities created\n`);
 
+    // ============================================
+    // 12. BOARD MEMBERS
+    // ============================================
+    console.log('👥 Creating board members...');
+    const currentYear = new Date().getFullYear();
+    const boardMemberData = [
+      { name: 'Alexandra Morales', role: 'President', email: 'alexandra@gblga.org', bio: 'Leading the GBLGA team with passion and dedication to empowering Gabelli Business students.', type: 'SENIOR', year: currentYear },
+      { name: 'Marcus Chen', role: 'Vice President - Operations', email: 'marcus@gblga.org', bio: 'Managing day-to-day operations and logistics for all GBLGA events and initiatives.', type: 'SENIOR', year: currentYear },
+      { name: 'Sophie Laurent', role: 'Vice President - Events', email: 'sophie@gblga.org', bio: 'Curating impactful events that connect students with industry leaders and career opportunities.', type: 'SENIOR', year: currentYear },
+      { name: 'David Okafor', role: 'Vice President - Finance', email: 'david@gblga.org', bio: 'Ensuring fiscal responsibility and managing the budget to maximize member value.', type: 'SENIOR', year: currentYear },
+      { name: 'Priya Sharma', role: 'Vice President - Marketing', email: 'priya@gblga.org', bio: 'Driving brand awareness and engagement across all GBLGA communication channels.', type: 'SENIOR', year: currentYear },
+      { name: 'James Okonkwo', role: 'Junior Board - Treasury', email: 'james@gblga.org', bio: 'Assisting with financial planning and treasury operations.', type: 'JUNIOR', year: currentYear },
+      { name: 'Emily Rodriguez', role: 'Junior Board - Outreach', email: 'emily@gblga.org', bio: 'Building relationships with alumni and corporate partners.', type: 'JUNIOR', year: currentYear },
+      { name: 'Kevin Nguyen', role: 'Junior Board - Operations', email: 'kevin@gblga.org', bio: 'Supporting event logistics and operational workflows.', type: 'JUNIOR', year: currentYear },
+      { name: 'Amara Diallo', role: 'Junior Board - Events', email: 'amara@gblga.org', bio: 'Helping plan and execute member events and social activities.', type: 'JUNIOR', year: currentYear },
+    ];
+
+    const memberIds = [];
+    for (const m of boardMemberData) {
+      const memberId = crypto.randomUUID();
+      await db.insert(boardMembers).values({
+        id: memberId,
+        name: m.name,
+        role: m.role,
+        email: m.email,
+        bio: m.bio,
+        type: m.type,
+        year: m.year,
+        photoId: null,
+        photoUrl: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      memberIds.push(memberId);
+      stats.boardMembers++;
+    }
+    console.log(`✅ ${stats.boardMembers} board members created\n`);
+
+    // ============================================
+    // 13. EVENTS
+    // ============================================
+    console.log('📅 Creating events...');
+    const eventImagePool = await db
+      .select({ id: mediaItems.id })
+      .from(mediaItems)
+      .where(eq(mediaItems.type, 'IMAGE'))
+      .limit(20);
+
+    const now = new Date();
+    const eventData = [
+      { title: 'Spring Networking Gala', slug: 'spring-networking-gala-2026', description: 'Join us for our flagship networking event connecting students with industry professionals from finance, consulting, and tech.', location: 'Gabelli Commons', dateOffset: 15, time: '6:00 PM' },
+      { title: 'Career Workshop Series: Resume Mastery', slug: 'resume-mastery-workshop', description: 'Hands-on workshop focused on crafting compelling resumes that stand out to top employers.', location: 'Room 302', dateOffset: 8, time: '4:30 PM' },
+      { title: 'Alumni Panel: Women in Leadership', slug: 'women-in-leadership-panel', description: 'Hear from distinguished alumnae about their career journeys and insights on leadership.', location: 'Keating Hall', dateOffset: 22, time: '5:00 PM' },
+      { title: 'GBLGA Cultural Exchange Night', slug: 'cultural-exchange-night', description: 'Celebrate the diverse cultures within Gabelli with food, music, and performances from around the world.', location: 'Gabelli Commons', dateOffset: -10, time: '7:00 PM' },
+      { title: 'Financial Literacy Bootcamp', slug: 'financial-literacy-bootcamp', description: 'A two-session bootcamp covering personal finance, investing basics, and budgeting strategies.', location: 'Room 405', dateOffset: -25, time: '3:00 PM' },
+      { title: 'End of Semester Social', slug: 'end-of-semester-social', description: 'Celebrate the end of another successful semester with food, drinks, and good company.', location: 'Gabelli Terrace', dateOffset: -45, time: '5:30 PM' },
+      { title: 'Summer Internship Prep Day', slug: 'internship-prep-day', description: 'Full day of mock interviews, networking practice, and professional headshots to prepare for summer internships.', location: 'Gabelli Commons', dateOffset: 30, time: '10:00 AM' },
+      { title: 'Tech Talk: AI in Business', slug: 'ai-in-business-tech-talk', description: 'Industry experts discuss how artificial intelligence is transforming business operations and strategy.', location: 'Keating Hall', dateOffset: -60, time: '6:30 PM' },
+      { title: 'Community Service Day', slug: 'community-service-day', description: 'Give back to the Bronx community through organized volunteer activities with local non-profits.', location: 'Various Locations', dateOffset: -90, time: '9:00 AM' },
+      { title: 'GBLGA Annual Gala', slug: 'gblga-annual-gala', description: 'Our premier event of the year featuring keynote speakers, awards ceremony, and celebration dinner.', location: 'Fordham University Club', dateOffset: 45, time: '6:00 PM' },
+      { title: 'Mock Interview Marathon', slug: 'mock-interview-marathon', description: 'Practice your interview skills with alumni and recruiters in rapid-fire mock interview sessions.', location: 'Room 210', dateOffset: -15, time: '2:00 PM' },
+    ];
+
+    const flyerImageIds = eventImagePool.map((img) => img.id);
+
+    for (const [index, ev] of eventData.entries()) {
+      const eventDate = new Date(now);
+      eventDate.setDate(eventDate.getDate() + ev.dateOffset);
+      const isPast = ev.dateOffset < 0;
+      const status = isPast ? 'COMPLETED' : 'UPCOMING';
+      const flyerId = flyerImageIds.length ? flyerImageIds[index % flyerImageIds.length] : null;
+
+      const eventId = crypto.randomUUID();
+      await db.insert(events).values({
+        id: eventId,
+        title: ev.title,
+        slug: ev.slug,
+        description: ev.description,
+        location: ev.location,
+        eventDate,
+        eventTime: ev.time,
+        status,
+        featuredImageId: flyerId,
+        createdAt: new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(),
+      });
+      stats.events++;
+    }
+    console.log(`✅ ${stats.events} events created\n`);
+
     // Summary
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log('\n' + '='.repeat(50));
@@ -579,6 +674,8 @@ async function seed() {
     console.log(`  💬 Comments: ${stats.comments}`);
     console.log(`  📧 Subscribers: ${stats.subscribers}`);
     console.log(`  📈 Activities: ${stats.activities}`);
+    console.log(`  👥 Board Members: ${stats.boardMembers}`);
+    console.log(`  📅 Events: ${stats.events}`);
     console.log(`\n⏱️  Duration: ${duration}s`);
     console.log('\n🔑 Login credentials:');
     console.log('   Email: admin@example.com');
@@ -605,7 +702,7 @@ export async function seedDemoData(options = {}) {
   const startTime = Date.now();
 
   // Dynamic imports
-  const { db, users, categories, tags, settings, posts, postTags, comments, mediaItems, subscribers, activities } = await import('../src/db/index.js');
+  const { db, users, categories, tags, settings, posts, postTags, comments, mediaItems, subscribers, activities, events, boardMembers } = await import('../src/db/index.js');
   const { eq, sql } = await import('drizzle-orm');
   const { default: bcrypt } = await import('bcryptjs');
 
@@ -758,6 +855,52 @@ export async function seedDemoData(options = {}) {
     });
   }
   console.log(`✅ ${subscriberEmails.length} subscribers created\n`);
+
+  // Seed board members
+  console.log('👥 Creating board members...');
+  const currentYear = new Date().getFullYear();
+  const boardData = [
+    { name: 'Alexandra Morales', role: 'President', email: 'alexandra@gblga.org', type: 'SENIOR', year: currentYear },
+    { name: 'Marcus Chen', role: 'Vice President', email: 'marcus@gblga.org', type: 'SENIOR', year: currentYear },
+    { name: 'Emily Rodriguez', role: 'Junior Board', email: 'emily@gblga.org', type: 'JUNIOR', year: currentYear },
+  ];
+  for (const m of boardData) {
+    await insertWithIgnore(boardMembers, {
+      id: crypto.randomUUID(),
+      name: m.name,
+      role: m.role,
+      email: m.email,
+      type: m.type,
+      year: m.year,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+  console.log(`✅ ${boardData.length} board members created\n`);
+
+  // Seed events
+  console.log('📅 Creating events...');
+  const eventData = [
+    { title: 'Spring Networking Gala', slug: 'spring-networking-gala', dateOffset: 30, time: '6:00 PM', location: 'Gabelli Commons' },
+    { title: 'Career Workshop Series', slug: 'career-workshop-series', dateOffset: 14, time: '4:30 PM', location: 'Room 302' },
+    { title: 'Cultural Exchange Night', slug: 'cultural-exchange-night', dateOffset: -14, time: '7:00 PM', location: 'Gabelli Commons' },
+  ];
+  for (const ev of eventData) {
+    const eventDate = new Date();
+    eventDate.setDate(eventDate.getDate() + ev.dateOffset);
+    await insertWithIgnore(events, {
+      id: crypto.randomUUID(),
+      title: ev.title,
+      slug: ev.slug,
+      location: ev.location,
+      eventDate,
+      eventTime: ev.time,
+      status: ev.dateOffset < 0 ? 'COMPLETED' : 'UPCOMING',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+  console.log(`✅ ${eventData.length} events created\n`);
 
   // Summary
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);

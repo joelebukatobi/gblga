@@ -214,7 +214,7 @@ jobs:
           echo "Waiting for app to start..."
           sleep 10
           
-          GBLGA_URL="${{ secrets.GBLGA_URL || 'https://gblga.joelebukatobi.dev' }}"
+          GBLGA_URL="${{ secrets.GBLGA_URL || 'https://gblga.joelebukatobi.dev' }}/health"
           echo "Checking health at: $GBLGA_URL"
           
           # Retry up to 3 times with 5 second intervals

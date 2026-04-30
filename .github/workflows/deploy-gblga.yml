@@ -5,12 +5,6 @@ on:
     branches:
       - dev
   workflow_dispatch:
-    inputs:
-      run_seed:
-        description: Run seed script after migrations
-        required: false
-        default: false
-        type: boolean
 
 concurrency:
   group: deploy-gblga
@@ -40,11 +34,10 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Validate build
+      - name: Build frontend assets
         run: |
           npm ci --no-audit --no-fund
           npm run build:css
-          echo "✅ Build validation complete - CSS will be built on server"
 
       - name: Validate required deploy secrets
         run: |
@@ -172,18 +165,13 @@ jobs:
               PREVIOUS_LOCK_HASH="$(cat "$LOCK_HASH_FILE")"
             fi
 
-            if [ ! -d node_modules ] || [ "$CURRENT_LOCK_HASH" != "$PREVIOUS_LOCK_HASH" ] || [ ! -f node_modules/.bin/sass ]; then
-              echo "Installing dependencies (including dev for build tools)"
-              npm ci --no-audit --no-fund
+            if [ ! -d node_modules ] || [ "$CURRENT_LOCK_HASH" != "$PREVIOUS_LOCK_HASH" ]; then
+              echo "Installing production dependencies"
+              npm ci --omit=dev --no-audit --no-fund
               printf '%s\n' "$CURRENT_LOCK_HASH" > "$LOCK_HASH_FILE"
             else
               echo "Skipping dependency install (lockfile unchanged)"
             fi
-
-            # Build CSS on server (ensures fresh compiled assets)
-            echo "Building CSS assets..."
-            RAYON_NUM_THREADS=1 npm run build:css
-            echo "✅ CSS build complete"
 
             if [ -z "$DATABASE_URL" ]; then
               echo "DATABASE_URL secret is required for migrations"
@@ -198,16 +186,6 @@ jobs:
             echo "Database migrations: OK"
 
             # NOTE: Database seeding is disabled. Use setup wizard instead.
-            # To set up the site, SSH into the server and run:
-            #   cd ${{ secrets.DEPLOY_PATH }} && node scripts/generate-setup-token.js
-            # Then share the generated URL with the client.
-            #
-            # if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.run_seed }}" = "true" ]; then
-            #   echo "Running database seed script..."
-            #   node ./scripts/seed.js
-            # else
-            #   echo "Skipping seed script"
-            # fi
 
             echo "✅ Deployment complete. Run 'node scripts/generate-setup-token.js' to generate setup URL."
 

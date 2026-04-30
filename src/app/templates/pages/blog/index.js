@@ -9,12 +9,12 @@ function renderBlogCard(post) {
     : post.publishedAt
       ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
       : '';
-  const category = post.category?.name || post.category?.title || post.category || 'Uncategorized';
+  const category = post.category?.name || post.category?.title || post.category || '';
   const author = post.user
     ? `${post.user.first_name || ''} ${post.user.last_name || ''}`.trim()
     : post.author
       ? `${post.author.firstName || ''} ${post.author.lastName || ''}`.trim()
-      : 'Unknown';
+      : '';
   const image = post.image || post.featuredImage?.url || post.featuredImage?.thumbnailUrl || '/public/uploads/images/featured-posts.jpg';
   const rawExcerpt = post.description || post.excerpt || post.summary || '';
   const maxExcerptChars = 100;

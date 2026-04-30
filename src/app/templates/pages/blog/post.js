@@ -21,11 +21,11 @@ function renderBlogPostContent({ post, relatedPosts = [] } = {}) {
     ? new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
     : post.date || '';
 
-  const category = post.category?.name || post.category?.title || post.category || 'Uncategorized';
+  const category = post.category?.name || post.category?.title || post.category || '';
   const categorySlug = post.category?.slug || '';
   const author = post.user
     ? `${post.user.first_name || ''} ${post.user.last_name || ''}`.trim()
-    : post.author || 'Unknown';
+    : post.author || '';
   const image = post.image || post.featuredImage?.url || '/public/uploads/images/featured-posts.jpg';
 
   const postMeta = `
@@ -64,7 +64,7 @@ function renderBlogPostContent({ post, relatedPosts = [] } = {}) {
             <img src="/dist/images/gblga-logo-icon.svg" alt="${author}" />
             <div>
               <h3>${author}</h3>
-              <p>${post.user?.role || 'Author'}</p>
+              <p>${post.user?.role || ''}</p>
             </div>
           </div>
         </div>
@@ -75,10 +75,10 @@ function renderBlogPostContent({ post, relatedPosts = [] } = {}) {
             <h3>Related Posts</h3>
             <div class="blog-post__related-grid">
               ${relatedPosts.map(related => {
-                const relatedCategory = related.category?.name || 'Uncategorized';
+                const relatedCategory = related.category?.name || '';
                 const relatedAuthor = related.user
                   ? `${related.user.first_name || ''} ${related.user.last_name || ''}`.trim()
-                  : 'Unknown';
+                  : '';
                 return `
                 <article>
                   <a href="/blog/${related.slug}" hx-get="/blog/${related.slug}" hx-target=".app__main" hx-push-url="true">

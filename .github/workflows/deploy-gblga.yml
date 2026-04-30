@@ -121,6 +121,7 @@ jobs:
           server-dir: ${{ steps.paths.outputs.ftp_dir }}
           state-name: .ftp-deploy-sync-state-v2.json
           exclude: |
+            **/public/uploads/**
             **/.git*/**
             **/.git*
             **/node_modules/**
@@ -181,7 +182,7 @@ jobs:
 
             # Build CSS on server (ensures fresh compiled assets)
             echo "Building CSS assets..."
-            npm run build:css
+            RAYON_NUM_THREADS=1 npm run build:css
             echo "✅ CSS build complete"
 
             if [ -z "$DATABASE_URL" ]; then

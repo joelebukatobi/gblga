@@ -30,6 +30,12 @@ export default async function boardMembersRoutes(fastify, opts) {
     handler: boardMembersController.update.bind(boardMembersController),
   });
 
+  // POST /admin/board-members/:id/photo - Upload photo
+  fastify.post('/:id/photo', {
+    preHandler: requireAuthRedirect('/admin/auth/login'),
+    handler: boardMembersController.uploadPhoto.bind(boardMembersController),
+  });
+
   fastify.delete('/:id', {
     preHandler: requireAuthRedirect('/admin/auth/login'),
     handler: boardMembersController.delete.bind(boardMembersController),

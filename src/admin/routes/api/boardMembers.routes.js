@@ -10,14 +10,12 @@ export default async function boardMembersApiRoutes(fastify, opts) {
       const limit = parseInt(request.query?.limit || '20', 10) || 20;
       const type = request.query?.type || '';
       const year = request.query?.year || '';
-      const isActive = request.query?.isActive !== undefined ? request.query.isActive : true;
 
       const result = await boardMembersService.getAll({
         page,
         limit,
         type,
         year,
-        isActive,
       });
 
       return reply.send({

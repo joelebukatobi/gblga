@@ -23,54 +23,52 @@ export function eventNewPage({ user, errors = {} }) {
             <form class="form" id="newEventForm" hx-post="/admin/events" hx-target="#form-response" hx-swap="innerHTML">
               <div id="form-response"></div>
 
-              <div class="form__row form__row--2col">
-                <div class="form__group ${errors.title ? 'form__group--error' : ''}">
-                  <label class="label label--required" for="eventTitle">Title</label>
-                  <input type="text" class="input" id="eventTitle" name="title" placeholder="e.g. Cultural Exchange Night" required />
-                  ${errors.title ? `<p class="form-feedback form-feedback--error">${errors.title}</p>` : ''}
-                </div>
-                <div class="form__group ${errors.slug ? 'form__group--error' : ''}">
-                  <label class="label" for="eventSlug">Slug</label>
-                  <input type="text" class="input" id="eventSlug" name="slug" placeholder="e.g. cultural-exchange-night" />
-                  <p class="form-feedback form-feedback--hint">Leave blank to generate from title</p>
-                </div>
-              </div>
-
-              <div class="form__row form__row--2col">
+              <div class="form__row form__row--sidebar">
                 <div class="form__group">
-                  <label class="label" for="eventDate">Event Date</label>
-                  <div class="form__wrapper">
-                    <input
-                      type="text"
-                      class="input"
-                      id="eventDate"
-                      name="eventDate"
-                      placeholder="Select date..."
-                      readonly
-                      data-hs-datepicker='{
-                        "type": "default",
-                        "applyUtilityClasses": true,
-                        "autoApply": true,
-                        "mode": "single"
-                      }'
-                    />
-                    <i data-lucide="calendar" class="input__icon input__icon--right"></i>
+                  <label class="label">Flyer</label>
+                  <div class="form__photo" style="cursor: default;">
+                    <div id="flyerPreview" class="form__photo-placeholder">
+                      <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
+                    </div>
+                  </div>
+                  <p class="form__hint">Flyer can be added after creating the event.</p>
+                </div>
+
+                <div>
+                  <div class="form__row form__row--2col">
+                    <div class="form__group ${errors.title ? 'form__group--error' : ''}">
+                      <label class="label label--required" for="eventTitle">Title</label>
+                      <input type="text" class="input" id="eventTitle" name="title" placeholder="e.g. Cultural Exchange Night" required />
+                      ${errors.title ? `<p class="form-feedback form-feedback--error">${errors.title}</p>` : ''}
+                    </div>
+                    <div class="form__group ${errors.slug ? 'form__group--error' : ''}">
+                      <label class="label" for="eventSlug">Slug</label>
+                      <input type="text" class="input" id="eventSlug" name="slug" placeholder="e.g. cultural-exchange-night" />
+                      <p class="form-feedback form-feedback--hint">Leave blank to generate from title</p>
+                    </div>
+                  </div>
+
+                  <div class="form__row form__row--2col">
+                    <div class="form__group">
+                      <label class="label" for="eventDate">Event Date</label>
+                      <input type="date" class="input" id="eventDate" name="eventDate" />
+                    </div>
+                    <div class="form__group">
+                      <label class="label" for="eventTime">Event Time</label>
+                      <input type="text" class="input" id="eventTime" name="eventTime" placeholder="e.g. 6:00 PM" />
+                    </div>
+                  </div>
+
+                  <div class="form__group">
+                    <label class="label" for="eventLocation">Location</label>
+                    <input type="text" class="input" id="eventLocation" name="location" placeholder="e.g. Gabelli Commons" />
+                  </div>
+
+                  <div class="form__group form__group--last">
+                    <label class="label" for="eventDescription">Description</label>
+                    <textarea class="textarea" id="eventDescription" name="description" rows="4" placeholder="Enter event description..."></textarea>
                   </div>
                 </div>
-                <div class="form__group">
-                  <label class="label" for="eventTime">Event Time</label>
-                  <input type="text" class="input" id="eventTime" name="eventTime" placeholder="e.g. 6:00 PM" />
-                </div>
-              </div>
-
-              <div class="form__group">
-                <label class="label" for="eventLocation">Location</label>
-                <input type="text" class="input" id="eventLocation" name="location" placeholder="e.g. Gabelli Commons" />
-              </div>
-
-              <div class="form__group">
-                <label class="label" for="eventDescription">Description</label>
-                <textarea class="textarea" id="eventDescription" name="description" rows="4" placeholder="Enter event description..."></textarea>
               </div>
 
               <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />

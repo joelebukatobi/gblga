@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   PRIMARY KEY (`id`),
   KEY `board_members_type_idx` (`type`),
   KEY `board_members_year_idx` (`year`),
-  KEY `board_members_is_active_idx` (`is_active`),
   KEY `board_members_photo_id_idx` (`photo_id`),
   CONSTRAINT `board_members_photo_id_media_items_id_fk` FOREIGN KEY (`photo_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

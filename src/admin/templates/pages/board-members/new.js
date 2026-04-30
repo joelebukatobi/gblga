@@ -23,62 +23,63 @@ export function boardMemberNewPage({ user, errors = {} }) {
             <form class="form" id="newBoardMemberForm" hx-post="/admin/board-members" hx-target="#form-response" hx-swap="innerHTML">
               <div id="form-response"></div>
 
-              <div class="form__row form__row--2col">
-                <div class="form__group ${errors.name ? 'form__group--error' : ''}">
-                  <label class="label label--required" for="memberName">Name</label>
-                  <input type="text" class="input" id="memberName" name="name" placeholder="e.g. Alexandra Morales" required />
-                </div>
-                <div class="form__group ${errors.role ? 'form__group--error' : ''}">
-                  <label class="label label--required" for="memberRole">Role</label>
-                  <input type="text" class="input" id="memberRole" name="role" placeholder="e.g. President" required />
-                </div>
-              </div>
-
-              <div class="form__row form__row--2col">
+              <div class="form__row form__row--sidebar">
                 <div class="form__group">
-                  <label class="label" for="memberEmail">Email</label>
-                  <input type="email" class="input" id="memberEmail" name="email" placeholder="e.g. alex@example.com" />
+                  <label class="label">Photo</label>
+                  <div class="form__photo" style="cursor: default;">
+                    <div id="photoPreview" class="form__photo-placeholder">
+                      <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
+                    </div>
+                  </div>
+                  <p class="form__hint">Photo can be added after creating the member.</p>
                 </div>
-                <div class="form__group">
-                  <label class="label label--required" for="memberYear">Year</label>
-                  <input type="number" class="input" id="memberYear" name="year" placeholder="e.g. 2026" required />
-                </div>
-              </div>
 
-              <div class="form__row form__row--2col">
-                <div class="form__group">
-                  <label class="label" for="memberType">Type</label>
-                  <select
-                    name="type"
-                    id="memberType"
-                    data-hs-select='{
-                      "placeholder": "Select type...",
-                      "toggleClasses": "form__select-toggle",
-                      "dropdownClasses": "form__select-dropdown",
-                      "optionClasses": "form__select-option"
-                    }'
-                    class="hidden"
-                  >
-                    <option value="SENIOR" selected>Senior</option>
-                    <option value="JUNIOR">Junior</option>
-                  </select>
-                </div>
-                <div class="form__group">
-                  <label class="label" for="memberOrder">Display Order</label>
-                  <input type="number" class="input" id="memberOrder" name="order" value="0" />
-                </div>
-              </div>
+                <div>
+                  <div class="form__row form__row--2col">
+                    <div class="form__group ${errors.name ? 'form__group--error' : ''}">
+                      <label class="label label--required" for="memberName">Name</label>
+                      <input type="text" class="input" id="memberName" name="name" placeholder="e.g. Alexandra Morales" required />
+                    </div>
+                    <div class="form__group ${errors.role ? 'form__group--error' : ''}">
+                      <label class="label label--required" for="memberRole">Role</label>
+                      <input type="text" class="input" id="memberRole" name="role" placeholder="e.g. President" required />
+                    </div>
+                  </div>
 
-              <div class="form__group">
-                <label class="label" for="memberBio">Bio</label>
-                <textarea class="textarea" id="memberBio" name="bio" rows="4" placeholder="Enter member bio..."></textarea>
-              </div>
+                  <div class="form__row form__row--2col">
+                    <div class="form__group">
+                      <label class="label" for="memberEmail">Email</label>
+                      <input type="email" class="input" id="memberEmail" name="email" placeholder="e.g. alex@example.com" />
+                    </div>
+                    <div class="form__group">
+                      <label class="label label--required" for="memberYear">Year</label>
+                      <input type="number" class="input" id="memberYear" name="year" placeholder="e.g. 2026" required />
+                    </div>
+                  </div>
 
-              <div class="form__group">
-                <label class="label flex items-center gap-[0.8rem] cursor-pointer" for="memberIsActive">
-                  <input type="checkbox" id="memberIsActive" name="isActive" value="true" checked class="w-[1.6rem] h-[1.6rem]" />
-                  <span>Active</span>
-                </label>
+                  <div class="form__group">
+                    <label class="label" for="memberType">Type</label>
+                    <select
+                      name="type"
+                      id="memberType"
+                      data-hs-select='{
+                        "placeholder": "Select type...",
+                        "toggleClasses": "form__select-toggle",
+                        "dropdownClasses": "form__select-dropdown",
+                        "optionClasses": "form__select-option"
+                      }'
+                      class="hidden"
+                    >
+                      <option value="SENIOR" selected>Senior</option>
+                      <option value="JUNIOR">Junior</option>
+                    </select>
+                  </div>
+
+                  <div class="form__group form__group--last">
+                    <label class="label" for="memberBio">Bio</label>
+                    <textarea class="textarea" id="memberBio" name="bio" rows="4" placeholder="Enter member bio..."></textarea>
+                  </div>
+                </div>
               </div>
 
               <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
@@ -101,6 +102,26 @@ export function boardMemberNewPage({ user, errors = {} }) {
       function submitForm() {
         htmx.trigger('#newBoardMemberForm', 'submit');
       }
+
+      function getInitials(name) {
+        if (!name) return '';
+        const parts = name.trim().split(/\\s+/);
+        if (parts.length === 1) return parts[0][0]?.toUpperCase() || '';
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+
+      const photoPreview = document.getElementById('photoPreview');
+      const defaultIcon = photoPreview.innerHTML;
+
+      document.getElementById('memberName').addEventListener('input', function() {
+        const initials = getInitials(this.value);
+        if (initials) {
+          photoPreview.innerHTML = initials;
+        } else {
+          photoPreview.innerHTML = defaultIcon;
+          lucide.createIcons();
+        }
+      });
     </script>
   `;
 

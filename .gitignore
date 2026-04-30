@@ -86,5 +86,16 @@ docs/
 # Generated media uploads/cache
 public/uploads/images/image-*
 public/uploads/images/thumbs/
+public/uploads/images/pexels-*
 public/uploads/posts/post-*
+public/uploads/events/
 public/uploads/videos/thumbs/thumb-*
+public/uploads/videos/*.mp4
+
+# Built vendor bundles
+public/vendor/
+
+# Screenshots and test artifacts
+*.png
+admin-*.yml
+home-page-snapshot.txt

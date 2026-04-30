@@ -6,20 +6,20 @@ import albumsService from '../../services/albums.service.js';
  */
 function formatEventForCard(event) {
   const date = event.eventDate ? new Date(event.eventDate) : null;
-  const day = date ? String(date.getDate()).padStart(2, '0') : '01';
+  const day = date ? String(date.getDate()).padStart(2, '0') : '';
   const month = date
     ? date.toLocaleDateString('en-US', { month: 'long' })
-    : 'Jan';
-  const year = date ? String(date.getFullYear()) : '2026';
+    : '';
+  const year = date ? String(date.getFullYear()) : '';
 
   return {
-    title: event.title || 'Event Title',
+    title: event.title || '',
     description: event.description || '',
     day,
     month,
     year,
-    location: event.location || 'Location TBD',
-    time: event.eventTime || 'Time TBD',
+    location: event.location || '',
+    time: event.eventTime || '',
     href: '/events',
   };
 }

@@ -77,7 +77,7 @@ function gallery({ albums = [] } = {}) {
   const tiles = albums.length > 0
     ? albums.map((album) => {
         const coverImage = album.coverImage
-          ? (album.coverImage.thumbnailPath || album.coverImage.path)
+          ? album.coverImage.path
           : '/public/uploads/images/featured-posts.jpg';
         const mediaCount = album.mediaCount || 0;
         const itemLabel = mediaCount === 1 ? 'item' : 'items';
@@ -95,14 +95,7 @@ function gallery({ albums = [] } = {}) {
           </article>
         `;
       }).join('')
-    : `
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Cultural Night</figcaption></figure>
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Panel Series</figcaption></figure>
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Mentorship</figcaption></figure>
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Graduation</figcaption></figure>
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Alumni Mixer</figcaption></figure>
-      <figure class="gallery-item"><div class="gallery-item__media" aria-hidden="true"></div><figcaption class="gallery-item__overlay">Community Service</figcaption></figure>
-    `;
+    : '';
 
   return `
     <section class="gallery" aria-labelledby="gallery-title">
@@ -110,7 +103,7 @@ function gallery({ albums = [] } = {}) {
         <div class="gallery__header">
           <h2 id="gallery-title" class="gallery__title">Gallery</h2>
           <div class="gallery__view-all">
-            <a class="gallery__view-all-link" href="/gallery">View All</a>
+            <a class="gallery__view-all-link" href="/gallery">View All Albums</a>
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
           </div>
         </div>

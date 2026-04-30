@@ -60,7 +60,6 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
                 <th>Role</th>
                 <th>Type</th>
                 <th>Year</th>
-                <th>Active</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -87,10 +86,6 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
                     <td class="table__td">
                       <span class="table__label">Year</span>
                       ${member.year}
-                    </td>
-                    <td class="table__td">
-                      <span class="table__label">Active</span>
-                      ${member.isActive ? '<span class="badge badge--success">Yes</span>' : '<span class="badge badge--neutral">No</span>'}
                     </td>
                     <td class="table__td table__td--actions">
                       <div class="row-actions">

@@ -70,16 +70,12 @@ export function albumsListPage({ albums, total, page, totalPages, filters, user,
             </thead>
             <tbody class="table__tbody">
               ${albums.map((album) => {
-                const coverSrc = album.coverImage?.thumbnailPath || album.coverImage?.path || '/dist/images/gblga-logo-icon.svg';
                 return `
                 <tr class="table__tr">
                   <td class="table__td">
                     <span class="table__label">Album</span>
-                    <div class="flex items-center gap-3">
-                      <img src="${coverSrc}" alt="" class="w-10 h-10 rounded object-cover" />
-                      <div class="table__title">
-                        <a href="/admin/media/albums/${album.id}/edit">${escapeHtml(album.title)}</a>
-                      </div>
+                    <div class="table__title">
+                      <a href="/admin/media/albums/${album.id}/edit">${escapeHtml(album.title)}</a>
                     </div>
                   </td>
                   <td class="table__td">

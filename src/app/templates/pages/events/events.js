@@ -2,7 +2,8 @@ import { renderAppLayout } from '../../layouts/main.js';
 import { pageHero } from '../../components/page-hero.js';
 import { renderFilterBar, renderFilterDropdown } from '../../components/filter-bar.js';
 
-const YEARS = [2026, 2025, 2024];
+const currentYear = new Date().getFullYear();
+const YEARS = Array.from({ length: 5 }, (_, i) => currentYear - i);
 const EVENTS_PER_PAGE = 9;
 
 function formatEventDate(eventDate) {
@@ -17,12 +18,12 @@ function formatEventDate(eventDate) {
 
 function renderEventCard(event) {
   const { day, month, year } = formatEventDate(event.eventDate);
-  const imageSrc = event.featuredImage?.path || '/public/uploads/images/gblga-bhm-ig.png';
+  const imageSrc = event.featuredImage?.path || '';
 
   return `
     <article class="event-card">
       <div class="event-card__media">
-        <img src="${imageSrc}" alt="${event.title}" />
+        ${imageSrc ? `<img src="${imageSrc}" alt="${event.title}" />` : ''}
       </div>
       <div class="event-card__body">
         <h3 class="event-card__title">${event.title}</h3>

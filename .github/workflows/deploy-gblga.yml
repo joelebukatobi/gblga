@@ -1,9 +1,9 @@
-name: Deploy Sandbox
+name: Deploy GBLGA
 
 on:
   push:
     branches:
-      - dev
+      - main
   workflow_dispatch:
     inputs:
       run_seed:
@@ -13,7 +13,7 @@ on:
         type: boolean
 
 concurrency:
-  group: deploy-sandbox
+  group: deploy-gblga
   cancel-in-progress: true
 
 jobs:
@@ -25,10 +25,10 @@ jobs:
       CPANEL_FTP_USER: ${{ secrets.CPANEL_FTP_USER }}
       CPANEL_FTP_PASSWORD: ${{ secrets.CPANEL_FTP_PASSWORD }}
       DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-      CPANEL_SSH_HOST: ${{ secrets.CPANEL_HOST }}
-      CPANEL_SSH_USER: ${{ secrets.CPANEL_USER }}
+      CPANEL_SSH_HOST: ${{ secrets.CPANEL_FTP_HOST }}
+      CPANEL_SSH_USER: ${{ secrets.CPANEL_FTP_USER }}
       CPANEL_SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
-      CPANEL_SSH_PORT: ${{ secrets.CPANEL_PORT }}
+      CPANEL_SSH_PORT: 22
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Checkout
@@ -235,12 +235,12 @@ jobs:
           echo "Waiting for app to start..."
           sleep 10
           
-          SANDBOX_URL="${{ secrets.SANDBOX_URL || 'https://sandbox.joelebukatobi.dev' }}"
-          echo "Checking health at: $SANDBOX_URL"
+          GBLGA_URL="${{ secrets.GBLGA_URL || 'https://gblga.joelebukatobi.dev' }}"
+          echo "Checking health at: $GBLGA_URL"
           
           # Retry up to 3 times with 5 second intervals
           for i in 1 2 3; do
-            if curl -sf "$SANDBOX_URL" > /dev/null; then
+            if curl -sf "$GBLGA_URL" > /dev/null; then
               echo "✅ Health check passed - app is responding"
               exit 0
             fi

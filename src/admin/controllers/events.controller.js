@@ -83,7 +83,7 @@ class EventsController {
         slug,
         description,
         location,
-        eventDate: eventDate || null,
+        eventDate: eventDate ? new Date(eventDate) : null,
         eventTime: eventTime || null,
         featuredImageId: featuredImageId || null,
       }, user.id);
@@ -135,7 +135,7 @@ class EventsController {
         slug,
         description,
         location,
-        eventDate: eventDate || null,
+        eventDate: eventDate ? new Date(eventDate) : null,
         eventTime: eventTime || null,
         featuredImageId: featuredImageId || null,
       }, user.id);
@@ -146,6 +146,114 @@ class EventsController {
       request.log.error(error);
       reply.code(400);
       return reply.type('text/html').send(errorFragment({ message: error.message || 'Failed to update event.' }));
+    }
+  }
+
+  async uploadFlyer(request, reply) {
+    try {
+      const { id } = request.params;
+
+      const event = await eventsService.getById(id);
+      if (!event) {
+        reply.code(404);
+        return reply.type('text/html').send(errorFragment({ message: 'Event not found.' }));
+      }
+
+      const data = await request.file();
+      if (!data) {
+        reply.code(400);
+        return reply.type('text/html').send(errorFragment({ message: 'No file uploaded.' }));
+      }
+
+      const { mimetype } = data;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+      if (!allowedTypes.includes(mimetype)) {
+        reply.code(400);
+        return reply.type('text/html').send(errorFragment({ message: 'Invalid file type. Only JPEG, PNG and WebP are allowed.' }));
+      }
+
+      const { db, mediaItems } = await import('../../db/index.js');
+      const { eq } = await import('drizzle-orm');
+      const fs = await import('fs/promises');
+      const path = await import('path');
+      const crypto = await import('crypto');
+      const { events } = await import('../../db/schema.js');
+
+      const fileBuffer = await data.toBuffer();
+      const hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+
+      const existingImage = await db
+        .select({ id: mediaItems.id, path: mediaItems.path })
+        .from(mediaItems)
+        .where(eq(mediaItems.hash, hash))
+        .limit(1);
+
+      if (existingImage.length > 0) {
+        await db.update(events)
+          .set({ featuredImageId: existingImage[0].id, updatedAt: new Date() })
+          .where(eq(events.id, id));
+
+        const flyerUrl = `/${existingImage[0].path}`;
+
+        return reply.type('text/html').send(`
+          <div id="flyerPreview">
+            <img src="${flyerUrl}?t=${Date.now()}" alt="Event flyer" />
+          </div>
+          <script>
+            document.body.dispatchEvent(new CustomEvent('htmx:toast', {
+              detail: { message: 'Flyer updated successfully!', type: 'success' }
+            }));
+          </script>
+        `);
+      }
+
+      const timestamp = Date.now();
+      const extension = data.filename.split('.').pop();
+      const filename = `event-${timestamp}.${extension}`;
+      const filepath = `public/uploads/events/${filename}`;
+
+      const uploadsDir = path.join(process.cwd(), 'public/uploads/events');
+      try {
+        await fs.access(uploadsDir);
+      } catch {
+        await fs.mkdir(uploadsDir, { recursive: true });
+      }
+
+      await fs.writeFile(path.join(process.cwd(), filepath), fileBuffer);
+
+      const mediaItemId = crypto.randomUUID();
+      await db.insert(mediaItems).values({
+        id: mediaItemId,
+        type: 'IMAGE',
+        filename,
+        originalName: data.filename,
+        mimeType: data.mimetype,
+        size: data.file.bytesRead,
+        path: filepath,
+        hash,
+        uploadedBy: request.user.id,
+      });
+
+      await db.update(events)
+        .set({ featuredImageId: mediaItemId, updatedAt: new Date() })
+        .where(eq(events.id, id));
+
+      const flyerUrl = `/${filepath}`;
+
+      return reply.type('text/html').send(`
+        <div id="flyerPreview">
+          <img src="${flyerUrl}?t=${Date.now()}" alt="Event flyer" />
+        </div>
+        <script>
+          document.body.dispatchEvent(new CustomEvent('htmx:toast', {
+            detail: { message: 'Flyer uploaded successfully!', type: 'success' }
+          }));
+        </script>
+      `);
+    } catch (error) {
+      request.log.error(error);
+      reply.code(400);
+      return reply.type('text/html').send(errorFragment({ message: error.message || 'Failed to upload flyer.' }));
     }
   }
 

@@ -30,6 +30,11 @@ export default async function eventsRoutes(fastify, opts) {
     handler: eventsController.update.bind(eventsController),
   });
 
+  fastify.post('/:id/upload-flyer', {
+    preHandler: requireAuthRedirect('/admin/auth/login'),
+    handler: eventsController.uploadFlyer.bind(eventsController),
+  });
+
   fastify.delete('/:id', {
     preHandler: requireAuthRedirect('/admin/auth/login'),
     handler: eventsController.delete.bind(eventsController),

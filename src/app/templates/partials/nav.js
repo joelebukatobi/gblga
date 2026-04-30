@@ -28,12 +28,6 @@ export function nav(activeRoute = '/') {
           <ul class="site-nav__links">${items}</ul>
         </nav>
         <div class="site-nav__end">
-          <div class="site-nav__utilities">
-            <button class="site-nav__utility-btn" type="button" aria-label="Search">
-              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
-            </button>
-            <span class="site-nav__lang">EN</span>
-          </div>
           <a class="btn btn--primary btn--sm" href="#join">Become A Member</a>
         </div>
       </div>

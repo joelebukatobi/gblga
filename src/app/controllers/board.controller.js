@@ -18,7 +18,7 @@ export const boardController = {
     // Fetch board members from API
     const apiResponse = await request.server.inject({
       method: 'GET',
-      url: `/api/v1/board-members?type=${type}&year=${year}&page=${page}&limit=9&isActive=true`,
+      url: `/api/v1/board-members?type=${type}&year=${year}&page=${page}&limit=9`,
     });
 
     let members = [];

@@ -2,16 +2,28 @@ import { renderAppLayout } from '../../layouts/main.js';
 import { pageHero } from '../../components/page-hero.js';
 import { renderFilterBar, renderFilterTag, renderFilterDropdown } from '../../components/filter-bar.js';
 
-const YEARS = [2026, 2025, 2024];
+const currentYear = new Date().getFullYear();
+const YEARS = Array.from({ length: 5 }, (_, i) => currentYear - i);
 const MEMBERS_PER_PAGE = 9;
 
+function getNameInitials(name) {
+  if (!name) return '';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0][0]?.toUpperCase() || '';
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 function renderBoardMember(member) {
-  const imageSrc = member.photo?.path || '/dist/images/gblga-logo-icon.svg';
+  const photoUrl = member.photoUrl || member.photo?.path || null;
+  const initials = getNameInitials(member.name);
 
   return `
     <article class="board-member">
       <div class="board-member__photo">
-        <img src="${imageSrc}" alt="${member.name}" />
+        ${photoUrl
+          ? `<img src="${photoUrl}" alt="${member.name}" />`
+          : `<div class="board-member__initials">${initials}</div>`
+        }
       </div>
       <div class="board-member__info">
         <h3 class="board-member__name">${member.name}</h3>

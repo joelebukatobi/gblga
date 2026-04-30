@@ -96,6 +96,13 @@ export default async function app(fastify, opts) {
     decorateReply: false,
   });
 
+  // Serve uploads directory (user avatars, board member photos)
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../public', 'uploads'),
+    prefix: '/uploads/',
+    decorateReply: false,
+  });
+
   // Serve dist/ directory (compiled CSS/JS)
   await fastify.register(fastifyStatic, {
     root: path.join(__dirname, '../dist'),
@@ -121,13 +128,6 @@ export default async function app(fastify, opts) {
   await fastify.register(fastifyStatic, {
     root: path.join(__dirname, '../node_modules/fslightbox'),
     prefix: '/vendor/fslightbox/',
-    decorateReply: false,
-  });
-
-  // Serve vanilla-calendar-pro for Preline datepicker
-  await fastify.register(fastifyStatic, {
-    root: path.join(__dirname, '../node_modules/vanilla-calendar-pro'),
-    prefix: '/vendor/vanilla-calendar-pro/',
     decorateReply: false,
   });
 

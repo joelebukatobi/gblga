@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   KEY `events_event_date_idx` (`event_date`),
   KEY `events_featured_image_id_idx` (`featured_image_id`),
   CONSTRAINT `events_featured_image_id_media_items_id_fk` FOREIGN KEY (`featured_image_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `board_members` (
   `id` varchar(36) NOT NULL,
@@ -30,8 +30,7 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   `type` enum('SENIOR','JUNIOR') NOT NULL DEFAULT 'SENIOR',
   `year` int NOT NULL,
   `photo_id` varchar(36),
-  `order` int NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `photo_url` varchar(255),
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -40,4 +39,4 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   KEY `board_members_is_active_idx` (`is_active`),
   KEY `board_members_photo_id_idx` (`photo_id`),
   CONSTRAINT `board_members_photo_id_media_items_id_fk` FOREIGN KEY (`photo_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

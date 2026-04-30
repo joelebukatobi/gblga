@@ -449,8 +449,7 @@ export const boardMembers = mysqlTable('board_members', {
   type: mysqlEnum('type', boardMemberTypeEnum).default('SENIOR').notNull(),
   year: int('year').notNull(),
   photoId: idColumn('photo_id').references(() => mediaItems.id),
-  order: int('order').default(0).notNull(),
-  isActive: boolean('is_active').default(true).notNull(),
+  photoUrl: varchar('photo_url', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

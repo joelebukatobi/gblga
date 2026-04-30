@@ -79,7 +79,7 @@
   }
 
   &__photos {
-    @apply grid gap-[1.6rem] mt-[0.8rem] grid-cols-2;
+    @apply grid gap-[1.6rem] mt-[0.8rem];
   }
 
   &__photo {

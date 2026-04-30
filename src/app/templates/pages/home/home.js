@@ -3,10 +3,33 @@ import { renderEventCard } from '../../components/event-card.js';
 
 // Hero Section
 function hero() {
+  const slides = [
+    '/dist/images/MVIMG_20260218_171802.jpg',
+    '/dist/images/MVIMG_20260218_185835.jpg',
+    '/dist/images/picture-three.jpg',
+  ];
+
+  const slideEls = slides
+    .map(
+      (src, i) =>
+        `<div class="hero__slide ${i === 0 ? 'hero__slide--active' : ''}" style="background-image: url('${src}');" aria-hidden="${i !== 0}"></div>`
+    )
+    .join('');
+
+  const dots = slides
+    .map(
+      (_, i) =>
+        `<button class="hero__dot ${i === 0 ? 'hero__dot--active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
+    )
+    .join('');
+
   return `
     <section class="hero" aria-label="Hero">
-      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__slides" aria-live="polite">
+        ${slideEls}
+      </div>
       <div class="hero__overlay" aria-hidden="true"></div>
+      <div class="hero__dots">${dots}</div>
       <div class="hero__inner">
         <div class="hero__content">
           <h1 class="hero__title">Experience Community, Culture, and Connection.</h1>
@@ -18,6 +41,43 @@ function hero() {
         </div>
       </div>
     </section>
+
+    <script>
+      (function() {
+        const slides = document.querySelectorAll('.hero__slide');
+        const dots = document.querySelectorAll('.hero__dot');
+        if (slides.length === 0) return;
+
+        let current = 0;
+        const interval = 5000;
+        let timer;
+
+        function showSlide(index) {
+          slides.forEach((s, i) => {
+            s.classList.toggle('hero__slide--active', i === index);
+            s.setAttribute('aria-hidden', i !== index);
+          });
+          dots.forEach((d, i) => {
+            d.classList.toggle('hero__dot--active', i === index);
+          });
+          current = index;
+        }
+
+        function next() {
+          showSlide((current + 1) % slides.length);
+        }
+
+        timer = setInterval(next, interval);
+
+        dots.forEach(function(dot) {
+          dot.addEventListener('click', function() {
+            clearInterval(timer);
+            showSlide(parseInt(this.dataset.index));
+            timer = setInterval(next, interval);
+          });
+        });
+      })();
+    </script>
   `;
 }
 

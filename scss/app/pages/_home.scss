@@ -11,15 +11,39 @@
 // ============================================================================
 
 .hero {
-  @apply relative w-full overflow-visible bg-maroon h-screen;
+  @apply relative w-full overflow-hidden bg-maroon h-screen;
 
-  &__media {
-    @apply absolute inset-0 w-full h-full bg-placeholder bg-cover bg-center;
-    background-image: url('https://thumbs.6sqft.com/wp-content/uploads/2025/02/03112321/Fordham-University-Sculpture-Garden.jpg?format=webp');
+  &__slides {
+    @apply absolute inset-0 w-full h-full;
+  }
+
+  &__slide {
+    @apply absolute inset-0 w-full h-full bg-cover bg-center;
+    @apply opacity-0 transition-opacity duration-1000 ease-in-out;
+
+    &--active {
+      @apply opacity-100;
+    }
   }
 
   &__overlay {
     @apply absolute inset-0 bg-gradient-to-b from-transparent to-black/70;
+  }
+
+  &__dots {
+    @apply absolute bottom-[2.4rem] left-1/2 -translate-x-1/2 z-10 flex gap-[1.2rem];
+  }
+
+  &__dot {
+    @apply w-[1.2rem] h-[1.2rem] rounded-full border border-white/60 bg-transparent cursor-pointer transition-all duration-200 p-0;
+
+    &:hover {
+      @apply bg-white/40;
+    }
+
+    &--active {
+      @apply bg-white border-white;
+    }
   }
 
   &__inner {

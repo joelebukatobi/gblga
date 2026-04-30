@@ -4,6 +4,13 @@
 import { db, boardMembers, mediaItems } from '../db/index.js';
 import { eq, like, desc, asc, sql, and } from 'drizzle-orm';
 import { activityService } from './activity.service.js';
+import sharp from 'sharp';
+import { existsSync, mkdirSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const UPLOAD_DIR = join(__dirname, '..', '..', 'public', 'uploads', 'board-members');
 
 /**
  * Board Members Service
@@ -17,9 +24,6 @@ class BoardMembersService {
     search,
     type,
     year,
-    isActive,
-    sortBy = 'order',
-    sortOrder = 'asc',
     page = 1,
     limit = 10,
   } = {}) {
@@ -37,10 +41,6 @@ class BoardMembersService {
 
     if (year) {
       conditions.push(eq(boardMembers.year, parseInt(year, 10)));
-    }
-
-    if (isActive !== undefined && isActive !== null && isActive !== '') {
-      conditions.push(eq(boardMembers.isActive, isActive === 'true' || isActive === true));
     }
 
     const whereClause = conditions.length > 1 ? and(...conditions) : conditions[0];
@@ -64,8 +64,7 @@ class BoardMembersService {
         type: boardMembers.type,
         year: boardMembers.year,
         photoId: boardMembers.photoId,
-        order: boardMembers.order,
-        isActive: boardMembers.isActive,
+        photoUrl: boardMembers.photoUrl,
         createdAt: boardMembers.createdAt,
         updatedAt: boardMembers.updatedAt,
         photo: {
@@ -81,16 +80,16 @@ class BoardMembersService {
       query = query.where(whereClause);
     }
 
-    // Apply sorting
-    const sortFieldMap = {
-      name: boardMembers.name,
-      role: boardMembers.role,
-      year: boardMembers.year,
-      order: boardMembers.order,
-      createdAt: boardMembers.createdAt,
-    };
-    const sortField = sortFieldMap[sortBy] || boardMembers.order;
-    query = sortOrder === 'asc' ? query.orderBy(asc(sortField)) : query.orderBy(desc(sortField));
+    // Role-based sorting: President → Vice President → Senior → Junior
+    query = query.orderBy(
+      sql`CASE 
+        WHEN ${boardMembers.role} LIKE '%President%' AND ${boardMembers.role} NOT LIKE '%Vice%' THEN 1
+        WHEN ${boardMembers.role} LIKE '%Vice%' THEN 2
+        WHEN ${boardMembers.type} = 'SENIOR' THEN 3
+        ELSE 4
+      END`,
+      asc(boardMembers.name)
+    );
 
     // Apply pagination
     const offset = (page - 1) * limit;
@@ -125,8 +124,7 @@ class BoardMembersService {
         type: boardMembers.type,
         year: boardMembers.year,
         photoId: boardMembers.photoId,
-        order: boardMembers.order,
-        isActive: boardMembers.isActive,
+        photoUrl: boardMembers.photoUrl,
         createdAt: boardMembers.createdAt,
         updatedAt: boardMembers.updatedAt,
         photo: {
@@ -143,6 +141,36 @@ class BoardMembersService {
   }
 
   /**
+   * Upload board member photo
+   */
+  async uploadPhoto(id, file) {
+    const dir = join(UPLOAD_DIR, id);
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+    }
+
+    const buffer = await file.toBuffer();
+    const outputPath = join(dir, 'photo.jpg');
+
+    await sharp(buffer)
+      .resize(400, 400, { fit: 'cover', position: 'center' })
+      .jpeg({ quality: 90 })
+      .toFile(outputPath);
+
+    return `/uploads/board-members/${id}/photo.jpg`;
+  }
+
+  /**
+   * Update board member photo URL
+   */
+  async updatePhoto(id, photoUrl) {
+    await db.update(boardMembers)
+      .set({ photoUrl, updatedAt: new Date() })
+      .where(eq(boardMembers.id, id));
+    return this.getById(id);
+  }
+
+  /**
    * Create a new board member
    */
   async create(data, userId) {
@@ -154,8 +182,7 @@ class BoardMembersService {
       type: data.type || 'SENIOR',
       year: parseInt(data.year, 10),
       photoId: data.photoId || null,
-      order: parseInt(data.order, 10) || 0,
-      isActive: data.isActive !== undefined ? data.isActive : true,
+      photoUrl: data.photoUrl || null,
     });
 
     const [member] = await db
@@ -194,8 +221,7 @@ class BoardMembersService {
     if (data.type !== undefined) updateData.type = data.type;
     if (data.year !== undefined) updateData.year = parseInt(data.year, 10);
     if (data.photoId !== undefined) updateData.photoId = data.photoId;
-    if (data.order !== undefined) updateData.order = parseInt(data.order, 10);
-    if (data.isActive !== undefined) updateData.isActive = data.isActive;
+    if (data.photoUrl !== undefined) updateData.photoUrl = data.photoUrl;
 
     await db.update(boardMembers).set(updateData).where(eq(boardMembers.id, id));
 

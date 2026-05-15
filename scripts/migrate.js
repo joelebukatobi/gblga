@@ -7,6 +7,7 @@ import { ensureDatabaseUrl } from './lib/load-env.js';
 import mysql from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';
+import { readFile } from 'fs/promises';
 
 // Load DATABASE_URL from available sources
 ensureDatabaseUrl({ scriptName: 'migrate.js' });
@@ -29,22 +30,29 @@ async function shouldRunMigrations(connection) {
       return true;
     }
 
-    // Check if any migrations have been recorded
+    // Get all migration files from journal
+    const journalPath = new URL('../src/db/migrations/meta/_journal.json', import.meta.url);
+    const journal = JSON.parse(await readFile(journalPath, 'utf8'));
+    const allMigrations = journal.entries.map(e => e.tag);
+
+    // Get already applied migrations from DB
     const [rows] = await connection.query(
-      'SELECT COUNT(*) as count FROM __drizzle_migrations'
+      "SELECT hash FROM __drizzle_migrations"
     );
+    const appliedMigrations = new Set(rows.map(r => r.hash));
 
-    const migrationCount = rows[0].count;
+    // Find pending migrations
+    const pending = allMigrations.filter(m => !appliedMigrations.has(m));
 
-    if (migrationCount === 0) {
-      console.log('📋 Migrations table exists but is empty');
-      return true;
+    if (pending.length === 0) {
+      console.log(`📊 All ${allMigrations.length} migrations applied - nothing pending`);
+      return false;
     }
 
-    console.log(`📊 Found ${migrationCount} applied migration(s)`);
-    return false;
+    console.log(`📊 ${appliedMigrations.size}/${allMigrations.length} applied, ${pending.length} pending:`);
+    pending.forEach(m => console.log(`   - ${m}`));
+    return true;
   } catch (error) {
-    // If we can't check, assume we need to run migrations
     console.log('⚠️  Could not check migration status:', error.message);
     return true;
   }

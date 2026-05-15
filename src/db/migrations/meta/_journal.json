@@ -36,6 +36,13 @@
       "when": 1777171000000,
       "tag": "0004_add_events_and_board_members",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1737802800000,
+      "tag": "0005_add_albums",
+      "breakpoints": true
     }
   ]
 }

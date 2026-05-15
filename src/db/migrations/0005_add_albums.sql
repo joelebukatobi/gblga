@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS albums (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   CONSTRAINT fk_albums_cover_image FOREIGN KEY (cover_image_id) REFERENCES media_items(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+--> statement-breakpoint
 -- Add album_id to media_items
 ALTER TABLE media_items
   ADD COLUMN album_id VARCHAR(36) NULL AFTER uploaded_by,

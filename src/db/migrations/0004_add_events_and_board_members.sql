@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   KEY `events_featured_image_id_idx` (`featured_image_id`),
   CONSTRAINT `events_featured_image_id_media_items_id_fk` FOREIGN KEY (`featured_image_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS `board_members` (
   `id` varchar(36) NOT NULL,
   `name` varchar(200) NOT NULL,

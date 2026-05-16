@@ -26,22 +26,8 @@
     {
       "idx": 3,
       "version": "5",
-      "when": 1776176500393,
-      "tag": "0003_add_setup_tokens",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1777171000000,
-      "tag": "0004_add_events_and_board_members",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1737802800000,
-      "tag": "0005_add_albums",
+      "when": 1778889607000,
+      "tag": "0003_add_custom_tables",
       "breakpoints": true
     }
   ]

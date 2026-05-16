@@ -96,7 +96,6 @@ public/uploads/videos/*.mp4
 public/vendor/
 
 # Screenshots and test artifacts
-*.png
-!dist/images/favicon.png
+/*.png
 admin-*.yml
 home-page-snapshot.txt

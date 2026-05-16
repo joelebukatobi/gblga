@@ -28,7 +28,7 @@ export function nav(activeRoute = '/') {
           <ul class="site-nav__links">${items}</ul>
         </nav>
         <div class="site-nav__end">
-          <a class="btn btn--primary btn--sm" href="#join">Become A Member</a>
+          <a class="btn btn--primary btn--sm" href="https://fordhamgsb.campuslabs.com/engage/actioncenter/organization/black-and-hispanic-mba-association" target="_blank" rel="noopener noreferrer">Become A Member</a>
         </div>
       </div>
     </header>

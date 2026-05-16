@@ -139,6 +139,9 @@ export function appGalleryIndexPage({ albums = [] } = {}) {
     bodyClass: 'gallery-page',
     content,
     activeRoute: '/gallery',
+    meta: {
+      description: 'Moments from our events and community. Explore photo albums from the Gabelli Black and LatinX Graduate Association.',
+    },
   });
 }
 
@@ -177,5 +180,9 @@ export function appGalleryAlbumPage({ album, media = [], pagination } = {}) {
     bodyClass: 'gallery-page',
     content,
     activeRoute: '/gallery',
+    meta: {
+      description: album.description || `Photos and videos from ${album.title} — Gabelli Black and LatinX Graduate Association.`,
+      ogImage: album.coverImage?.path || '/dist/images/gblga-logo.svg',
+    },
   });
 }

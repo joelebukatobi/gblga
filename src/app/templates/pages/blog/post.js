@@ -115,5 +115,10 @@ export function appBlogPostPage({ post, relatedPosts = [] } = {}) {
     bodyClass: 'blog-post-page',
     content,
     activeRoute: '/blog',
+    meta: {
+      description: post?.excerpt || post?.summary || 'Read the latest from the Gabelli Black and LatinX Graduate Association.',
+      ogType: 'article',
+      ogImage: post?.featuredImage?.url || post?.image || '/dist/images/gblga-logo.svg',
+    },
   });
 }

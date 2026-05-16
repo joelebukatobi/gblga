@@ -219,9 +219,12 @@ export function appHomePage({ albums = [], events = [] } = {}) {
   `;
 
   return renderAppLayout({
-    title: 'GBLGA · Gabelli Black and LatinX Graduate Association',
+    title: 'Home - GBLGA',
     bodyClass: 'home-page',
     content,
     activeRoute: '/',
+    meta: {
+      description: 'Gabelli Black and LatinX Graduate Association — Building community, fostering leadership, and driving change at Fordham.',
+    },
   });
 }

@@ -192,5 +192,8 @@ export function appBoardPage({
     bodyClass: 'board-page',
     content,
     activeRoute: '/board',
+    meta: {
+      description: 'Meet the leaders driving our mission forward. View current and past board members of the Gabelli Black and LatinX Graduate Association.',
+    },
   });
 }

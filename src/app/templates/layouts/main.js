@@ -1,14 +1,35 @@
 import { nav } from '../partials/nav.js';
 import { footer } from '../partials/footer.js';
 
-export function renderAppLayout({ title = 'GBLGA', bodyClass = '', content = '', activeRoute = '/' } = {}) {
+export function renderAppLayout({ title = 'GBLGA', bodyClass = '', content = '', activeRoute = '/', meta = {} } = {}) {
+  const {
+    description = 'Gabelli Black and LatinX Graduate Association — Building community, driving change.',
+    ogImage = '/dist/images/gblga-logo.svg',
+    ogType = 'website',
+    ogUrl = '',
+  } = meta;
+
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title}</title>
+    <meta name="description" content="${description}" />
     <link rel="icon" type="image/png" href="/dist/images/favicon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="${ogType}" />
+    <meta property="og:image" content="${ogImage}" />
+    ${ogUrl ? `<meta property="og:url" content="${ogUrl}" />` : ''}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
+    <meta name="twitter:image" content="${ogImage}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

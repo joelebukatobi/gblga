@@ -154,5 +154,8 @@ export function appEventsPage({
     bodyClass: 'events-page',
     content,
     activeRoute: '/events',
+    meta: {
+      description: 'Upcoming and past events from the Gabelli Black and LatinX Graduate Association community.',
+    },
   });
 }

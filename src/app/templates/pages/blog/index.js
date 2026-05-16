@@ -159,5 +159,8 @@ export function appBlogIndexPage({ posts, page, totalPages, totalPosts, tags = [
     bodyClass: 'blog-page',
     content,
     activeRoute: '/blog',
+    meta: {
+      description: 'Stories, updates, and insights from the Gabelli Black and LatinX Graduate Association community.',
+    },
   });
 }

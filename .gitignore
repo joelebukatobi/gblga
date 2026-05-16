@@ -20,7 +20,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Build outputs
-dist/
+dist/css/
 build/
 .build/
 *.tsbuildinfo
@@ -97,5 +97,6 @@ public/vendor/
 
 # Screenshots and test artifacts
 *.png
+!dist/images/favicon.png
 admin-*.yml
 home-page-snapshot.txt

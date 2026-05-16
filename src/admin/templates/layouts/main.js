@@ -32,7 +32,7 @@ export function mainLayout({ title = 'Dashboard', description = 'BlogCMS Dashboa
     <meta name="description" content="${description}" />
 
     <!-- Favicon -->
-    <link rel="icon" href="/dist/favicon.svg" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="/dist/images/favicon.png" />
 
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

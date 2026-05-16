@@ -3,7 +3,7 @@
 // Run database migrations programmatically
 // Drizzle's migrate() is idempotent — it skips already-applied migrations
 
-import { ensureDatabaseUrl } from './lib/load-env.js';
+import { ensureDatabaseUrl } from '../env.js';
 import mysql from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
 import { migrate } from 'drizzle-orm/mysql2/migrator';

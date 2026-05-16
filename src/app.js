@@ -8,17 +8,16 @@ import fastifyRateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyHtml from 'fastify-html';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { checkSetupStatus } from './middleware/setup-check.js';
+import { ensureDatabaseUrl } from '../env.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment variables
-const envFile = `.env${process.env.NODE_ENV === 'production' ? '' : '.development'}`;
-dotenv.config({ path: envFile });
+// Load environment variables (process.env, .env.local, .env.development, .env, cPanel)
+ensureDatabaseUrl({ scriptName: 'server', exitOnError: false });
 
 export default async function app(fastify, opts) {
   const isDevelopment = process.env.NODE_ENV === 'development';

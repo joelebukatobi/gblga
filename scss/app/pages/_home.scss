@@ -415,7 +415,7 @@
 
   // Filter row
   &__filters {
-    @apply flex items-start gap-[2.4rem] mb-[4rem];
+    @apply flex items-start justify-between mb-[4rem];
   }
 
   // Tag buttons - uses .btn .btn--outline .btn--sm as base
@@ -430,7 +430,7 @@
 
   // Category dropdown
   &__dropdown {
-    @apply relative ml-auto;
+    @apply relative;
 
     // Dropdown trigger button - uses .btn .btn--outline .btn--sm as base
     &-trigger {

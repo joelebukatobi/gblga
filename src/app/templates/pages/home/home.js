@@ -180,7 +180,7 @@ function newsletter() {
     <section class="newsletter" aria-labelledby="newsletter-title">
       <div class="newsletter__inner">
         <div class="newsletter__media" aria-hidden="true">
-          <img src="/public/uploads/images/newsletter-bg.jpg" alt="" />
+          <img src="/dist/images/newsletter-bg.jpg" alt="" />
         </div>
         <div class="newsletter__content">
           <p class="newsletter__eyebrow">Newsletter</p>

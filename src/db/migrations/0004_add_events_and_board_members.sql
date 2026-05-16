@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   KEY `events_event_date_idx` (`event_date`),
   KEY `events_featured_image_id_idx` (`featured_image_id`),
   CONSTRAINT `events_featured_image_id_media_items_id_fk` FOREIGN KEY (`featured_image_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS `board_members` (
   `id` varchar(36) NOT NULL,
@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   KEY `board_members_year_idx` (`year`),
   KEY `board_members_photo_id_idx` (`photo_id`),
   CONSTRAINT `board_members_photo_id_media_items_id_fk` FOREIGN KEY (`photo_id`) REFERENCES `media_items` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);

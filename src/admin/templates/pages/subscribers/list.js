@@ -52,7 +52,7 @@ export function subscribersListPage({ subscribers, pagination, filters, user, to
   // Initialize delete modal with custom config for subscribers
   const deleteModal = new DeleteModal({
     entityName: 'Subscriber',
-    entityLabel: 'name',
+    entityLabel: 'email',
     deleteUrlPath: '/admin/subscribers',
     targetSelector: 'closest tr',
     swapMode: 'outerHTML swap:300ms',
@@ -80,7 +80,9 @@ export function subscribersListPage({ subscribers, pagination, filters, user, to
           searchPlaceholder: 'Search subscribers...',
           searchValue: filters.search || '',
           filters: [],
-          hasAddButton: false,
+          hasAddButton: true,
+          addButtonUrl: '/admin/subscribers/new',
+          addButtonLabel: 'Add Subscriber',
         })}
 
         <div id="subscribers-table-container" class="subscribers__table-content">
@@ -118,7 +120,6 @@ function renderSubscribersTable(subscribers, pagination, filters) {
     <table class="table">
       <thead class="table__thead">
         <tr>
-          <th>Name</th>
           <th>Email</th>
           <th>Status</th>
           <th>Confirmed</th>
@@ -146,10 +147,6 @@ export function renderSubscriberRow(subscriber) {
 
   return `
     <tr class="table__tr" id="subscriber-${subscriber.id}">
-      <td class="table__td">
-        <span class="table__label">Name</span>
-        <div class="table__title">${escapeHtml(subscriber.name || '-')}</div>
-      </td>
       <td class="table__td">
         <span class="table__label">Email</span>
         <div class="table__title">
@@ -181,7 +178,6 @@ export function renderSubscriberRow(subscriber) {
             type="button"
             class="btn btn--ghost row-action row-action--delete"
             data-subscriber-id="${subscriber.id}"
-            data-subscriber-name="${escapeHtml(subscriber.name || '')}"
             data-subscriber-email="${escapeHtml(subscriber.email)}"
             onclick="openDeleteModal(this)"
           >

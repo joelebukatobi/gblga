@@ -34,18 +34,6 @@ export function newSubscriberPage({ user, error }) {
               <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
 
               <div class="form__group">
-                <label class="label label--required" for="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  class="input"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-
-              <div class="form__group">
                 <label class="label label--required" for="email">Email</label>
                 <input
                   type="email"

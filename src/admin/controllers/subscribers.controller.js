@@ -132,7 +132,7 @@ class SubscribersController {
    */
   async create(request, reply) {
     try {
-      const { email, name, status } = request.body;
+      const { email, status } = request.body;
 
       if (!email) {
         reply.code(400);
@@ -153,7 +153,6 @@ class SubscribersController {
       // Create subscriber
       const subscriber = await subscribersService.createSubscriber({
         email,
-        name,
         status: status || 'ACTIVE'
       });
 
@@ -187,7 +186,7 @@ class SubscribersController {
   async update(request, reply) {
     try {
       const { id } = request.params;
-      const { name, email, status } = request.body;
+      const { email, status } = request.body;
 
       // Check if subscriber exists
       const existing = await subscribersService.getSubscriberById(id);
@@ -211,7 +210,6 @@ class SubscribersController {
 
       // Update subscriber
       const subscriber = await subscribersService.updateSubscriber(id, {
-        name,
         email,
         status
       });
@@ -314,7 +312,6 @@ function subscribersTableFragment({ subscribers, pagination, filters }) {
     <table class="table">
       <thead class="table__thead">
         <tr>
-          <th>Name</th>
           <th>Email</th>
           <th>Status</th>
           <th>Confirmed</th>

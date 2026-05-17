@@ -897,7 +897,7 @@
     @apply h-[28rem] bg-maroon/5 flex items-center justify-center;
 
     img {
-      @apply w-full h-full object-contain p-[4rem];
+      @apply w-full h-full object-contain;
     }
   }
 

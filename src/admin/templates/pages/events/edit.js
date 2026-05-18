@@ -29,7 +29,7 @@ export function eventEditPage({ event, user, errors = {} }) {
             <h2>Event Details</h2>
           </div>
           <div class="card__body">
-            <form class="form" id="editEventForm" hx-put="/admin/events/${event.id}" hx-target="#form-response" hx-swap="innerHTML">
+            <form class="form" id="editEventForm" hx-put="/admin/events/${event.id}" hx-target="#form-response" hx-swap="innerHTML" hx-encoding="multipart/form-data">
               <div id="form-response"></div>
 
               <div class="form__row form__row--sidebar">
@@ -56,11 +56,7 @@ export function eventEditPage({ event, user, errors = {} }) {
                     name="flyer"
                     accept="image/jpeg,image/png,image/jpg,image/webp"
                     class="hidden"
-                    hx-post="/admin/events/${event.id}/upload-flyer"
-                    hx-target="#flyerPreview"
-                    hx-swap="innerHTML"
-                    hx-encoding="multipart/form-data"
-                    hx-trigger="change"
+                    onchange="handleFlyerSelect(this)"
                   />
                 </div>
 
@@ -116,10 +112,118 @@ export function eventEditPage({ event, user, errors = {} }) {
       </div>
     </div>
 
+    <!-- Flyer Crop Modal -->
+    <div id="flyerCropModal" class="modal">
+      <div class="modal__backdrop" onclick="closeFlyerCropModal()"></div>
+      <div class="modal__panel modal__panel--large">
+        <div class="modal__header" style="position: relative; flex-direction: row; justify-content: space-between; text-align: left;">
+          <h3 class="modal__title">Crop Flyer</h3>
+          <button type="button" class="modal__close" onclick="closeFlyerCropModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="modal__body" style="padding: 0; overflow: hidden;">
+          <div style="height: 40rem; background: #f5f5f5;">
+            <cropper-canvas id="flyerCanvas" background style="height: 100%; width: 100%;">
+              <cropper-image id="flyerImage" src="" alt="Flyer" rotatable scalable translatable></cropper-image>
+              <cropper-shade hidden></cropper-shade>
+              <cropper-handle action="select" plain></cropper-handle>
+              <cropper-selection id="flyerSelection" initial-coverage="0.8" aspect-ratio="0.75" movable resizable>
+                <cropper-grid covered></cropper-grid>
+                <cropper-crosshair centered></cropper-crosshair>
+                <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+                <cropper-handle action="n-resize"></cropper-handle>
+                <cropper-handle action="e-resize"></cropper-handle>
+                <cropper-handle action="s-resize"></cropper-handle>
+                <cropper-handle action="w-resize"></cropper-handle>
+                <cropper-handle action="ne-resize"></cropper-handle>
+                <cropper-handle action="nw-resize"></cropper-handle>
+                <cropper-handle action="se-resize"></cropper-handle>
+                <cropper-handle action="sw-resize"></cropper-handle>
+              </cropper-selection>
+            </cropper-canvas>
+          </div>
+        </div>
+        <div class="modal__footer modal__footer--row">
+          <button type="button" class="btn btn--primary" onclick="applyFlyerCrop()">
+            <i data-lucide="check"></i>
+            Apply Crop
+          </button>
+          <button type="button" class="btn btn--outline" onclick="closeFlyerCropModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
+      let currentFlyerFile = null;
+
       function submitForm() {
         htmx.trigger('#editEventForm', 'submit');
       }
+
+      window.handleFlyerSelect = function(input) {
+        if (input.files && input.files[0]) {
+          currentFlyerFile = input.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            openFlyerCropModal(e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
+
+      window.openFlyerCropModal = function(imageSrc) {
+        const modal = document.getElementById('flyerCropModal');
+        const flyerImage = document.getElementById('flyerImage');
+        flyerImage.src = imageSrc;
+        modal.classList.add('is-open');
+        lucide.createIcons();
+      };
+
+      window.closeFlyerCropModal = function() {
+        const modal = document.getElementById('flyerCropModal');
+        modal.classList.remove('is-open');
+        document.getElementById('flyerUpload').value = '';
+        currentFlyerFile = null;
+      };
+
+      window.applyFlyerCrop = async function() {
+        const selection = document.getElementById('flyerSelection');
+        if (!selection) return;
+
+        try {
+          const canvas = await selection.$toCanvas({
+            width: 800,
+            height: 600,
+          });
+
+          canvas.toBlob(function(blob) {
+            if (!blob) return;
+
+            const fileName = currentFlyerFile ? currentFlyerFile.name : 'flyer.jpg';
+            const croppedFile = new File([blob], fileName, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+
+            const preview = document.getElementById('flyerPreview');
+            const overlay = document.querySelector('.form__photo-overlay');
+
+            preview.innerHTML = '<img src="' + canvas.toDataURL('image/jpeg') + '" alt="Flyer preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+            preview.classList.remove('form__photo-placeholder');
+            if (overlay) overlay.style.display = 'flex';
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(croppedFile);
+            document.getElementById('flyerUpload').files = dataTransfer.files;
+
+            closeFlyerCropModal();
+          }, 'image/jpeg', 0.9);
+        } catch (error) {
+          console.error('Crop failed:', error);
+        }
+      };
     </script>
   `;
 

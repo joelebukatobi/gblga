@@ -71,13 +71,14 @@ class BoardMembersController {
   async create(request, reply) {
     try {
       const user = request.user;
-      const { name, role, email, bio, type, year, photoId } = request.body;
+      const { name, role, email, bio, type, year } = request.body;
 
       if (!name || !role || !year) {
         reply.code(400);
         return reply.type('text/html').send(errorFragment({ message: 'Name, role and year are required.' }));
       }
 
+      // Create the member first
       const member = await boardMembersService.create({
         name,
         role,
@@ -85,8 +86,22 @@ class BoardMembersController {
         bio,
         type: type || 'SENIOR',
         year,
-        photoId,
       }, user.id);
+
+      // Handle photo upload if present
+      try {
+        const data = await request.file();
+        if (data) {
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+          if (allowedTypes.includes(data.mimetype)) {
+            const photoUrl = await boardMembersService.uploadPhoto(member.id, data);
+            await boardMembersService.updatePhoto(member.id, photoUrl);
+          }
+        }
+      } catch (fileError) {
+        // No file uploaded or file error - continue without photo
+        request.log.info('No photo uploaded or file error:', fileError.message);
+      }
 
       reply.header('HX-Location', `/admin/board-members/${member.id}/edit`);
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Board member created successfully!', type: 'success' } }));

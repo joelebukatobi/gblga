@@ -89,6 +89,7 @@ public/uploads/images/thumbs/
 public/uploads/images/pexels-*
 public/uploads/posts/post-*
 public/uploads/events/
+public/uploads/board-members/
 public/uploads/videos/thumbs/thumb-*
 public/uploads/videos/*.mp4
 

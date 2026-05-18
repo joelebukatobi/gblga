@@ -20,18 +20,30 @@ export function boardMemberNewPage({ user, errors = {} }) {
             <h2>Member Details</h2>
           </div>
           <div class="card__body">
-            <form class="form" id="newBoardMemberForm" hx-post="/admin/board-members" hx-target="#form-response" hx-swap="innerHTML">
+            <form class="form" id="newBoardMemberForm" hx-post="/admin/board-members" hx-target="#form-response" hx-swap="innerHTML" hx-encoding="multipart/form-data">
               <div id="form-response"></div>
 
               <div class="form__row form__row--sidebar">
                 <div class="form__group">
                   <label class="label">Photo</label>
-                  <div class="form__photo" style="cursor: default;">
+                  <div class="form__photo" onclick="document.getElementById('memberPhoto').click()">
                     <div id="photoPreview" class="form__photo-placeholder">
                       <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
                     </div>
+                    <div class="form__photo-overlay" id="photoOverlay" style="display: none;">
+                      <span>Change Photo</span>
+                      <span>JPG, PNG, WebP. Max 10MB.</span>
+                    </div>
                   </div>
-                  <p class="form__hint">Photo can be added after creating the member.</p>
+                  <input
+                    type="file"
+                    id="memberPhoto"
+                    name="photo"
+                    accept="image/jpeg,image/png,image/jpg,image/webp"
+                    class="hidden"
+                    onchange="handlePhotoSelect(this)"
+                  />
+                  <p class="form__hint">Click to upload a photo (optional)</p>
                 </div>
 
                 <div>
@@ -57,7 +69,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
                     </div>
                   </div>
 
-                  <div class="form__group">
+                  <div class="form__group form__group--ordered">
                     <label class="label" for="memberType">Type</label>
                     <select
                       name="type"
@@ -98,17 +110,135 @@ export function boardMemberNewPage({ user, errors = {} }) {
       </div>
     </div>
 
-    <script>
-      function submitForm() {
-        htmx.trigger('#newBoardMemberForm', 'submit');
-      }
+    <!-- Photo Crop Modal -->
+    <div id="cropModal" class="modal">
+      <div class="modal__backdrop" onclick="closeCropModal()"></div>
+      <div class="modal__panel modal__panel--large">
+        <div class="modal__header" style="position: relative; flex-direction: row; justify-content: space-between; text-align: left;">
+          <h3 class="modal__title">Crop Photo</h3>
+          <button type="button" class="modal__close" onclick="closeCropModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="modal__body" style="padding: 0; overflow: hidden;">
+          <div style="height: 40rem; background: #f5f5f5;">
+            <cropper-canvas id="cropperCanvas" background style="height: 100%; width: 100%;">
+              <cropper-image id="cropperImage" src="" alt="Picture" rotatable scalable translatable></cropper-image>
+              <cropper-shade hidden></cropper-shade>
+              <cropper-handle action="select" plain></cropper-handle>
+              <cropper-selection id="cropperSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
+                <cropper-grid covered></cropper-grid>
+                <cropper-crosshair centered></cropper-crosshair>
+                <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+                <cropper-handle action="n-resize"></cropper-handle>
+                <cropper-handle action="e-resize"></cropper-handle>
+                <cropper-handle action="s-resize"></cropper-handle>
+                <cropper-handle action="w-resize"></cropper-handle>
+                <cropper-handle action="ne-resize"></cropper-handle>
+                <cropper-handle action="nw-resize"></cropper-handle>
+                <cropper-handle action="se-resize"></cropper-handle>
+                <cropper-handle action="sw-resize"></cropper-handle>
+              </cropper-selection>
+            </cropper-canvas>
+          </div>
+        </div>
+        <div class="modal__footer modal__footer--row">
+          <button type="button" class="btn btn--primary" onclick="applyCrop()">
+            <i data-lucide="check"></i>
+            Apply Crop
+          </button>
+          <button type="button" class="btn btn--outline" onclick="closeCropModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
 
-      function getInitials(name) {
+    <script src="/vendor/cropperjs/cropper.min.js"></script>
+    <script>
+      let currentFile = null;
+
+      window.submitForm = function() {
+        htmx.trigger('#newBoardMemberForm', 'submit');
+      };
+
+      window.getInitials = function(name) {
         if (!name) return '';
         const parts = name.trim().split(/\\s+/);
         if (parts.length === 1) return parts[0][0]?.toUpperCase() || '';
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-      }
+      };
+
+      window.handlePhotoSelect = function(input) {
+        if (input.files && input.files[0]) {
+          currentFile = input.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            openCropModal(e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
+
+      window.openCropModal = function(imageSrc) {
+        const modal = document.getElementById('cropModal');
+        const cropperImage = document.getElementById('cropperImage');
+        
+        cropperImage.src = imageSrc;
+        modal.classList.add('is-open');
+        lucide.createIcons();
+      };
+
+      window.closeCropModal = function() {
+        const modal = document.getElementById('cropModal');
+        modal.classList.remove('is-open');
+        
+        // Reset file input if crop was cancelled
+        const fileInput = document.getElementById('memberPhoto');
+        if (fileInput && !fileInput.files.length) {
+          fileInput.value = '';
+          currentFile = null;
+        }
+      };
+
+      window.applyCrop = async function() {
+        const selection = document.getElementById('cropperSelection');
+        
+        if (!selection) return;
+        
+        try {
+          const canvas = await selection.$toCanvas({
+            width: 400,
+            height: 400,
+          });
+          
+          canvas.toBlob(function(blob) {
+            if (!blob) return;
+            
+            // Create a new file from the blob
+            const fileName = currentFile ? currentFile.name : 'photo.jpg';
+            const croppedFile = new File([blob], fileName, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            
+            // Update preview
+            const preview = document.getElementById('photoPreview');
+            const overlay = document.getElementById('photoOverlay');
+            
+            preview.innerHTML = '<img src="' + canvas.toDataURL('image/jpeg') + '" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+            preview.classList.remove('form__photo-placeholder');
+            if (overlay) overlay.style.display = 'flex';
+            
+            // Create a DataTransfer to update the file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(croppedFile);
+            document.getElementById('memberPhoto').files = dataTransfer.files;
+            
+            closeCropModal();
+          }, 'image/jpeg', 0.9);
+        } catch (error) {
+          console.error('Crop failed:', error);
+        }
+      };
 
       const photoPreview = document.getElementById('photoPreview');
       const defaultIcon = photoPreview.innerHTML;

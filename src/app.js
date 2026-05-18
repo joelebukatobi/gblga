@@ -138,6 +138,13 @@ export default async function app(fastify, opts) {
     decorateReply: false,
   });
 
+  // Serve Cropper.js
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../node_modules/cropperjs/dist'),
+    prefix: '/vendor/cropperjs/',
+    decorateReply: false,
+  });
+
   // Health check endpoint
   fastify.get('/health', async () => {
     return {
@@ -173,6 +180,7 @@ export default async function app(fastify, opts) {
    await fastify.register(import('./admin/routes/api/videos.routes.js'), { prefix: '/api/v1/videos' });
    await fastify.register(import('./admin/routes/api/events.routes.js'), { prefix: '/api/v1/events' });
    await fastify.register(import('./admin/routes/api/boardMembers.routes.js'), { prefix: '/api/v1/board-members' });
+   await fastify.register(import('./admin/routes/api/subscribers.routes.js'), { prefix: '/api/v1' });
 
   // Register public app routes
   await fastify.register(import('./app/routes/home.routes.js'));

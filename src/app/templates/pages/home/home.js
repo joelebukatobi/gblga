@@ -188,18 +188,28 @@ function newsletter() {
           <p class="newsletter__quote">
             "Stay connected with events, opportunities, and stories from our community."
           </p>
-          <form class="newsletter-form" action="#" method="post">
+          <form
+            class="newsletter-form"
+            hx-post="/api/v1/subscribe"
+            hx-target="#newsletter-response"
+            hx-swap="innerHTML"
+            hx-indicator="#newsletter-indicator"
+          >
             <label class="visually-hidden" for="newsletter-email">Email address</label>
             <input
-              id="email"
+              id="newsletter-email"
               class="input"
               type="email"
               name="email"
               placeholder="Enter your email"
               required
             />
-            <button class="btn btn--primary" type="submit">Subscribe</button>
+            <button class="btn btn--primary" type="submit">
+              <span class="btn__text">Subscribe</span>
+              <span id="newsletter-indicator" class="htmx-indicator">Subscribing...</span>
+            </button>
           </form>
+          <div id="newsletter-response" class="newsletter__response"></div>
         </div>
       </div>
     </section>

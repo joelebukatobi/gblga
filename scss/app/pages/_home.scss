@@ -345,6 +345,19 @@
       @apply flex-shrink-0;
     }
   }
+
+  // Response message
+  &__response {
+    @apply mt-[1.6rem] text-[1.6rem] font-medium;
+
+    &--success {
+      @apply text-green-400;
+    }
+
+    &--error {
+      @apply text-red-400;
+    }
+  }
 }
 
 // ============================================================================

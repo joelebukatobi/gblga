@@ -403,7 +403,6 @@ export const dailyPageViews = mysqlTable(
 export const subscribers = mysqlTable('subscribers', {
   id: idColumn().primaryKey(),
   email: varchar('email', { length: 255 }).notNull().unique(),
-  name: varchar('name', { length: 100 }),
   status: mysqlEnum('status', subscriberStatusEnum).default('ACTIVE').notNull(),
   confirmedAt: timestamp('confirmed_at'),
   unsubscribedAt: timestamp('unsubscribed_at'),

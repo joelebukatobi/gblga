@@ -52,11 +52,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                     name="photo"
                     accept="image/jpeg,image/png,image/jpg,image/webp"
                     class="hidden"
-                    hx-post="/admin/board-members/${member.id}/photo"
-                    hx-target="#photoPreview"
-                    hx-swap="innerHTML"
-                    hx-encoding="multipart/form-data"
-                    hx-trigger="change"
+                    onchange="handlePhotoUpload(this)"
                   />
                 </div>
 
@@ -125,10 +121,145 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
       </div>
     </div>
 
+    <!-- Photo Crop Modal -->
+    <div id="cropModal" class="modal">
+      <div class="modal__backdrop" onclick="closeCropModal()"></div>
+      <div class="modal__panel modal__panel--large">
+        <div class="modal__header" style="position: relative; flex-direction: row; justify-content: space-between; text-align: left;">
+          <h3 class="modal__title">Crop Photo</h3>
+          <button type="button" class="modal__close" onclick="closeCropModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="modal__body" style="padding: 0; overflow: hidden;">
+          <div style="height: 40rem; background: #f5f5f5;">
+            <cropper-canvas id="cropperCanvas" background style="height: 100%; width: 100%;">
+              <cropper-image id="cropperImage" src="" alt="Picture" rotatable scalable translatable></cropper-image>
+              <cropper-shade hidden></cropper-shade>
+              <cropper-handle action="select" plain></cropper-handle>
+              <cropper-selection id="cropperSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
+                <cropper-grid covered></cropper-grid>
+                <cropper-crosshair centered></cropper-crosshair>
+                <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+                <cropper-handle action="n-resize"></cropper-handle>
+                <cropper-handle action="e-resize"></cropper-handle>
+                <cropper-handle action="s-resize"></cropper-handle>
+                <cropper-handle action="w-resize"></cropper-handle>
+                <cropper-handle action="ne-resize"></cropper-handle>
+                <cropper-handle action="nw-resize"></cropper-handle>
+                <cropper-handle action="se-resize"></cropper-handle>
+                <cropper-handle action="sw-resize"></cropper-handle>
+              </cropper-selection>
+            </cropper-canvas>
+          </div>
+        </div>
+        <div class="modal__footer modal__footer--row">
+          <button type="button" class="btn btn--primary" onclick="applyCrop()">
+            <i data-lucide="check"></i>
+            Apply Crop
+          </button>
+          <button type="button" class="btn btn--outline" onclick="closeCropModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
-      function submitForm() {
+      let currentFile = null;
+
+      window.submitForm = function() {
         htmx.trigger('#editBoardMemberForm', 'submit');
-      }
+      };
+
+      window.handlePhotoUpload = function(input) {
+        if (input.files && input.files[0]) {
+          currentFile = input.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            openCropModal(e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
+
+      window.openCropModal = function(imageSrc) {
+        const modal = document.getElementById('cropModal');
+        const cropperImage = document.getElementById('cropperImage');
+        
+        cropperImage.src = imageSrc;
+        modal.classList.add('is-open');
+        lucide.createIcons();
+      };
+
+      window.closeCropModal = function() {
+        const modal = document.getElementById('cropModal');
+        modal.classList.remove('is-open');
+        document.getElementById('memberPhotoUpload').value = '';
+        currentFile = null;
+      };
+
+      window.applyCrop = async function() {
+        const selection = document.getElementById('cropperSelection');
+        
+        if (!selection) return;
+        
+        try {
+          const canvas = await selection.$toCanvas({
+            width: 400,
+            height: 400,
+          });
+          
+          canvas.toBlob(async function(blob) {
+            if (!blob) return;
+            
+            const fileName = currentFile ? currentFile.name : 'photo.jpg';
+            const croppedFile = new File([blob], fileName, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            
+            // Create form data and upload via fetch
+            const formData = new FormData();
+            formData.append('photo', croppedFile);
+            
+            const csrfToken = document.querySelector('input[name="_csrf"]')?.value;
+            if (csrfToken) {
+              formData.append('_csrf', csrfToken);
+            }
+            
+            try {
+              const response = await fetch('/admin/board-members/${member.id}/photo', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                  'HX-Request': 'true'
+                }
+              });
+              
+              if (response.ok) {
+                const html = await response.text();
+                document.getElementById('photoPreview').innerHTML = html;
+                
+                // Show success toast
+                document.body.dispatchEvent(new CustomEvent('htmx:toast', {
+                  detail: { message: 'Photo updated successfully!', type: 'success' }
+                }));
+              } else {
+                throw new Error('Upload failed');
+              }
+            } catch (error) {
+              console.error('Upload failed:', error);
+              document.body.dispatchEvent(new CustomEvent('htmx:toast', {
+                detail: { message: 'Failed to upload photo', type: 'error' }
+              }));
+            }
+            
+            closeCropModal();
+          }, 'image/jpeg', 0.9);
+        } catch (error) {
+          console.error('Crop failed:', error);
+        }
+      };
     </script>
   `;
 

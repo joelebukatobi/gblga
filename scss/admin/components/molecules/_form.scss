@@ -157,10 +157,6 @@
     @apply gap-[0.8rem] text-white opacity-0 transition-opacity duration-200 rounded-md;
     @apply pointer-events-none;
 
-    &:hover {
-      @apply opacity-100 pointer-events-auto;
-    }
-
     span {
       @apply text-[1.4rem] font-sans;
 
@@ -168,6 +164,10 @@
         @apply text-[1.2rem] text-white/70 font-sans;
       }
     }
+  }
+
+  &__photo:hover &__photo-overlay {
+    @apply opacity-100;
   }
 
   &__divider {

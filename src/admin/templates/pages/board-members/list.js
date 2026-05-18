@@ -94,7 +94,7 @@ export function boardMembersListPage({ members, total, page, totalPages, filters
                           <span>Edit</span>
                         </a>
                         <button type="button" class="btn btn--ghost row-action row-action--delete"
-                          data-member-id="${member.id}" data-member-name="${escapeHtml(member.name)}"
+                          data-board-member-id="${member.id}" data-board-member-name="${escapeHtml(member.name)}"
                           onclick="openDeleteModal(this)">
                           <i data-lucide="trash-2"></i>
                           <span>Delete</span>

@@ -242,8 +242,19 @@ export function boardMemberNewPage({ user, errors = {} }) {
 
       const photoPreview = document.getElementById('photoPreview');
       const defaultIcon = photoPreview.innerHTML;
+      let hasUploadedImage = false;
+
+      // Listen for photo upload to track state
+      const originalPhotoSelect = window.handlePhotoSelect;
+      window.handlePhotoSelect = function(input) {
+        hasUploadedImage = true;
+        return originalPhotoSelect(input);
+      };
 
       document.getElementById('memberName').addEventListener('input', function() {
+        // Don't overwrite an uploaded image preview
+        if (hasUploadedImage) return;
+
         const initials = getInitials(this.value);
         if (initials) {
           photoPreview.innerHTML = initials;

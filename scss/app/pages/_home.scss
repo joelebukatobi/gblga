@@ -908,6 +908,7 @@
 
   &__photo {
     @apply h-[28rem] bg-maroon/5 flex items-center justify-center;
+    @apply pt-[1.6rem] px-[1.6rem];
 
     img {
       @apply w-full h-full object-cover object-top;
@@ -919,7 +920,7 @@
   }
 
   &__info {
-    @apply flex flex-col gap-[0.8rem] p-[2.4rem];
+    @apply flex flex-col gap-[0.8rem] p-[1.6rem];
   }
 
   &__name {

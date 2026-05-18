@@ -45,7 +45,7 @@ export function eventEditPage({ event, user, errors = {} }) {
                         : `<div class="form__photo-placeholder"><i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i></div>`
                       }
                     </div>
-                    <div class="form__photo-overlay" onclick="document.getElementById('flyerUpload').click()">
+                    <div class="form__photo-overlay">
                       <span>${flyerUrl ? 'Change Flyer' : 'Upload Flyer'}</span>
                       <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>

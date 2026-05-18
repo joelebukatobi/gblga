@@ -41,7 +41,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                         : `<div class="form__photo-placeholder">${initials}</div>`
                       }
                     </div>
-                    <div class="form__photo-overlay" onclick="document.getElementById('memberPhotoUpload').click()">
+                    <div class="form__photo-overlay">
                       <span>Change Photo</span>
                       <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>

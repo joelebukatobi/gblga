@@ -128,7 +128,7 @@ export function eventEditPage({ event, user, errors = {} }) {
               <cropper-image id="flyerImage" src="" alt="Flyer" rotatable scalable translatable></cropper-image>
               <cropper-shade hidden></cropper-shade>
               <cropper-handle action="select" plain></cropper-handle>
-              <cropper-selection id="flyerSelection" initial-coverage="0.8" aspect-ratio="0.75" movable resizable>
+              <cropper-selection id="flyerSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
                 <cropper-grid covered></cropper-grid>
                 <cropper-crosshair centered></cropper-crosshair>
                 <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
@@ -195,7 +195,7 @@ export function eventEditPage({ event, user, errors = {} }) {
         try {
           const canvas = await selection.$toCanvas({
             width: 800,
-            height: 600,
+            height: 800,
           });
 
           canvas.toBlob(function(blob) {

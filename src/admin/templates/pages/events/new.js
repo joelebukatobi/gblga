@@ -26,23 +26,23 @@ export function eventNewPage({ user, errors = {} }) {
               <div class="form__row form__row--sidebar">
                 <div class="form__group">
                   <label class="label">Flyer</label>
-                  <div class="form__photo" onclick="document.getElementById('flyerUpload').click()">
+                  <div class="form__photo" style="position: relative;">
                     <div id="flyerPreview" class="form__photo-placeholder">
                       <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
                     </div>
-                    <div class="form__photo-overlay" id="flyerOverlay" style="display: none;">
+                    <div class="form__photo-overlay" id="flyerOverlay">
                       <span>Change Flyer</span>
                       <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
+                    <input
+                      type="file"
+                      id="flyerUpload"
+                      name="flyer"
+                      accept="image/jpeg,image/png,image/jpg,image/webp"
+                      style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%;"
+                      onchange="handleFlyerSelect(this)"
+                    />
                   </div>
-                  <input
-                    type="file"
-                    id="flyerUpload"
-                    name="flyer"
-                    accept="image/jpeg,image/png,image/jpg,image/webp"
-                    class="hidden"
-                    onchange="handleFlyerSelect(this)"
-                  />
                   <p class="form__hint">Click to upload a flyer (optional)</p>
                 </div>
 

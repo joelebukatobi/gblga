@@ -33,7 +33,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                   <label class="label">Photo</label>
                   <div
                     class="form__photo"
-                    onclick="document.getElementById('memberPhotoUpload').click()"
+                    style="position: relative;"
                   >
                     <div id="photoPreview" class="h-full">
                       ${photoUrl
@@ -45,15 +45,15 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                       <span>Change Photo</span>
                       <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
+                    <input
+                      type="file"
+                      id="memberPhotoUpload"
+                      name="photo"
+                      accept="image/jpeg,image/png,image/jpg,image/webp"
+                      style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%;"
+                      onchange="handlePhotoSelect(this)"
+                    />
                   </div>
-                  <input
-                    type="file"
-                    id="memberPhotoUpload"
-                    name="photo"
-                    accept="image/jpeg,image/png,image/jpg,image/webp"
-                    class="hidden"
-                    onchange="handlePhotoSelect(this)"
-                  />
                 </div>
 
                 <!-- Right Column: Form Fields -->

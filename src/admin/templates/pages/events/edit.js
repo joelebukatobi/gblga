@@ -37,7 +37,7 @@ export function eventEditPage({ event, user, errors = {} }) {
                   <label class="label">Flyer</label>
                   <div
                     class="form__photo"
-                    onclick="document.getElementById('flyerUpload').click()"
+                    style="position: relative;"
                   >
                     <div id="flyerPreview" class="h-full">
                       ${flyerUrl
@@ -49,15 +49,15 @@ export function eventEditPage({ event, user, errors = {} }) {
                       <span>${flyerUrl ? 'Change Flyer' : 'Upload Flyer'}</span>
                       <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
+                    <input
+                      type="file"
+                      id="flyerUpload"
+                      name="flyer"
+                      accept="image/jpeg,image/png,image/jpg,image/webp"
+                      style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%;"
+                      onchange="handleFlyerSelect(this)"
+                    />
                   </div>
-                  <input
-                    type="file"
-                    id="flyerUpload"
-                    name="flyer"
-                    accept="image/jpeg,image/png,image/jpg,image/webp"
-                    class="hidden"
-                    onchange="handleFlyerSelect(this)"
-                  />
                 </div>
 
                 <div>

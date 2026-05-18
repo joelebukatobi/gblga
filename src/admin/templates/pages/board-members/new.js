@@ -39,7 +39,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
                       id="memberPhoto"
                       name="photo"
                       accept="image/jpeg,image/png,image/jpg,image/webp"
-                      style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%;"
+                      style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;"
                       onchange="handlePhotoSelect(this)"
                     />
                   </div>

@@ -16,9 +16,15 @@ function formatEventDate(eventDate) {
   };
 }
 
+function truncateText(text, maxLength) {
+  if (!text || text.length <= maxLength) return text || '';
+  return text.substring(0, maxLength).trim() + '...';
+}
+
 function renderEventCard(event) {
   const { day, month, year } = formatEventDate(event.eventDate);
   const imageSrc = event.featuredImage?.path || '';
+  const truncatedDescription = truncateText(event.description, 150);
 
   return `
     <article class="event-card">
@@ -27,7 +33,7 @@ function renderEventCard(event) {
       </div>
       <div class="event-card__body">
         <h3 class="event-card__title">${event.title}</h3>
-        <p class="event-card__description">${event.description || ''}</p>
+        <p class="event-card__description">${truncatedDescription}</p>
         <hr class="event-card__divider" />
         <div class="event-card__meta">
           <p>${day} ${month}, ${year} &nbsp; &#9679; &nbsp; ${event.eventTime || ''} &nbsp; &#9679; &nbsp; ${event.location || ''}</p>

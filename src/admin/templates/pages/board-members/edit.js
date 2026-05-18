@@ -84,7 +84,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                     </div>
                   </div>
 
-                  <div class="form__group">
+                  <div class="form__group form__group--ordered">
                     <label class="label" for="memberType">Type</label>
                     <select
                       name="type"

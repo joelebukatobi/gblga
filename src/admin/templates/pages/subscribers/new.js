@@ -45,7 +45,7 @@ export function newSubscriberPage({ user, error }) {
                 />
               </div>
 
-              <div class="form__group">
+              <div class="form__group form__group--ordered">
                 <label class="label" for="status">Status</label>
                 <select
                   id="status"

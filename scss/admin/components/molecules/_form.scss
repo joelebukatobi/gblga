@@ -66,6 +66,19 @@
     &--last {
       @apply mb-0;
     }
+
+    // Force label-first ordering regardless of DOM manipulation (Preline/HTMX)
+    &--ordered {
+      @apply flex flex-col;
+
+      .label {
+        @apply order-1;
+      }
+
+      > *:not(.label) {
+        @apply order-2;
+      }
+    }
   }
 
   // Input wrapper for icons/addons (positioning only)

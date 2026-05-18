@@ -49,6 +49,9 @@ class ImagesService {
 
     // Filter by type = IMAGE
     conditions.push(eq(mediaItems.type, 'IMAGE'));
+    
+    // Exclude event flyers (they're stored in uploads/events/)
+    conditions.push(sql`${mediaItems.path} NOT LIKE '%/events/%'`);
 
     if (search) {
       conditions.push(

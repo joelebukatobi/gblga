@@ -225,6 +225,7 @@ class EventsController {
 
       const fileBuffer = await data.toBuffer();
       const hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+      const fileSize = fileBuffer.length;
 
       const existingImage = await db
         .select({ id: mediaItems.id, path: mediaItems.path })
@@ -272,7 +273,7 @@ class EventsController {
         filename,
         originalName: data.filename,
         mimeType: data.mimetype,
-        size: data.file.bytesRead,
+        size: fileSize,
         path: filepath,
         hash,
         uploadedBy: request.user.id,
@@ -321,6 +322,7 @@ class EventsController {
 
     const fileBuffer = await data.toBuffer();
     const hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    const fileSize = fileBuffer.length;
 
     const existingImage = await db
       .select({ id: mediaItems.id, path: mediaItems.path })

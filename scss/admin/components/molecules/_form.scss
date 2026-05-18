@@ -155,9 +155,10 @@
   &__photo-overlay {
     @apply absolute inset-0 bg-black/50 flex flex-col items-center justify-center;
     @apply gap-[0.8rem] text-white opacity-0 transition-opacity duration-200 rounded-md;
+    @apply pointer-events-none;
 
     &:hover {
-      @apply opacity-100;
+      @apply opacity-100 pointer-events-auto;
     }
 
     span {

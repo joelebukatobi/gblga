@@ -24,7 +24,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             <h2>Member Details</h2>
           </div>
           <div class="card__body">
-            <form class="form" id="editBoardMemberForm" hx-put="/admin/board-members/${member.id}" hx-target="#form-response" hx-swap="innerHTML">
+            <form class="form" id="editBoardMemberForm" hx-put="/admin/board-members/${member.id}" hx-target="#form-response" hx-swap="innerHTML" hx-encoding="multipart/form-data">
               <div id="form-response"></div>
 
               <div class="form__row form__row--sidebar">
@@ -52,7 +52,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                     name="photo"
                     accept="image/jpeg,image/png,image/jpg,image/webp"
                     class="hidden"
-                    onchange="handlePhotoUpload(this)"
+                    onchange="handlePhotoSelect(this)"
                   />
                 </div>
 
@@ -171,7 +171,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
         htmx.trigger('#editBoardMemberForm', 'submit');
       };
 
-      window.handlePhotoUpload = function(input) {
+      window.handlePhotoSelect = function(input) {
         if (input.files && input.files[0]) {
           currentFile = input.files[0];
           const reader = new FileReader();
@@ -209,50 +209,28 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             height: 400,
           });
           
-          canvas.toBlob(async function(blob) {
+          canvas.toBlob(function(blob) {
             if (!blob) return;
             
+            // Create a new file from the blob
             const fileName = currentFile ? currentFile.name : 'photo.jpg';
             const croppedFile = new File([blob], fileName, {
               type: 'image/jpeg',
               lastModified: Date.now(),
             });
             
-            // Create form data and upload via fetch
-            const formData = new FormData();
-            formData.append('photo', croppedFile);
+            // Update preview
+            const preview = document.getElementById('photoPreview');
+            const overlay = document.querySelector('.form__photo-overlay');
             
-            const csrfToken = document.querySelector('input[name="_csrf"]')?.value;
-            if (csrfToken) {
-              formData.append('_csrf', csrfToken);
-            }
+            preview.innerHTML = '<img src="' + canvas.toDataURL('image/jpeg') + '" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+            preview.classList.remove('form__photo-placeholder');
+            if (overlay) overlay.style.display = 'flex';
             
-            try {
-              const response = await fetch('/admin/board-members/${member.id}/photo', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                  'HX-Request': 'true'
-                }
-              });
-              
-              if (response.ok) {
-                const html = await response.text();
-                document.getElementById('photoPreview').innerHTML = html;
-                
-                // Show success toast
-                document.body.dispatchEvent(new CustomEvent('htmx:toast', {
-                  detail: { message: 'Photo updated successfully!', type: 'success' }
-                }));
-              } else {
-                throw new Error('Upload failed');
-              }
-            } catch (error) {
-              console.error('Upload failed:', error);
-              document.body.dispatchEvent(new CustomEvent('htmx:toast', {
-                detail: { message: 'Failed to upload photo', type: 'error' }
-              }));
-            }
+            // Create a DataTransfer to update the file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(croppedFile);
+            document.getElementById('memberPhotoUpload').files = dataTransfer.files;
             
             closeCropModal();
           }, 'image/jpeg', 0.9);

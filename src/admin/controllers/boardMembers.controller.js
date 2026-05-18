@@ -71,14 +71,30 @@ class BoardMembersController {
   async create(request, reply) {
     try {
       const user = request.user;
-      const { name, role, email, bio, type, year } = request.body;
+
+      // Parse multipart form data
+      const parts = request.parts();
+      const fields = {};
+      let photoFile = null;
+
+      for await (const part of parts) {
+        if (part.file) {
+          // It's a file
+          photoFile = part;
+        } else {
+          // It's a field
+          fields[part.fieldname] = await part.value;
+        }
+      }
+
+      const { name, role, email, bio, type, year } = fields;
 
       if (!name || !role || !year) {
         reply.code(400);
         return reply.type('text/html').send(errorFragment({ message: 'Name, role and year are required.' }));
       }
 
-      // Create the member first
+      // Create the member
       const member = await boardMembersService.create({
         name,
         role,
@@ -89,18 +105,12 @@ class BoardMembersController {
       }, user.id);
 
       // Handle photo upload if present
-      try {
-        const data = await request.file();
-        if (data) {
-          const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-          if (allowedTypes.includes(data.mimetype)) {
-            const photoUrl = await boardMembersService.uploadPhoto(member.id, data);
-            await boardMembersService.updatePhoto(member.id, photoUrl);
-          }
+      if (photoFile) {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+        if (allowedTypes.includes(photoFile.mimetype)) {
+          const photoUrl = await boardMembersService.uploadPhoto(member.id, photoFile);
+          await boardMembersService.updatePhoto(member.id, photoUrl);
         }
-      } catch (fileError) {
-        // No file uploaded or file error - continue without photo
-        request.log.info('No photo uploaded or file error:', fileError.message);
       }
 
       reply.header('HX-Location', `/admin/board-members/${member.id}/edit`);
@@ -137,7 +147,23 @@ class BoardMembersController {
     try {
       const user = request.user;
       const { id } = request.params;
-      const { name, role, email, bio, type, year, photoId } = request.body;
+
+      // Parse multipart form data
+      const parts = request.parts();
+      const fields = {};
+      let photoFile = null;
+
+      for await (const part of parts) {
+        if (part.file) {
+          // It's a file
+          photoFile = part;
+        } else {
+          // It's a field
+          fields[part.fieldname] = await part.value;
+        }
+      }
+
+      const { name, role, email, bio, type, year } = fields;
 
       const existing = await boardMembersService.getById(id);
       if (!existing) {
@@ -152,8 +178,16 @@ class BoardMembersController {
         bio,
         type,
         year,
-        photoId,
       }, user.id);
+
+      // Handle photo upload if present
+      if (photoFile) {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+        if (allowedTypes.includes(photoFile.mimetype)) {
+          const photoUrl = await boardMembersService.uploadPhoto(id, photoFile);
+          await boardMembersService.updatePhoto(id, photoUrl);
+        }
+      }
 
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Board member updated successfully!', type: 'success' } }));
       return reply.type('text/html').send('');

@@ -38,6 +38,7 @@ export function eventEditPage({ event, user, errors = {} }) {
                   <div
                     class="form__photo"
                     style="position: relative;"
+                    onclick="if (event.target.tagName !== 'INPUT') document.getElementById('flyerUpload').click()"
                   >
                     <div id="flyerPreview" class="h-full">
                       ${flyerUrl

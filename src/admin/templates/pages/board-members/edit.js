@@ -34,6 +34,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                   <div
                     class="form__photo"
                     style="position: relative;"
+                    onclick="if (event.target.tagName !== 'INPUT') document.getElementById('memberPhotoUpload').click()"
                   >
                     <div id="photoPreview" class="h-full">
                       ${photoUrl

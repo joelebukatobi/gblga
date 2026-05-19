@@ -31,10 +31,10 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                 <!-- Left Column: Photo -->
                 <div class="form__group">
                   <label class="label">Photo</label>
-                  <div
+                  <label
                     class="form__photo"
-                    style="position: relative;"
-                    onclick="if (event.target.tagName !== 'INPUT') document.getElementById('memberPhotoUpload').click()"
+                    for="memberPhotoUpload"
+                    style="position: relative; display: block;"
                   >
                     <div id="photoPreview" class="h-full">
                       ${photoUrl
@@ -54,7 +54,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                       style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;"
                       onchange="handlePhotoSelect(this)"
                     />
-                  </div>
+                  </label>
                 </div>
 
                 <!-- Right Column: Form Fields -->

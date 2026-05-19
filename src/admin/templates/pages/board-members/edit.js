@@ -34,12 +34,17 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                   <div
                     class="form__photo"
                     style="position: relative;"
+                    onclick="if (event.target.tagName !== 'INPUT') document.getElementById('memberPhotoUpload').click()"
                   >
                     <div id="photoPreview" class="h-full">
                       ${photoUrl
                         ? `<img src="${photoUrl}" alt="${escapeHtml(member.name)}" />`
-                        : `<div class="form__photo-placeholder"><div class="flex flex-col items-center gap-[1.2rem]"><span class="text-[2.4rem] text-grey-500 font-sans font-semibold uppercase">${initials}</span><span class="text-[1.2rem] text-grey-500 font-sans normal-case">Click to upload</span></div></div>`
+                        : `<div class="form__photo-placeholder">${initials}</div>`
                       }
+                    </div>
+                    <div class="form__photo-overlay">
+                      <span>Change Photo</span>
+                      <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
                     <input
                       type="file"

@@ -26,12 +26,13 @@ export function boardMemberNewPage({ user, errors = {} }) {
               <div class="form__row form__row--sidebar">
                 <div class="form__group">
                   <label class="label">Photo</label>
-                  <div class="form__photo" style="position: relative;">
+                  <div class="form__photo" style="position: relative;" onclick="if (event.target.tagName !== 'INPUT') document.getElementById('memberPhoto').click()">
                     <div id="photoPreview" class="form__photo-placeholder">
-                      <div class="flex flex-col items-center gap-[1.2rem]">
-                        <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
-                        <span class="text-[1.2rem] text-grey-500 font-sans normal-case">Click to upload</span>
-                      </div>
+                      <i data-lucide="image" class="w-[4.8rem] h-[4.8rem] text-grey-500 stroke-1"></i>
+                    </div>
+                    <div class="form__photo-overlay" id="photoOverlay">
+                      <span>Change Photo</span>
+                      <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
                     <input
                       type="file"

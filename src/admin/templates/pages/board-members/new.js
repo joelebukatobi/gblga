@@ -123,7 +123,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
         <div class="modal__body" style="padding: 0; overflow: hidden;">
           <div style="height: 40rem; background: #f5f5f5;">
             <cropper-canvas id="cropperCanvas" background style="height: 100%; width: 100%;">
-              <cropper-image id="cropperImage" src="" alt="Picture" rotatable scalable translatable></cropper-image>
+              <cropper-image id="cropperImage" alt="Picture" rotatable scalable translatable></cropper-image>
               <cropper-shade hidden></cropper-shade>
               <cropper-handle action="select" plain></cropper-handle>
               <cropper-selection id="cropperSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
@@ -181,16 +181,20 @@ export function boardMemberNewPage({ user, errors = {} }) {
       window.openCropModal = function(imageSrc) {
         const modal = document.getElementById('cropModal');
         const cropperImage = document.getElementById('cropperImage');
-        
-        cropperImage.src = imageSrc;
+        const safeSrc = typeof imageSrc === 'string' ? imageSrc.trim() : '';
+
+        if (!safeSrc || safeSrc === 'null' || safeSrc === 'undefined') return;
+        cropperImage.src = safeSrc;
         modal.classList.add('is-open');
         lucide.createIcons();
       };
 
       window.closeCropModal = function() {
         const modal = document.getElementById('cropModal');
+        const cropperImage = document.getElementById('cropperImage');
         modal.classList.remove('is-open');
-        
+        if (cropperImage) cropperImage.removeAttribute('src');
+
         // Reset file input if crop was cancelled
         const fileInput = document.getElementById('memberPhoto');
         if (fileInput && !fileInput.files.length) {

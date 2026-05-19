@@ -140,7 +140,7 @@
   }
 
   &__photo {
-    @apply relative w-full overflow-hidden cursor-pointer rounded-md;
+    @apply relative w-full aspect-square overflow-hidden cursor-pointer rounded-md;
 
     img {
       @apply w-full h-full object-cover rounded-md;

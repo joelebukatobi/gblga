@@ -123,7 +123,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
         <div class="modal__body" style="padding: 0; overflow: hidden;">
           <div style="height: 40rem; background: #f5f5f5;">
             <cropper-canvas id="cropperCanvas" background style="height: 100%; width: 100%;">
-              <cropper-image id="cropperImage" alt="Picture" rotatable scalable translatable></cropper-image>
+              <cropper-image id="cropperImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Picture" rotatable scalable translatable></cropper-image>
               <cropper-shade hidden></cropper-shade>
               <cropper-handle action="select" plain></cropper-handle>
               <cropper-selection id="cropperSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
@@ -155,6 +155,8 @@ export function boardMemberNewPage({ user, errors = {} }) {
     <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
       let currentFile = null;
+
+      const emptyCropSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
       window.submitForm = function() {
         htmx.trigger('#newBoardMemberForm', 'submit');
@@ -193,7 +195,7 @@ export function boardMemberNewPage({ user, errors = {} }) {
         const modal = document.getElementById('cropModal');
         const cropperImage = document.getElementById('cropperImage');
         modal.classList.remove('is-open');
-        if (cropperImage) cropperImage.removeAttribute('src');
+        if (cropperImage) cropperImage.src = emptyCropSrc;
 
         // Reset file input if crop was cancelled
         const fileInput = document.getElementById('memberPhoto');

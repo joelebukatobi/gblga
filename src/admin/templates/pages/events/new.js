@@ -112,7 +112,7 @@ export function eventNewPage({ user, errors = {} }) {
         <div class="modal__body" style="padding: 0; overflow: hidden;">
           <div style="height: 40rem; background: #f5f5f5;">
             <cropper-canvas id="flyerCanvas" background style="height: 100%; width: 100%;">
-              <cropper-image id="flyerImage" alt="Flyer" rotatable scalable translatable></cropper-image>
+              <cropper-image id="flyerImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Flyer" rotatable scalable translatable></cropper-image>
               <cropper-shade hidden></cropper-shade>
               <cropper-handle action="select" plain></cropper-handle>
               <cropper-selection id="flyerSelection" initial-coverage="0.8" aspect-ratio="1" movable resizable>
@@ -158,6 +158,8 @@ export function eventNewPage({ user, errors = {} }) {
         }
       });
 
+      const emptyCropSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
       function submitForm() {
         htmx.trigger('#newEventForm', 'submit');
       }
@@ -189,7 +191,7 @@ export function eventNewPage({ user, errors = {} }) {
         const flyerImage = document.getElementById('flyerImage');
         const fileInput = document.getElementById('flyerUpload');
         modal.classList.remove('is-open');
-        if (flyerImage) flyerImage.removeAttribute('src');
+        if (flyerImage) flyerImage.src = emptyCropSrc;
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
           currentFlyerFile = null;

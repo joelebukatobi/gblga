@@ -144,6 +144,7 @@ export function eventNewPage({ user, errors = {} }) {
     <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
       let currentFlyerFile = null;
+      let croppedFlyerFile = null;
 
       const titleInput = document.getElementById('eventTitle');
       const slugInput = document.getElementById('eventSlug');
@@ -163,6 +164,13 @@ export function eventNewPage({ user, errors = {} }) {
       function submitForm() {
         htmx.trigger('#newEventForm', 'submit');
       }
+
+      document.getElementById('newEventForm').addEventListener('htmx:configRequest', function(evt) {
+        if (croppedFlyerFile) {
+          evt.detail.parameters.append('flyer', croppedFlyerFile);
+          croppedFlyerFile = null;
+        }
+      });
 
       window.handleFlyerSelect = function(input) {
         if (input.files && input.files[0]) {
@@ -192,6 +200,7 @@ export function eventNewPage({ user, errors = {} }) {
         const fileInput = document.getElementById('flyerUpload');
         modal.classList.remove('is-open');
         if (flyerImage) flyerImage.src = emptyCropSrc;
+        croppedFlyerFile = null;
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
           currentFlyerFile = null;
@@ -224,9 +233,9 @@ export function eventNewPage({ user, errors = {} }) {
             preview.classList.remove('form__photo-placeholder');
             if (overlay) overlay.style.display = 'flex';
 
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(croppedFile);
-            document.getElementById('flyerUpload').files = dataTransfer.files;
+            // Store cropped file for htmx submission and clear original input
+            croppedFlyerFile = croppedFile;
+            document.getElementById('flyerUpload').value = '';
 
             closeFlyerCropModal();
           }, 'image/jpeg', 0.9);

@@ -167,12 +167,20 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
     <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
       let currentFile = null;
+      let croppedPhotoFile = null;
 
       const emptyCropSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
       window.submitForm = function() {
         htmx.trigger('#editBoardMemberForm', 'submit');
       };
+
+      document.getElementById('editBoardMemberForm').addEventListener('htmx:configRequest', function(evt) {
+        if (croppedPhotoFile) {
+          evt.detail.parameters.append('photo', croppedPhotoFile);
+          croppedPhotoFile = null;
+        }
+      });
 
       window.handlePhotoSelect = function(input) {
         if (input.files && input.files[0]) {
@@ -202,6 +210,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
         const fileInput = document.getElementById('memberPhotoUpload');
         modal.classList.remove('is-open');
         if (cropperImage) cropperImage.src = emptyCropSrc;
+        croppedPhotoFile = null;
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
           currentFile = null;
@@ -237,10 +246,9 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             preview.classList.remove('form__photo-placeholder');
             if (overlay) overlay.style.display = 'flex';
             
-            // Create a DataTransfer to update the file input
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(croppedFile);
-            document.getElementById('memberPhotoUpload').files = dataTransfer.files;
+            // Store cropped file for htmx submission and clear original input
+            croppedPhotoFile = croppedFile;
+            document.getElementById('memberPhotoUpload').value = '';
             
             closeCropModal();
           }, 'image/jpeg', 0.9);

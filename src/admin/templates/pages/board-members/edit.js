@@ -31,20 +31,15 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                 <!-- Left Column: Photo -->
                 <div class="form__group">
                   <label class="label">Photo</label>
-                  <label
+                  <div
                     class="form__photo"
-                    for="memberPhotoUpload"
-                    style="position: relative; display: block;"
+                    style="position: relative;"
                   >
                     <div id="photoPreview" class="h-full">
                       ${photoUrl
                         ? `<img src="${photoUrl}" alt="${escapeHtml(member.name)}" />`
-                        : `<div class="form__photo-placeholder">${initials}</div>`
+                        : `<div class="form__photo-placeholder"><div class="flex flex-col items-center gap-[1.2rem]"><span class="text-[2.4rem] text-grey-500 font-sans font-semibold uppercase">${initials}</span><span class="text-[1.2rem] text-grey-500 font-sans normal-case">Click to upload</span></div></div>`
                       }
-                    </div>
-                    <div class="form__photo-overlay">
-                      <span>Change Photo</span>
-                      <span>JPG, PNG, WebP. Max 10MB.</span>
                     </div>
                     <input
                       type="file"
@@ -54,7 +49,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                       style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;"
                       onchange="handlePhotoSelect(this)"
                     />
-                  </label>
+                  </div>
                 </div>
 
                 <!-- Right Column: Form Fields -->

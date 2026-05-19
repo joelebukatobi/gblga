@@ -188,10 +188,13 @@ export function eventEditPage({ event, user, errors = {} }) {
       window.closeFlyerCropModal = function() {
         const modal = document.getElementById('flyerCropModal');
         const flyerImage = document.getElementById('flyerImage');
+        const fileInput = document.getElementById('flyerUpload');
         modal.classList.remove('is-open');
         if (flyerImage) flyerImage.removeAttribute('src');
-        document.getElementById('flyerUpload').value = '';
-        currentFlyerFile = null;
+        if (fileInput && !fileInput.files.length) {
+          fileInput.value = '';
+          currentFlyerFile = null;
+        }
       };
 
       window.applyFlyerCrop = async function() {

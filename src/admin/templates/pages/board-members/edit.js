@@ -197,10 +197,13 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
       window.closeCropModal = function() {
         const modal = document.getElementById('cropModal');
         const cropperImage = document.getElementById('cropperImage');
+        const fileInput = document.getElementById('memberPhotoUpload');
         modal.classList.remove('is-open');
         if (cropperImage) cropperImage.removeAttribute('src');
-        document.getElementById('memberPhotoUpload').value = '';
-        currentFile = null;
+        if (fileInput && !fileInput.files.length) {
+          fileInput.value = '';
+          currentFile = null;
+        }
       };
 
       window.applyCrop = async function() {

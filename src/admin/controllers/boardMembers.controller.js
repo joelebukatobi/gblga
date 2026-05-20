@@ -107,8 +107,8 @@ class BoardMembersController {
       // Handle photo upload if present
       if (photoFile) {
         const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-        if (allowedTypes.includes(photoFile.mimetype)) {
-          const photoUrl = await boardMembersService.uploadPhoto(member.id, photoFile);
+        if (allowedTypes.includes(photoFile.mimetype) || fields.photoCroppedData) {
+          const photoUrl = await boardMembersService.uploadPhoto(member.id, photoFile, fields.photoCroppedData);
           await boardMembersService.updatePhoto(member.id, photoUrl);
         }
       }
@@ -183,8 +183,8 @@ class BoardMembersController {
       // Handle photo upload if present
       if (photoFile) {
         const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-        if (allowedTypes.includes(photoFile.mimetype)) {
-          const photoUrl = await boardMembersService.uploadPhoto(id, photoFile);
+        if (allowedTypes.includes(photoFile.mimetype) || fields.photoCroppedData) {
+          const photoUrl = await boardMembersService.uploadPhoto(id, photoFile, fields.photoCroppedData);
           await boardMembersService.updatePhoto(id, photoUrl);
         }
       }

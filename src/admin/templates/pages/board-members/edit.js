@@ -106,6 +106,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
                 </div>
               </div>
 
+              <input type="hidden" id="photoCroppedData" name="photoCroppedData" value="" />
               <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
             </form>
           </div>
@@ -167,22 +168,12 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
     <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
       let currentFile = null;
-      let croppedPhotoFile = null;
 
       const emptyCropSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
       window.submitForm = function() {
         htmx.trigger('#editBoardMemberForm', 'submit');
       };
-
-      document.getElementById('editBoardMemberForm').addEventListener('htmx:configRequest', function(evt) {
-        if (croppedPhotoFile) {
-          evt.detail.formData.delete('photo');
-          evt.detail.formData.append('photo', croppedPhotoFile);
-          evt.detail.parameters = evt.detail.formData;
-          croppedPhotoFile = null;
-        }
-      });
 
       window.handlePhotoSelect = function(input) {
         if (input.files && input.files[0]) {
@@ -213,7 +204,8 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
         modal.classList.remove('is-open');
         if (cropperImage) cropperImage.src = emptyCropSrc;
         if (clearCropped) {
-          croppedPhotoFile = null;
+          const croppedInput = document.getElementById('photoCroppedData');
+          if (croppedInput) croppedInput.value = '';
         }
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
@@ -232,30 +224,23 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             height: 400,
           });
           
-          canvas.toBlob(function(blob) {
-            if (!blob) return;
-            
-            // Create a new file from the blob
-            const fileName = currentFile ? currentFile.name : 'photo.jpg';
-            const croppedFile = new File([blob], fileName, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            
+          const croppedDataUrl = canvas.toDataURL('image/webp', 0.92);
+          if (!croppedDataUrl) return;
+
+          const croppedInput = document.getElementById('photoCroppedData');
+          if (croppedInput) croppedInput.value = croppedDataUrl;
+
             // Update preview
             const preview = document.getElementById('photoPreview');
             const overlay = document.querySelector('.form__photo-overlay');
-            
-            preview.innerHTML = '<img src="' + canvas.toDataURL('image/jpeg') + '" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+
+            preview.innerHTML = '<img src="' + croppedDataUrl + '" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />';
             preview.classList.remove('form__photo-placeholder');
             if (overlay) overlay.style.display = 'flex';
-            
-            // Store cropped file for htmx submission and clear original input
-            croppedPhotoFile = croppedFile;
+
             document.getElementById('memberPhotoUpload').value = '';
-            
+
             closeCropModal(false);
-          }, 'image/jpeg', 0.9);
         } catch (error) {
           console.error('Crop failed:', error);
         }

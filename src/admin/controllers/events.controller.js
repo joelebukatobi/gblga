@@ -102,8 +102,8 @@ class EventsController {
       }, user.id);
 
       // Handle flyer upload if present
-      if (flyerFile) {
-        const featuredImageId = await this._processFlyerUpload(event.id, flyerFile, user.id);
+      if (flyerFile || fields.flyerCroppedData) {
+        const featuredImageId = await this._processFlyerUpload(event.id, flyerFile, user.id, fields.flyerCroppedData);
         if (featuredImageId) {
           await eventsService.update(event.id, { featuredImageId }, user.id);
         }
@@ -175,8 +175,8 @@ class EventsController {
       };
 
       // Handle flyer upload if present
-      if (flyerFile) {
-        const featuredImageId = await this._processFlyerUpload(id, flyerFile, user.id);
+      if (flyerFile || fields.flyerCroppedData) {
+        const featuredImageId = await this._processFlyerUpload(id, flyerFile, user.id, fields.flyerCroppedData);
         if (featuredImageId) {
           updateData.featuredImageId = featuredImageId;
         }
@@ -184,6 +184,7 @@ class EventsController {
 
       await eventsService.update(id, updateData, user.id);
 
+      reply.header('HX-Location', `/admin/events/${id}/edit`);
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Event updated successfully!', type: 'success' } }));
       return reply.type('text/html').send('');
     } catch (error) {
@@ -271,7 +272,7 @@ class EventsController {
         id: mediaItemId,
         type: 'IMAGE',
         filename,
-        originalName: data.filename,
+      originalName: data?.filename || filename,
         mimeType: data.mimetype,
         size: fileSize,
         path: filepath,
@@ -306,10 +307,10 @@ class EventsController {
    * Process flyer upload and return media item ID
    * @private
    */
-  async _processFlyerUpload(eventId, data, userId) {
-    const { mimetype } = data;
+  async _processFlyerUpload(eventId, data, userId, croppedDataUrl = '') {
+    const mimetype = data?.mimetype;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-    if (!allowedTypes.includes(mimetype)) {
+    if (!allowedTypes.includes(mimetype) && !croppedDataUrl) {
       throw new Error('Invalid file type. Only JPEG, PNG and WebP are allowed.');
     }
 
@@ -320,7 +321,9 @@ class EventsController {
     const crypto = await import('crypto');
     const { events } = await import('../../db/schema.js');
 
-    const fileBuffer = await data.toBuffer();
+    const fileBuffer = croppedDataUrl
+      ? Buffer.from(croppedDataUrl.split(',')[1] || '', 'base64')
+      : await data.toBuffer();
     const hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
     const fileSize = fileBuffer.length;
 
@@ -338,8 +341,7 @@ class EventsController {
     }
 
     const timestamp = Date.now();
-    const extension = data.filename.split('.').pop();
-    const filename = `event-${timestamp}.${extension}`;
+    const filename = `event-${timestamp}.webp`;
     const filepath = `public/uploads/events/${filename}`;
 
     const uploadsDir = path.join(process.cwd(), 'public/uploads/events');
@@ -349,16 +351,20 @@ class EventsController {
       await fs.mkdir(uploadsDir, { recursive: true });
     }
 
-    await fs.writeFile(path.join(process.cwd(), filepath), fileBuffer);
+    const sharp = (await import('sharp')).default;
+    await sharp(fileBuffer)
+      .resize(800, 800, { fit: 'cover', position: 'center' })
+      .webp({ quality: 90 })
+      .toFile(path.join(process.cwd(), filepath));
 
     const mediaItemId = crypto.randomUUID();
     await db.insert(mediaItems).values({
       id: mediaItemId,
       type: 'IMAGE',
       filename,
-      originalName: data.filename,
-      mimeType: data.mimetype,
-      size: data.file.bytesRead,
+      originalName: data?.filename || filename,
+      mimeType: 'image/webp',
+      size: fileSize,
       path: filepath,
       hash,
       uploadedBy: userId,

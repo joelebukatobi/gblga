@@ -97,6 +97,7 @@ export function eventEditPage({ event, user, errors = {} }) {
                 </div>
               </div>
 
+              <input type="hidden" id="flyerCroppedData" name="flyerCroppedData" value="" />
               <input type="hidden" name="_csrf" value="${user?.csrfToken || ''}" />
             </form>
           </div>
@@ -158,22 +159,12 @@ export function eventEditPage({ event, user, errors = {} }) {
     <script src="/vendor/cropperjs/cropper.min.js"></script>
     <script>
       let currentFlyerFile = null;
-      let croppedFlyerFile = null;
 
       const emptyCropSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
       function submitForm() {
         htmx.trigger('#editEventForm', 'submit');
       }
-
-      document.getElementById('editEventForm').addEventListener('htmx:configRequest', function(evt) {
-        if (croppedFlyerFile) {
-          evt.detail.formData.delete('flyer');
-          evt.detail.formData.append('flyer', croppedFlyerFile);
-          evt.detail.parameters = evt.detail.formData;
-          croppedFlyerFile = null;
-        }
-      });
 
       window.handleFlyerSelect = function(input) {
         if (input.files && input.files[0]) {
@@ -204,7 +195,8 @@ export function eventEditPage({ event, user, errors = {} }) {
         modal.classList.remove('is-open');
         if (flyerImage) flyerImage.src = emptyCropSrc;
         if (clearCropped) {
-          croppedFlyerFile = null;
+          const croppedInput = document.getElementById('flyerCroppedData');
+          if (croppedInput) croppedInput.value = '';
         }
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
@@ -222,28 +214,22 @@ export function eventEditPage({ event, user, errors = {} }) {
             height: 800,
           });
 
-          canvas.toBlob(function(blob) {
-            if (!blob) return;
+          const croppedDataUrl = canvas.toDataURL('image/webp', 0.92);
+          if (!croppedDataUrl) return;
 
-            const fileName = currentFlyerFile ? currentFlyerFile.name : 'flyer.jpg';
-            const croppedFile = new File([blob], fileName, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
+          const croppedInput = document.getElementById('flyerCroppedData');
+          if (croppedInput) croppedInput.value = croppedDataUrl;
 
             const preview = document.getElementById('flyerPreview');
             const overlay = document.querySelector('.form__photo-overlay');
 
-            preview.innerHTML = '<img src="' + canvas.toDataURL('image/jpeg') + '" alt="Flyer preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+            preview.innerHTML = '<img src="' + croppedDataUrl + '" alt="Flyer preview" style="width: 100%; height: 100%; object-fit: cover;" />';
             preview.classList.remove('form__photo-placeholder');
             if (overlay) overlay.style.display = 'flex';
 
-            // Store cropped file for htmx submission and clear original input
-            croppedFlyerFile = croppedFile;
             document.getElementById('flyerUpload').value = '';
 
             closeFlyerCropModal(false);
-          }, 'image/jpeg', 0.9);
         } catch (error) {
           console.error('Crop failed:', error);
         }

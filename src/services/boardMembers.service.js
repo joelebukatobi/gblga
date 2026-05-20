@@ -143,21 +143,23 @@ class BoardMembersService {
   /**
    * Upload board member photo
    */
-  async uploadPhoto(id, file) {
+  async uploadPhoto(id, file, croppedDataUrl = '') {
     const dir = join(UPLOAD_DIR, id);
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
     }
 
-    const buffer = await file.toBuffer();
-    const outputPath = join(dir, 'photo.jpg');
+    const buffer = croppedDataUrl
+      ? Buffer.from(croppedDataUrl.split(',')[1] || '', 'base64')
+      : await file.toBuffer();
+    const outputPath = join(dir, 'photo.webp');
 
     await sharp(buffer)
       .resize(400, 400, { fit: 'cover', position: 'center' })
-      .jpeg({ quality: 90 })
+      .webp({ quality: 90 })
       .toFile(outputPath);
 
-    return `/uploads/board-members/${id}/photo.jpg`;
+    return `/uploads/board-members/${id}/photo.webp`;
   }
 
   /**

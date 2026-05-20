@@ -177,7 +177,9 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
 
       document.getElementById('editBoardMemberForm').addEventListener('htmx:configRequest', function(evt) {
         if (croppedPhotoFile) {
-          evt.detail.parameters.append('photo', croppedPhotoFile);
+          evt.detail.formData.delete('photo');
+          evt.detail.formData.append('photo', croppedPhotoFile);
+          evt.detail.parameters = evt.detail.formData;
           croppedPhotoFile = null;
         }
       });
@@ -204,13 +206,15 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
         lucide.createIcons();
       };
 
-      window.closeCropModal = function() {
+      window.closeCropModal = function(clearCropped = true) {
         const modal = document.getElementById('cropModal');
         const cropperImage = document.getElementById('cropperImage');
         const fileInput = document.getElementById('memberPhotoUpload');
         modal.classList.remove('is-open');
         if (cropperImage) cropperImage.src = emptyCropSrc;
-        croppedPhotoFile = null;
+        if (clearCropped) {
+          croppedPhotoFile = null;
+        }
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
           currentFile = null;
@@ -250,7 +254,7 @@ export function boardMemberEditPage({ member, user, errors = {} }) {
             croppedPhotoFile = croppedFile;
             document.getElementById('memberPhotoUpload').value = '';
             
-            closeCropModal();
+            closeCropModal(false);
           }, 'image/jpeg', 0.9);
         } catch (error) {
           console.error('Crop failed:', error);

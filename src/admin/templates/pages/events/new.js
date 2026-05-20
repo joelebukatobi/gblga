@@ -167,7 +167,9 @@ export function eventNewPage({ user, errors = {} }) {
 
       document.getElementById('newEventForm').addEventListener('htmx:configRequest', function(evt) {
         if (croppedFlyerFile) {
-          evt.detail.parameters.append('flyer', croppedFlyerFile);
+          evt.detail.formData.delete('flyer');
+          evt.detail.formData.append('flyer', croppedFlyerFile);
+          evt.detail.parameters = evt.detail.formData;
           croppedFlyerFile = null;
         }
       });
@@ -194,13 +196,15 @@ export function eventNewPage({ user, errors = {} }) {
         lucide.createIcons();
       };
 
-      window.closeFlyerCropModal = function() {
+      window.closeFlyerCropModal = function(clearCropped = true) {
         const modal = document.getElementById('flyerCropModal');
         const flyerImage = document.getElementById('flyerImage');
         const fileInput = document.getElementById('flyerUpload');
         modal.classList.remove('is-open');
         if (flyerImage) flyerImage.src = emptyCropSrc;
-        croppedFlyerFile = null;
+        if (clearCropped) {
+          croppedFlyerFile = null;
+        }
         if (fileInput && !fileInput.files.length) {
           fileInput.value = '';
           currentFlyerFile = null;
@@ -237,7 +241,7 @@ export function eventNewPage({ user, errors = {} }) {
             croppedFlyerFile = croppedFile;
             document.getElementById('flyerUpload').value = '';
 
-            closeFlyerCropModal();
+            closeFlyerCropModal(false);
           }, 'image/jpeg', 0.9);
         } catch (error) {
           console.error('Crop failed:', error);

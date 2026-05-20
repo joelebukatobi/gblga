@@ -242,9 +242,9 @@ class ImagesService {
     }
 
     // Delete files
-    const filepath = path.join(process.cwd(), 'public', image.path);
+    const filepath = path.join(process.cwd(), image.path.replace(/^\//, ''));
     const thumbpath = image.thumbnailPath 
-      ? path.join(process.cwd(), 'public', image.thumbnailPath)
+      ? path.join(process.cwd(), image.thumbnailPath.replace(/^\//, ''))
       : null;
 
     await fs.unlink(filepath).catch(() => {});

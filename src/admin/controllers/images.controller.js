@@ -136,20 +136,65 @@ class ImagesController {
   async upload(request, reply) {
     try {
       const user = request.user;
+      request.log.info('Starting image upload');
       
-      // Get all parts (file and fields)
-      const parts = request.parts();
+      // Check if request has multipart content type
+      const contentType = request.headers['content-type'];
+      const contentLength = request.headers['content-length'];
+      request.log.info(`Request headers - Content-Type: ${contentType}, Content-Length: ${contentLength}`);
+      
+      if (!contentType || !contentType.includes('multipart/form-data')) {
+        request.log.warn(`Invalid content type: ${contentType}`);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Invalid request format. Expected multipart/form-data.',
+        }));
+      }
+      
+      if (!contentLength || parseInt(contentLength) === 0) {
+        request.log.warn('Content-Length is 0 or missing');
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'No file data received. Please select a file to upload.',
+        }));
+      }
+      
+      // Get all parts (file and fields) with timeout
+      let parts;
+      try {
+        parts = request.parts();
+      } catch (parseError) {
+        request.log.error('Failed to initialize multipart parser:', parseError);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Failed to parse upload request. Please try again.',
+        }));
+      }
+      
       let file = null;
       let postId = null;
       let title = null;
       let altText = null;
-      
       let albumId = null;
+      let partCount = 0;
+      
+      // IMPORTANT: @fastify/multipart v8 requires file streams to be consumed
+      // inside the for await loop. If not consumed, busboy waits forever.
       for await (const part of parts) {
+        partCount++;
+        request.log.info(`Processing part ${partCount}: type=${part.type}, fieldname=${part.fieldname}`);
         if (part.type === 'file') {
-          file = part;
+          // Consume file buffer here - REQUIRED for busboy to continue
+          const buffer = await part.toBuffer();
+          request.log.info(`File received: ${part.filename}, mimetype: ${part.mimetype}, size: ${buffer.length}`);
+          file = {
+            filename: part.filename,
+            mimetype: part.mimetype,
+            toBuffer: async () => buffer,
+          };
         } else if (part.type === 'field') {
           const value = await part.value;
+          request.log.info(`Field received: ${part.fieldname} = ${value}`);
           if (part.fieldname === 'postId') postId = value;
           if (part.fieldname === 'title') title = value;
           if (part.fieldname === 'altText') altText = value;
@@ -157,19 +202,24 @@ class ImagesController {
         }
       }
       
+      request.log.info(`Finished processing ${partCount} parts`);
+      
       if (!file) {
+        request.log.warn(`No file found in request after parsing ${partCount} parts`);
         reply.code(400);
         return reply.type('text/html').send(errorToast({
-          message: 'No image file provided.',
+          message: 'No image file provided. Please select a file to upload.',
         }));
       }
 
+      request.log.info('Starting image service upload');
       // Upload and process image
       const image = await imagesService.upload(file, {
         title: title || file.filename,
         altText: altText || '',
         albumId: albumId || null,
       }, user.id);
+      request.log.info(`Image uploaded successfully: ${image.id}`);
 
       // Attach to post if postId provided
       if (postId) {
@@ -181,7 +231,7 @@ class ImagesController {
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Image uploaded successfully!', type: 'success' } }));
       return reply.type('text/html').send('');
     } catch (error) {
-      request.log.error(error);
+      request.log.error('Upload error:', error);
       reply.code(400);
       return reply.type('text/html').send(errorToast({
         message: error.message || 'Failed to upload image.',

@@ -29,9 +29,17 @@ export function imagesEditPage({ user, image, posts, albums = [] }) {
         <div class="media-layout media-layout--start">
           <!-- Left: Image Preview -->
           <div class="media-layout__content media-layout__content--start">
-            <div class="upload-zone upload-zone--preview upload-zone--full">
+            <div class="upload-zone upload-zone--preview upload-zone--full image-preview-container">
+              <!-- Background image (blurred backdrop) -->
               <img 
-                class="upload-zone__preview upload-zone__preview--visible" 
+                class="image-preview-bg"
+                src="${image.path}"
+                alt=""
+              />
+              
+              <!-- Main image (foreground, natural aspect ratio) -->
+              <img 
+                class="image-preview-main" 
                 src="${image.path}"
                 alt="${escapeHtml(image.altText || image.title || '')}"
               />
@@ -68,7 +76,7 @@ export function imagesEditPage({ user, image, posts, albums = [] }) {
 
                   <!-- Alt Text -->
                   <div class="form__group">
-                    <label class="label label--required" for="altText">Alt Text</label>
+                    <label class="label" for="altText">Alt Text</label>
                     <input 
                       type="text" 
                       name="altText" 
@@ -76,7 +84,6 @@ export function imagesEditPage({ user, image, posts, albums = [] }) {
                       class="input"
                       value="${escapeHtml(image.altText || '')}"
                       placeholder="Describe the image for accessibility"
-                      required 
                     />
                     <p class="form-feedback form-feedback--hint">Describe the image for screen readers</p>
                   </div>

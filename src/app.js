@@ -52,8 +52,8 @@ export default async function app(fastify, opts) {
   await fastify.register(fastifyFormbody);
   await fastify.register(fastifyMultipart, {
     limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB
-      files: 1,
+      fileSize: 50 * 1024 * 1024, // 50MB
+      files: 20,
     }
   });
   // CORS - disabled in development, configured for production

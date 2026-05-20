@@ -18,3 +18,16 @@ html {
 .visually-hidden {
   @apply sr-only;
 }
+
+// ============================================================================
+// HTMX Loading Indicators
+// ============================================================================
+
+.htmx-indicator {
+  display: none;
+}
+
+.htmx-request .htmx-indicator,
+.htmx-indicator.htmx-request {
+  display: inline-block;
+}

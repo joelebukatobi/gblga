@@ -48,6 +48,10 @@
 
   &__inner {
     @apply relative mx-auto flex flex-col justify-end h-full max-w-[120rem] px-[3.2rem] pb-[4.8rem] pt-[6.4rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] pb-[3.2rem] pt-[8rem];
+    }
   }
 
   &__content {
@@ -56,10 +60,18 @@
 
   &__title {
     @apply text-white w-full m-0 leading-[1.1] tracking-[0.02em] font-forum text-[5.6rem];
+
+    @media (max-width: 768px) {
+      font-size: 3.6rem;
+    }
   }
 
   &__subtitle {
     @apply text-white w-3/4 m-0 leading-[1.6] text-[2.4rem] font-lato;
+
+    @media (max-width: 768px) {
+      @apply w-full text-[1.8rem];
+    }
   }
 }
 
@@ -72,18 +84,34 @@
 
   &__inner {
     @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[6.4rem];
+    }
   }
 
   &__heading {
     @apply text-[4.8rem] tracking-[0.02em] m-0 font-forum;
+
+    @media (max-width: 768px) {
+      font-size: 3.2rem;
+    }
   }
 
   &__grid {
     @apply grid gap-[4.8rem] items-center grid-cols-2;
+
+    @media (max-width: 768px) {
+      @apply grid-cols-1 gap-[3.2rem];
+    }
   }
 
   &__left {
     @apply relative flex flex-col items-center justify-center bg-maroon/95 h-full w-full p-[3.2rem] overflow-hidden rounded-[0.8rem];
+
+    @media (max-width: 768px) {
+      @apply p-[2.4rem] h-[32rem];
+    }
   }
 
   &__seal-bg {
@@ -92,6 +120,10 @@
 
   &__seal {
     @apply relative w-[40rem] h-[40rem] object-cover opacity-80;
+
+    @media (max-width: 768px) {
+      @apply w-[24rem] h-[24rem];
+    }
   }
 
   &__right {
@@ -100,6 +132,10 @@
 
   &__body {
     @apply text-[1.6rem] leading-[1.6] opacity-90 m-0 max-w-[56rem] font-lato;
+
+    @media (max-width: 768px) {
+      @apply text-[1.4rem];
+    }
   }
 
   &__photos {
@@ -108,11 +144,15 @@
 
   &__photo {
     @apply w-full h-[48rem] object-cover rounded-[0.4rem];
+
+    @media (max-width: 768px) {
+      @apply h-[28rem];
+    }
   }
 }
 
 // ============================================================================
-// Home · Upcoming Events Section
+// Home · Events Section
 // ============================================================================
 
 .upcoming-events {
@@ -120,18 +160,38 @@
 
   &__inner {
     @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[6.4rem];
+    }
   }
 
   &__header {
     @apply flex items-center justify-between mb-[4rem];
+
+    @media (max-width: 768px) {
+      @apply flex-col items-start gap-[1.6rem] mb-[3.2rem];
+    }
   }
 
   &__title {
     @apply text-[4.8rem] tracking-[0.02em] text-maroon m-0 font-forum;
+
+    @media (max-width: 768px) {
+      font-size: 3.2rem;
+    }
   }
 
   &__grid {
     @apply grid gap-[2.4rem] grid-cols-3;
+
+    @media (max-width: 1024px) {
+      @apply grid-cols-2;
+    }
+
+    @media (max-width: 640px) {
+      @apply grid-cols-1;
+    }
   }
 
   // Event cards - styled inline as children of the grid
@@ -150,6 +210,10 @@
     // Media section
     > article > div:first-child {
       @apply relative h-[32rem] overflow-hidden;
+
+      @media (max-width: 768px) {
+        @apply h-[24rem];
+      }
 
       // Image - cover, centered from top
       > img {
@@ -215,24 +279,55 @@
 
   &__inner {
     @apply mx-auto max-w-[120rem] px-[3.2rem] py-[12.8rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[6.4rem];
+    }
   }
 
   &__header {
     @apply flex items-center justify-between mb-[4rem];
+
+    @media (max-width: 768px) {
+      @apply flex-col items-start gap-[1.6rem] mb-[3.2rem];
+    }
   }
 
   &__title {
     @apply text-[3.6rem] tracking-[0.02em] text-maroon m-0 font-forum;
+
+    @media (max-width: 768px) {
+      font-size: 2.8rem;
+    }
   }
 
   &__grid {
     @apply grid gap-[1.6rem] auto-rows-fr grid-cols-3;
+
+    @media (max-width: 1024px) {
+      @apply grid-cols-2;
+    }
+
+    @media (max-width: 768px) {
+      @apply flex gap-[1.6rem] overflow-x-auto snap-x snap-mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 
   // Gallery items - styled inline as children
   &__grid > figure,
   &__grid > .gallery-item {
     @apply relative aspect-[4/3] overflow-hidden m-0 cursor-pointer;
+
+    @media (max-width: 768px) {
+      @apply flex-shrink-0 w-[85vw] snap-start;
+    }
 
     // Media container
     > div,
@@ -297,6 +392,10 @@
 
   &__inner {
     @apply relative mx-auto max-w-[120rem] mt-[3.2rem] mb-[12.8rem] rounded-[0.8rem] overflow-hidden;
+
+    @media (max-width: 768px) {
+      @apply mx-[1.6rem] mb-[6.4rem];
+    }
   }
 
   &__media {
@@ -306,6 +405,10 @@
     img {
       @apply w-full h-[64rem] object-cover;
       display: block;
+
+      @media (max-width: 768px) {
+        @apply h-[48rem];
+      }
     }
 
     // Dark overlay - covers full width
@@ -317,18 +420,34 @@
 
   &__content {
     @apply absolute inset-0 flex flex-col items-center justify-center text-center px-[3.2rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem];
+    }
   }
 
   &__eyebrow {
     @apply text-[2.4rem] tracking-[0.08em] uppercase text-cream/70 mb-[1.2rem] mt-0 font-forum;
+
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
   }
 
   &__title {
     @apply text-[4.8rem] tracking-[0.02em] text-white mb-[1.6rem] mt-0 font-forum;
+
+    @media (max-width: 768px) {
+      font-size: 3.2rem;
+    }
   }
 
   &__quote {
     @apply italic text-[1.8rem] leading-[1.6] text-cream/80 max-w-[64rem] mb-[3.2rem] m-0 font-lato;
+
+    @media (max-width: 768px) {
+      @apply text-[1.6rem] mb-[2.4rem];
+    }
   }
 
   // Newsletter form - styled inline
@@ -338,11 +457,19 @@
     // Input
     input {
       @apply flex-1;
+
+      @media (max-width: 640px) {
+        @apply h-[4.4rem] px-[1.2rem] text-[1.4rem];
+      }
     }
 
     // Submit button
-    button {
+    .btn {
       @apply flex-shrink-0;
+
+      @media (max-width: 640px) {
+        @apply h-[4.4rem] px-[1.6rem] text-[1.4rem];
+      }
     }
   }
 
@@ -1067,7 +1194,7 @@
   }
 
   &__description {
-    @apply text-[1.4rem] leading-[1.6] text-black m-0 font-lato;
+    @apply text-[1.4rem] leading-[1.6] text-black m-0 font-lato line-clamp-2;
   }
 
   &__divider {

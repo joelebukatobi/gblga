@@ -11,6 +11,10 @@
 
   &__top {
     @apply flex items-center justify-between;
+
+    @media (max-width: 768px) {
+      @apply flex-col items-center gap-[3.2rem];
+    }
   }
 
   &__brand {
@@ -39,6 +43,10 @@
 
   &__bottom-inner {
     @apply flex flex-col items-center gap-[0.8rem];
+
+    @media (max-width: 768px) {
+      @apply flex-col-reverse;
+    }
   }
 
   &__social {
@@ -79,9 +87,17 @@
 
   &__credit {
     @apply text-[1.6rem] font-lato text-maroon/70 m-0;
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+    }
   }
 
   &__copyright {
     @apply text-[1.6rem] font-lato text-maroon m-0;
+
+    @media (max-width: 768px) {
+      @apply text-center;
+    }
   }
 }

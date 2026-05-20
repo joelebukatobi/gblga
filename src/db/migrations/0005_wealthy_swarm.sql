@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `external_link` varchar(500);

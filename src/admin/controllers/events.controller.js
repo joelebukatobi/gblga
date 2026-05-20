@@ -85,7 +85,7 @@ class EventsController {
         }
       }
 
-      const { title, slug, description, location, eventDate, eventTime } = fields;
+      const { title, slug, description, location, eventDate, eventTime, externalLink } = fields;
 
       if (!title) {
         reply.code(400);
@@ -99,6 +99,7 @@ class EventsController {
         location,
         eventDate: eventDate ? new Date(eventDate) : null,
         eventTime: eventTime || null,
+        externalLink: externalLink || null,
       }, user.id);
 
       // Handle flyer upload if present
@@ -157,7 +158,7 @@ class EventsController {
         }
       }
 
-      const { title, slug, description, location, eventDate, eventTime } = fields;
+      const { title, slug, description, location, eventDate, eventTime, externalLink } = fields;
 
       const existing = await eventsService.getById(id);
       if (!existing) {
@@ -172,6 +173,7 @@ class EventsController {
         location,
         eventDate: eventDate ? new Date(eventDate) : null,
         eventTime: eventTime || null,
+        externalLink: externalLink || null,
       };
 
       // Handle flyer upload if present

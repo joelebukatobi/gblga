@@ -424,6 +424,7 @@ export const events = mysqlTable('events', {
   eventTime: varchar('event_time', { length: 20 }),
   status: mysqlEnum('status', eventStatusEnum).default('UPCOMING').notNull(),
   featuredImageId: idColumn('featured_image_id').references(() => mediaItems.id),
+  externalLink: varchar('external_link', { length: 500 }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

@@ -76,6 +76,12 @@ export function eventNewPage({ user, errors = {} }) {
                     <input type="text" class="input" id="eventLocation" name="location" placeholder="e.g. Gabelli Commons" />
                   </div>
 
+                  <div class="form__group">
+                    <label class="label" for="eventExternalLink">External Link</label>
+                    <input type="url" class="input" id="eventExternalLink" name="externalLink" placeholder="https://gradlink.example.com/rsvp" />
+                    <p class="form-feedback form-feedback--hint">RSVP and "Read More" will link here</p>
+                  </div>
+
                   <div class="form__group form__group--last">
                     <label class="label" for="eventDescription">Description</label>
                     <textarea class="textarea" id="eventDescription" name="description" rows="4" placeholder="Enter event description..."></textarea>

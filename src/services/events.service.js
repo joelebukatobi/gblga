@@ -63,6 +63,7 @@ class EventsService {
         eventTime: events.eventTime,
         status: events.status,
         featuredImageId: events.featuredImageId,
+        externalLink: events.externalLink,
         createdAt: events.createdAt,
         updatedAt: events.updatedAt,
         featuredImage: {
@@ -116,6 +117,7 @@ class EventsService {
         eventTime: events.eventTime,
         status: events.status,
         featuredImageId: events.featuredImageId,
+        externalLink: events.externalLink,
         createdAt: events.createdAt,
         updatedAt: events.updatedAt,
         featuredImage: {
@@ -168,6 +170,7 @@ class EventsService {
       eventTime: data.eventTime || null,
       status,
       featuredImageId: data.featuredImageId || null,
+      externalLink: data.externalLink || null,
     });
 
     const [event] = await db
@@ -205,6 +208,7 @@ class EventsService {
     if (data.eventDate !== undefined) updateData.eventDate = data.eventDate;
     if (data.eventTime !== undefined) updateData.eventTime = data.eventTime;
     if (data.featuredImageId !== undefined) updateData.featuredImageId = data.featuredImageId;
+    if (data.externalLink !== undefined) updateData.externalLink = data.externalLink;
 
     // Re-derive status if date changed
     if (data.eventDate !== undefined) {

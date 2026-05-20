@@ -329,6 +329,41 @@ class ImagesService {
       })
       .where(eq(posts.id, postId));
   }
+
+  /**
+   * Batch upload multiple images
+   * @param {Array<Object>} files - Array of file objects
+   * @param {Object} metadata - Shared metadata (albumId)
+   * @param {string} userId - Uploading user ID
+   * @returns {Promise<Array>} - Results array with success/failure status
+   */
+  async batchUpload(files, metadata, userId) {
+    const results = [];
+
+    for (const file of files) {
+      try {
+        const image = await this.upload(file, {
+          title: file.filename,
+          altText: '',
+          albumId: metadata.albumId || null,
+        }, userId);
+
+        results.push({
+          success: true,
+          filename: file.filename,
+          image,
+        });
+      } catch (error) {
+        results.push({
+          success: false,
+          filename: file.filename,
+          error: error.message,
+        });
+      }
+    }
+
+    return results;
+  }
 }
 
 export const imagesService = new ImagesService();

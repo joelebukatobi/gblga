@@ -357,6 +357,150 @@ class ImagesController {
       }));
     }
   }
+
+  /**
+   * GET /admin/media/images/batch
+   * Show batch upload form
+   */
+  async showBatchForm(request, reply) {
+    try {
+      const user = request.user;
+
+      // Get albums for dropdown
+      const albums = await albumsService.getAllForDropdown();
+
+      // Import batch template
+      const { imagesBatchPage } = await import('../templates/pages/media/images/batch.js');
+
+      return reply.type('text/html').send(
+        imagesBatchPage({
+          user,
+          albums,
+        })
+      );
+    } catch (error) {
+      request.log.error(error);
+      reply.code(500);
+      return reply.type('text/html').send(errorToast({
+        message: 'Failed to load batch upload form.',
+      }));
+    }
+  }
+
+  /**
+   * POST /admin/media/images/batch
+   * Batch upload images
+   */
+  async batchUpload(request, reply) {
+    try {
+      const user = request.user;
+      request.log.info('Starting batch image upload');
+
+      // Check content type
+      const contentType = request.headers['content-type'];
+      request.log.info(`Content-Type: ${contentType}`);
+      
+      if (!contentType || !contentType.includes('multipart/form-data')) {
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Invalid request format. Expected multipart/form-data.',
+        }));
+      }
+
+      // Get all parts
+      let parts;
+      try {
+        parts = request.parts();
+        request.log.info('Multipart parser initialized successfully');
+      } catch (parseError) {
+        request.log.error('Failed to initialize multipart parser:', parseError);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Failed to parse upload request. Please try again.',
+        }));
+      }
+
+      const files = [];
+      let albumId = null;
+      let partCount = 0;
+
+      // Parse all parts
+      try {
+        for await (const part of parts) {
+          partCount++;
+          request.log.info(`Processing part ${partCount}: type=${part.type}, fieldname=${part.fieldname}`);
+          
+          if (part.type === 'file') {
+            request.log.info(`Reading file buffer for: ${part.filename}`);
+            const buffer = await part.toBuffer();
+            files.push({
+              filename: part.filename,
+              mimetype: part.mimetype,
+              toBuffer: async () => buffer,
+            });
+            request.log.info(`File received: ${part.filename}, mimetype: ${part.mimetype}, size: ${buffer.length}`);
+          } else if (part.type === 'field') {
+            const value = await part.value;
+            request.log.info(`Field received: ${part.fieldname} = ${value}`);
+            if (part.fieldname === 'albumId') albumId = value;
+          }
+        }
+      } catch (parseLoopError) {
+        request.log.error({ err: parseLoopError, stack: parseLoopError.stack }, 'Error during multipart parsing loop: ' + parseLoopError.message);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: `Error parsing upload: ${parseLoopError.message || 'Unknown error'}`,
+        }));
+      }
+
+      request.log.info(`Finished processing ${partCount} parts, ${files.length} files`);
+
+      if (files.length === 0) {
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'No image files provided. Please select files to upload.',
+        }));
+      }
+
+      // Batch upload
+      request.log.info('Starting batch upload service');
+      const results = await imagesService.batchUpload(files, {
+        albumId: albumId || null,
+      }, user.id);
+
+      const successful = results.filter(r => r.success);
+      const failed = results.filter(r => !r.success);
+
+      request.log.info(`Batch upload complete: ${successful.length} successful, ${failed.length} failed`);
+
+      // Build message
+      let message;
+      if (failed.length === 0) {
+        message = `Successfully uploaded ${successful.length} image${successful.length !== 1 ? 's' : ''}`;
+      } else {
+        message = `Uploaded ${successful.length} of ${files.length} images. ${failed.length} failed.`;
+      }
+
+      // Return success with redirect and toast
+      reply.header('HX-Redirect', `/admin/media/images?toast=${encodeURIComponent(message)}`);
+      return reply.type('text/html').send('');
+    } catch (error) {
+      request.log.error('Batch upload error:', error);
+      
+      // Handle specific file size error
+      if (error.code === 'FST_REQ_FILE_TOO_LARGE') {
+        reply.code(413);
+        return reply.type('text/html').send(errorToast({
+          message: 'One or more files exceed the 50MB size limit. Please compress your images or upload smaller files.',
+        }));
+      }
+      
+      reply.code(400);
+      return reply.type('text/html').send(errorToast({
+        message: error.message || 'Failed to upload images.',
+      }));
+    }
+  }
 }
 
 // Helper function for images grid fragment (HTMX)

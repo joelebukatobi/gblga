@@ -25,6 +25,7 @@ export function listToolbar({
   hasAddButton = false,
   addButtonUrl = '#',
   addButtonText = 'Add New',
+  extraButtons = '',
 }) {
   const filtersHtml = filters
     .map(
@@ -78,6 +79,7 @@ export function listToolbar({
       <div class="list-toolbar__filters">
         ${filtersHtml}
         ${addButtonHtml}
+        ${extraButtons}
       </div>
     </div>
   `;

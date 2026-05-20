@@ -109,14 +109,14 @@ function about() {
   `;
 }
 
-// Upcoming Events Section
-function upcomingEvents({ events = [] } = {}) {
+// Events Section
+function eventsSection({ events = [], showingPastEvents = false } = {}) {
   const cards = events.map(renderEventCard).join('');
   return `
-    <section class="upcoming-events" aria-labelledby="upcoming-events-title">
+    <section class="upcoming-events" aria-labelledby="events-section-title">
       <div class="upcoming-events__inner">
         <div class="upcoming-events__header">
-          <h2 id="upcoming-events-title" class="upcoming-events__title">Upcoming Events</h2>
+          <h2 id="events-section-title" class="upcoming-events__title">Events</h2>
           <div class="upcoming-events__see-all">
             <a class="upcoming-events__see-all-link" href="/events">See All Events</a>
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
@@ -124,7 +124,7 @@ function upcomingEvents({ events = [] } = {}) {
         </div>
         ${events.length > 0
           ? `<div class="upcoming-events__grid">${cards}</div>`
-          : `<p class="upcoming-events__empty">No upcoming events at the moment. Check back soon!</p>`
+          : `<p class="upcoming-events__empty">No events at the moment. Check back soon!</p>`
         }
       </div>
     </section>
@@ -217,12 +217,12 @@ function newsletter() {
 }
 
 // Home Page Composer
-export function appHomePage({ albums = [], events = [] } = {}) {
+export function appHomePage({ albums = [], events = [], showingPastEvents = false } = {}) {
   const content = `
     ${hero()}
     <div class="home">
       ${about()}
-      ${upcomingEvents({ events })}
+      ${eventsSection({ events, showingPastEvents })}
       ${gallery({ albums })}
       ${newsletter()}
     </div>

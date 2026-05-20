@@ -22,6 +22,7 @@ function formatEventForCard(event) {
     time: event.eventTime || '',
     href: '/events',
     image: event.featuredImage?.path || '',
+    externalLink: event.externalLink || '',
   };
 }
 
@@ -48,19 +49,35 @@ class HomeController {
     // Fetch albums for gallery preview
     const albums = await getAlbumsForHome();
 
-    // Fetch upcoming events from API for events preview
-    const eventsResponse = await request.server.inject({
+    // Fetch upcoming events first
+    const upcomingResponse = await request.server.inject({
       method: 'GET',
       url: '/api/v1/events?status=UPCOMING&limit=3&sortBy=eventDate&sortOrder=asc',
     });
 
     let events = [];
-    if (eventsResponse.statusCode === 200) {
-      const payload = eventsResponse.json();
+    let showingPastEvents = false;
+
+    if (upcomingResponse.statusCode === 200) {
+      const payload = upcomingResponse.json();
       events = (payload?.data || []).map(formatEventForCard);
     }
 
-    return reply.type('text/html').send(appHomePage({ albums, events }));
+    // If no upcoming events, fetch recent completed events as fallback
+    if (events.length === 0) {
+      const pastResponse = await request.server.inject({
+        method: 'GET',
+        url: '/api/v1/events?status=COMPLETED&limit=3&sortBy=eventDate&sortOrder=desc',
+      });
+
+      if (pastResponse.statusCode === 200) {
+        const payload = pastResponse.json();
+        events = (payload?.data || []).map(formatEventForCard);
+        showingPastEvents = true;
+      }
+    }
+
+    return reply.type('text/html').send(appHomePage({ albums, events, showingPastEvents }));
   }
 }
 

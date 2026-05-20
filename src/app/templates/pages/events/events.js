@@ -16,15 +16,14 @@ function formatEventDate(eventDate) {
   };
 }
 
-function truncateText(text, maxLength) {
-  if (!text || text.length <= maxLength) return text || '';
-  return text.substring(0, maxLength).trim() + '...';
-}
-
 function renderEventCard(event) {
   const { day, month, year } = formatEventDate(event.eventDate);
   const imageSrc = event.featuredImage?.path || '';
-  const truncatedDescription = truncateText(event.description, 150);
+  const ctaText = event.externalLink ? 'Learn More &amp; RSVP' : 'RSVP';
+
+  const rsvpLink = event.externalLink
+    ? `<a href="${event.externalLink}" class="btn btn--primary event-card__cta" target="_blank" rel="noopener">${ctaText}</a>`
+    : `<span class="btn btn--primary event-card__cta">${ctaText}</span>`;
 
   return `
     <article class="event-card">
@@ -33,12 +32,12 @@ function renderEventCard(event) {
       </div>
       <div class="event-card__body">
         <h3 class="event-card__title">${event.title}</h3>
-        <p class="event-card__description">${truncatedDescription}</p>
+        <p class="event-card__description">${event.description || ''}</p>
         <hr class="event-card__divider" />
         <div class="event-card__meta">
           <p>${day} ${month}, ${year} &nbsp; &#9679; &nbsp; ${event.eventTime || ''} &nbsp; &#9679; &nbsp; ${event.location || ''}</p>
         </div>
-        <span class="btn btn--primary event-card__cta">RSVP</span>
+        ${rsvpLink}
       </div>
     </article>
   `;

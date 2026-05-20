@@ -29,8 +29,14 @@ export function nav(activeRoute = '/') {
         </nav>
         <div class="site-nav__end">
           <a class="btn btn--primary btn--sm" href="https://fordhamgsb.campuslabs.com/engage/actioncenter/organization/black-and-hispanic-mba-association" target="_blank" rel="noopener noreferrer">Become A Member</a>
+          <button class="site-nav__toggle" type="button" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileMenu(this)">
+            <span class="site-nav__toggle-bar"></span>
+          </button>
         </div>
       </div>
+      <nav class="site-nav__menu" aria-label="Mobile">
+        <ul class="site-nav__links">${items}</ul>
+      </nav>
     </header>
   `;
 }

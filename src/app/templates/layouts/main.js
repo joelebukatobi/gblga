@@ -54,6 +54,17 @@ export function renderAppLayout({ title = 'GBLGA', bodyClass = '', content = '',
         }
       }
 
+      // Mobile menu toggle
+      function toggleMobileMenu(btn) {
+        const menu = document.querySelector('.site-nav__menu');
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        if (menu) {
+          menu.classList.toggle('site-nav__menu--open');
+        }
+        document.body.style.overflow = !expanded ? 'hidden' : '';
+      }
+
       // Navbar scroll effect
       document.addEventListener('DOMContentLoaded', function() {
         const nav = document.querySelector('.site-nav');

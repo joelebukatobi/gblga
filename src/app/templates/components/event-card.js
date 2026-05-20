@@ -1,8 +1,3 @@
-function truncateText(text, maxLength) {
-  if (!text || text.length <= maxLength) return text || '';
-  return text.substring(0, maxLength).trim() + '...';
-}
-
 export function renderEventCard(event = {}) {
   const {
     title = '',
@@ -14,6 +9,7 @@ export function renderEventCard(event = {}) {
     time = '',
     href = '#',
     image = '',
+    externalLink = '',
   } = event;
 
   const dateStr = [day, month, year].filter(Boolean).join(' ');
@@ -22,19 +18,20 @@ export function renderEventCard(event = {}) {
     ? `<p class="event-details">${metaItems.join(' &nbsp; &#9679; &nbsp; ')}</p>`
     : '';
 
-  const truncatedDescription = truncateText(description, 150);
+  const linkUrl = externalLink || href;
+  const ctaText = externalLink ? 'Learn More &amp; RSVP' : 'See Event';
 
   return `
-    <a class="event-card" href="${href}">
+    <a class="event-card" href="${linkUrl}">
       <article class="event-card__inner">
         <div class="event-card__media">
           ${image ? `<img src="${image}" alt="${title}" />` : ''}
         </div>
         <div class="event-card__body">
           <h3 class="event-card__title">${title}</h3>
-          <p class="event-card__description">${truncatedDescription}</p>
+          <p class="event-card__description">${description}</p>
           ${meta ? `<hr class="event-card__divider" /><div class="event-card__meta">${meta}</div>` : ''}
-          <span class="btn btn--primary event-card__cta">RSVP</span>
+          <span class="btn btn--primary event-card__cta">${ctaText}</span>
         </div>
       </article>
     </a>

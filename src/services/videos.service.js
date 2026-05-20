@@ -279,9 +279,9 @@ class VideosService {
     }
 
     // Delete files
-    const filepath = path.join(process.cwd(), 'public', video.path);
-    const thumbpath = video.thumbnailPath 
-      ? path.join(process.cwd(), 'public', video.thumbnailPath)
+    const filepath = path.join(process.cwd(), video.path.replace(/^\//, ''));
+    const thumbpath = video.thumbnailPath
+      ? path.join(process.cwd(), video.thumbnailPath.replace(/^\//, ''))
       : null;
 
     await fs.unlink(filepath).catch(() => {});

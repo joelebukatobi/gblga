@@ -132,40 +132,79 @@ class VideosController {
   async upload(request, reply) {
     try {
       const user = request.user;
-      
-      // Get all parts (file and fields)
-      const parts = request.parts();
+      request.log.info('Starting video upload');
+
+      // Check if request has multipart content type
+      const contentType = request.headers['content-type'];
+      if (!contentType || !contentType.includes('multipart/form-data')) {
+        request.log.warn(`Invalid content type: ${contentType}`);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Invalid request format. Expected multipart/form-data.',
+        }));
+      }
+
+      // Get all parts (file and fields) with timeout
+      let parts;
+      try {
+        parts = request.parts();
+      } catch (parseError) {
+        request.log.error('Failed to initialize multipart parser:', parseError);
+        reply.code(400);
+        return reply.type('text/html').send(errorToast({
+          message: 'Failed to parse upload request. Please try again.',
+        }));
+      }
+
       let file = null;
       let postId = null;
       let title = null;
       let altText = null;
       let albumId = null;
-      
+      let partCount = 0;
+
+      // IMPORTANT: @fastify/multipart v8 requires file streams to be consumed
+      // inside the for await loop. If not consumed, busboy waits forever.
       for await (const part of parts) {
+        partCount++;
+        request.log.info(`Processing part ${partCount}: type=${part.type}, fieldname=${part.fieldname}`);
         if (part.type === 'file') {
-          file = part;
+          // Consume file buffer here - REQUIRED for busboy to continue
+          const buffer = await part.toBuffer();
+          request.log.info(`File received: ${part.filename}, mimetype: ${part.mimetype}, size: ${buffer.length}`);
+          file = {
+            filename: part.filename,
+            mimetype: part.mimetype,
+            toBuffer: async () => buffer,
+          };
         } else if (part.type === 'field') {
           const value = await part.value;
+          request.log.info(`Field received: ${part.fieldname} = ${value}`);
           if (part.fieldname === 'postId') postId = value;
           if (part.fieldname === 'title') title = value;
           if (part.fieldname === 'altText') altText = value;
           if (part.fieldname === 'albumId') albumId = value;
         }
       }
-      
+
+      request.log.info(`Finished processing ${partCount} parts`);
+
       if (!file) {
+        request.log.warn(`No file found in request after parsing ${partCount} parts`);
         reply.code(400);
         return reply.type('text/html').send(errorToast({
-          message: 'No video file provided.',
+          message: 'No video file provided. Please select a file to upload.',
         }));
       }
 
+      request.log.info('Starting video service upload');
       // Upload and process video
       const video = await videosService.upload(file, {
         title: title || file.filename,
         altText: altText || '',
         albumId: albumId || null,
       }, user.id);
+      request.log.info(`Video uploaded successfully: ${video.id}`);
 
       // Attach to post if postId provided
       if (postId) {
@@ -177,7 +216,7 @@ class VideosController {
       reply.header('HX-Trigger', JSON.stringify({ "htmx:toast": { message: 'Video uploaded successfully!', type: 'success' } }));
       return reply.type('text/html').send('');
     } catch (error) {
-      request.log.error(error);
+      request.log.error('Upload error:', error);
       reply.code(400);
       return reply.type('text/html').send(errorToast({
         message: error.message || 'Failed to upload video.',

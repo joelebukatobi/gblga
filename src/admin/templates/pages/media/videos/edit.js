@@ -82,7 +82,7 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
 
                   <!-- Alt Text -->
                   <div class="form__group">
-                    <label class="label label--required" for="altText">Alt Text</label>
+                    <label class="label" for="altText">Alt Text</label>
                     <input 
                       type="text" 
                       name="altText" 
@@ -90,7 +90,6 @@ export function videosEditPage({ user, video, posts, albums = [] }) {
                       class="input"
                       value="${escapeHtml(video.altText || '')}"
                       placeholder="Describe the video for accessibility"
-                      required 
                     />
                     <p class="form-feedback form-feedback--hint">Describe the video for screen readers</p>
                   </div>

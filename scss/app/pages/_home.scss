@@ -400,11 +400,11 @@
     }
 
     .gallery-item__year {
-      @apply text-[2.4rem] font-forum text-white;
+      @apply text-[2.4rem] font-forum text-white text-center;
     }
 
     .gallery-item__count {
-      @apply text-[1.4rem] font-lato text-white/80 mt-[0.4rem];
+      @apply text-[1.4rem] font-lato text-white/80 mt-[0.4rem] text-center;
     }
   }
 
@@ -1679,7 +1679,7 @@
   }
 
   &__title {
-    @apply text-[2.4rem] text-white m-0 font-forum;
+    @apply text-[2.4rem] text-white m-0 font-forum text-center;
 
     @media (max-width: 640px) {
       @apply text-[1.8rem];
@@ -1687,7 +1687,7 @@
   }
 
   &__count {
-    @apply text-[1.4rem] text-white/80 m-0 font-lato mt-[0.8rem];
+    @apply text-[1.4rem] text-white/80 m-0 font-lato mt-[0.8rem] text-center;
   }
 }
 

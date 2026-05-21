@@ -2095,12 +2095,14 @@ html {
   text-decoration-line: none;
 }
 .gallery .gallery-item--album .gallery-item__year {
+  text-align: center;
   font-family: var(--font-forum);
   font-size: 2.4rem;
   color: var(--color-white);
 }
 .gallery .gallery-item--album .gallery-item__count {
   margin-top: 0.4rem;
+  text-align: center;
   font-family: var(--font-lato);
   font-size: 1.4rem;
   color: color-mix(in srgb, #ffffff 80%, transparent);
@@ -4362,6 +4364,7 @@ html {
 }
 .gallery-album__title {
   margin: calc(var(--spacing) * 0);
+  text-align: center;
   font-family: var(--font-forum);
   font-size: 2.4rem;
   color: var(--color-white);
@@ -4374,6 +4377,7 @@ html {
 .gallery-album__count {
   margin: calc(var(--spacing) * 0);
   margin-top: 0.8rem;
+  text-align: center;
   font-family: var(--font-lato);
   font-size: 1.4rem;
   color: color-mix(in srgb, #ffffff 80%, transparent);

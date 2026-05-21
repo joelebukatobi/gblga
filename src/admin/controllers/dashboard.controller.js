@@ -361,6 +361,8 @@ function chartFragment({ range, data }) {
       const endIdx = Math.min((i + 1) * daysPerWeek, data.length);
       const weekData = data.slice(startIdx, endIdx);
       
+      if (weekData.length === 0) continue;
+      
       const weekViews = weekData.reduce((sum, day) => sum + day.views, 0);
       const weekVisitors = weekData.reduce((sum, day) => sum + day.uniqueVisitors, 0);
       

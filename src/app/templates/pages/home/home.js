@@ -231,8 +231,8 @@ function newsletter() {
           <form
             class="newsletter-form"
             hx-post="/api/v1/subscribe"
-            hx-target="#newsletter-response"
-            hx-swap="innerHTML"
+            hx-target="body"
+            hx-swap="beforeend"
             hx-indicator="#newsletter-indicator"
           >
             <label class="visually-hidden" for="newsletter-email">Email address</label>

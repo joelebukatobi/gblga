@@ -1765,3 +1765,75 @@
     }
   }
 }
+
+// ============================================================
+// NEWSLETTER MODAL
+// ============================================================
+.newsletter-modal {
+  @apply fixed inset-0 z-[100] flex items-center justify-center p-[2.4rem];
+  background: rgba(58, 25, 32, 0.7);
+
+  &__card {
+    @apply bg-cream rounded-[0.8rem] shadow-xl w-full max-w-[40rem] overflow-hidden;
+    animation: modal-in 0.25s ease-out;
+  }
+
+  &__header {
+    @apply bg-maroon px-[2.4rem] py-[2rem] flex items-center justify-between;
+  }
+
+  &__title {
+    @apply text-[1.8rem] text-white m-0 font-forum;
+  }
+
+  &__close {
+    @apply bg-transparent border-0 text-white/70 cursor-pointer p-[0.4rem] rounded-[0.4rem] transition-colors duration-200;
+
+    &:hover {
+      @apply text-white bg-white/10;
+    }
+
+    i {
+      @apply text-[2rem];
+    }
+  }
+
+  &__body {
+    @apply px-[2.4rem] py-[3.2rem] flex flex-col items-center gap-[1.6rem] text-center;
+  }
+
+  &__icon {
+    @apply w-[5.6rem] h-[5.6rem] rounded-full flex items-center justify-center;
+
+    &--success {
+      @apply bg-maroon text-cream;
+    }
+
+    &--error {
+      @apply bg-red-800 text-cream;
+    }
+
+    i {
+      @apply text-[2.8rem];
+    }
+  }
+
+  &__message {
+    @apply text-[1.6rem] leading-[1.6] text-black/80 m-0 font-lato;
+  }
+
+  &__action {
+    @apply mt-[0.8rem];
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

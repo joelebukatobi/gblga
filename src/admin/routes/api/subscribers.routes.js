@@ -3,36 +3,68 @@
 
 import { subscribersService } from '../../../services/subscribers.service.js';
 
-function successHtml(message) {
-  return `<p class="newsletter__response newsletter__response--success">${message}</p>`;
-}
-
-function errorHtml(message) {
-  return `<p class="newsletter__response newsletter__response--error">${message}</p>`;
+function subscribeModal({ type, title, message }) {
+  const icon = type === 'success' ? 'ph ph-check-circle' : 'ph ph-warning-circle';
+  return `
+    <div class="newsletter-modal" id="newsletterModal" role="dialog" aria-modal="true" aria-labelledby="newsletterModalTitle">
+      <div class="newsletter-modal__card">
+        <div class="newsletter-modal__header">
+          <h3 class="newsletter-modal__title" id="newsletterModalTitle">${title}</h3>
+          <button class="newsletter-modal__close" onclick="closeNewsletterModal()" aria-label="Close">
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+        <div class="newsletter-modal__body">
+          <div class="newsletter-modal__icon newsletter-modal__icon--${type}">
+            <i class="${icon}"></i>
+          </div>
+          <p class="newsletter-modal__message">${message}</p>
+          <div class="newsletter-modal__action">
+            <button class="btn btn--primary" onclick="closeNewsletterModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function closeNewsletterModal() {
+        var modal = document.getElementById('newsletterModal');
+        if (modal) modal.remove();
+      }
+      setTimeout(closeNewsletterModal, 6000);
+    </script>
+  `;
 }
 
 export default async function subscribersApiRoutes(fastify, opts) {
   // POST /api/v1/subscribe - Subscribe to newsletter
   fastify.post('/subscribe', async (request, reply) => {
     const isHtmx = request.headers['hx-request'] === 'true';
-    
+
     try {
       const { email } = request.body;
 
       if (!email || !email.trim()) {
         reply.code(400);
         if (isHtmx) {
-          return reply.type('text/html').send(errorHtml('Email is required'));
+          return reply.type('text/html').send(subscribeModal({
+            type: 'error',
+            title: 'Missing Email',
+            message: 'Please provide a valid email address.',
+          }));
         }
         return reply.send({ error: 'Email is required' });
       }
 
       // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
         reply.code(400);
         if (isHtmx) {
-          return reply.type('text/html').send(errorHtml('Invalid email address'));
+          return reply.type('text/html').send(subscribeModal({
+            type: 'error',
+            title: 'Invalid Email',
+            message: 'Please enter a valid email address.',
+          }));
         }
         return reply.send({ error: 'Invalid email address' });
       }
@@ -45,37 +77,51 @@ export default async function subscribersApiRoutes(fastify, opts) {
         if (existingSubscriber.status === 'ACTIVE') {
           reply.code(409);
           if (isHtmx) {
-            return reply.type('text/html').send(errorHtml('You are already subscribed to our newsletter'));
+            return reply.type('text/html').send(subscribeModal({
+              type: 'error',
+              title: 'Already Subscribed',
+              message: 'You are already subscribed to our newsletter.',
+            }));
           }
           return reply.send({ error: 'You are already subscribed to our newsletter' });
         } else {
           // Reactivate unsubscribed subscriber
           await subscribersService.updateSubscriber(existingSubscriber.id, { status: 'ACTIVE' });
-          const message = 'Welcome back! Your subscription has been reactivated.';
           if (isHtmx) {
-            return reply.type('text/html').send(successHtml(message));
+            return reply.type('text/html').send(subscribeModal({
+              type: 'success',
+              title: 'Welcome Back!',
+              message: 'Your subscription has been reactivated.',
+            }));
           }
-          return reply.send({ message, data: { email: normalizedEmail } });
+          return reply.send({ message: 'Welcome back!', data: { email: normalizedEmail } });
         }
       }
 
       // Create new subscriber
-      const subscriber = await subscribersService.createSubscriber({
+      await subscribersService.createSubscriber({
         email: normalizedEmail,
         status: 'ACTIVE'
       });
 
-      const message = 'Successfully subscribed to our newsletter!';
       if (isHtmx) {
-        return reply.code(201).type('text/html').send(successHtml(message));
+        return reply.code(201).type('text/html').send(subscribeModal({
+          type: 'success',
+          title: 'Subscribed!',
+          message: 'Thank you for subscribing to our newsletter. Stay tuned for updates!',
+        }));
       }
-      return reply.code(201).send({ message, data: { email: subscriber.email } });
+      return reply.code(201).send({ message: 'Successfully subscribed!', data: { email: normalizedEmail } });
     } catch (error) {
       request.log.error(error);
       reply.code(500);
-      const message = 'Failed to subscribe. Please try again later.';
+      const message = 'Something went wrong. Please try again later.';
       if (isHtmx) {
-        return reply.type('text/html').send(errorHtml(message));
+        return reply.type('text/html').send(subscribeModal({
+          type: 'error',
+          title: 'Server Error',
+          message,
+        }));
       }
       return reply.send({ error: message });
     }

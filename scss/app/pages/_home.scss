@@ -1319,6 +1319,15 @@
   }
 }
 
+// Album cover placeholder
+.album-cover-placeholder {
+  @apply w-full h-full bg-maroon flex items-center justify-center p-[2.4rem];
+
+  &__text {
+    @apply text-white text-[2rem] font-forum text-center line-clamp-2;
+  }
+}
+
 // Gallery album card
 .gallery-album {
   @apply relative overflow-hidden rounded-[0.8rem] shadow-md transition-all duration-200;

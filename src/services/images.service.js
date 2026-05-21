@@ -1,8 +1,8 @@
 // src/services/images.service.js
 // Images service for managing media library
 
-import { db, mediaItems, posts } from '../db/index.js';
-import { eq, like, desc, asc, sql, and } from 'drizzle-orm';
+import { db, mediaItems, posts, albums } from '../db/index.js';
+import { eq, like, desc, asc, sql, and, isNull } from 'drizzle-orm';
 import { promises as fs } from 'fs';
 import path from 'path';
 import sharp from 'sharp';
@@ -185,6 +185,22 @@ class ImagesService {
         uploadedBy: userId,
         albumId: metadata.albumId || null,
       });
+
+    // Auto-assign as album cover if this is the first image in the album
+    if (metadata.albumId) {
+      const [album] = await db
+        .select()
+        .from(albums)
+        .where(eq(albums.id, metadata.albumId))
+        .limit(1);
+
+      if (album && !album.coverImageId) {
+        await db
+          .update(albums)
+          .set({ coverImageId: mediaId })
+          .where(eq(albums.id, metadata.albumId));
+      }
+    }
 
     const [imageRecord] = await db
       .select()

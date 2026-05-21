@@ -5,16 +5,19 @@ import { renderFilterBar } from '../../components/filter-bar.js';
 const MEDIA_PER_PAGE = 9;
 
 function renderAlbumCard(album) {
-  const coverImage = album.coverImage
-    ? album.coverImage.path
-    : '/public/uploads/images/featured-posts.jpg';
+  const hasCover = album.coverImage && album.coverImage.path;
   const mediaCount = album.mediaCount || 0;
   const itemLabel = mediaCount === 1 ? 'item' : 'items';
 
   return `
     <article class="gallery-album">
       <a href="/gallery/${album.slug}" aria-label="View ${album.title}" hx-get="/gallery/${album.slug}" hx-target=".app__main" hx-push-url="true">
-        <img src="${coverImage}" alt="${album.title} album cover" loading="lazy" />
+        ${hasCover
+          ? `<img src="${album.coverImage.path}" alt="${album.title} album cover" loading="lazy" />`
+          : `<div class="album-cover-placeholder">
+              <span class="album-cover-placeholder__text">${album.title}</span>
+            </div>`
+        }
         <div class="gallery-album__overlay">
           <h3 class="gallery-album__title">${album.title}</h3>
           <p class="gallery-album__count">${mediaCount} ${itemLabel}</p>

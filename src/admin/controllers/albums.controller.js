@@ -128,8 +128,11 @@ class AlbumsController {
         }));
       }
 
+      // Get album images for cover selection
+      const { data: albumImages } = await albumsService.getAlbumMedia(id, { limit: 50 });
+
       const { albumEditPage } = await import('../templates/pages/albums/index.js');
-      return reply.type('text/html').send(albumEditPage({ user, album }));
+      return reply.type('text/html').send(albumEditPage({ user, album, albumImages }));
     } catch (error) {
       request.log.error(error);
       reply.code(500);

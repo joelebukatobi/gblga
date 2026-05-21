@@ -66,8 +66,47 @@ class AlbumsService {
 
     const data = await query;
 
+    // For albums without a cover, try to use the first image in the album
+    const albumsWithCovers = await Promise.all(
+      data.map(async (album) => {
+        if (album.coverImage && album.coverImage.path) {
+          return album;
+        }
+
+        // Try to get the first image in this album
+        const [firstImage] = await db
+          .select({
+            id: mediaItems.id,
+            path: mediaItems.path,
+            thumbnailPath: mediaItems.thumbnailPath,
+          })
+          .from(mediaItems)
+          .where(
+            and(
+              eq(mediaItems.albumId, album.id),
+              eq(mediaItems.type, 'IMAGE')
+            )
+          )
+          .orderBy(desc(mediaItems.createdAt))
+          .limit(1);
+
+        if (firstImage) {
+          return {
+            ...album,
+            coverImage: firstImage,
+          };
+        }
+
+        // No images - mark as needing placeholder
+        return {
+          ...album,
+          coverImage: null,
+        };
+      })
+    );
+
     return {
-      data,
+      data: albumsWithCovers,
       pagination: {
         page,
         limit,
@@ -117,7 +156,44 @@ class AlbumsService {
       .from(mediaItems)
       .where(eq(mediaItems.albumId, id));
 
-    return { ...album, mediaCount: Number(count) };
+    const mediaCount = Number(count);
+
+    // Get cover image if set
+    let coverImage = null;
+    if (album.coverImageId) {
+      const [image] = await db
+        .select({
+          id: mediaItems.id,
+          path: mediaItems.path,
+          thumbnailPath: mediaItems.thumbnailPath,
+        })
+        .from(mediaItems)
+        .where(eq(mediaItems.id, album.coverImageId))
+        .limit(1);
+      coverImage = image || null;
+    }
+
+    // If no cover image, try to get the first image in the album
+    if (!coverImage && mediaCount > 0) {
+      const [firstImage] = await db
+        .select({
+          id: mediaItems.id,
+          path: mediaItems.path,
+          thumbnailPath: mediaItems.thumbnailPath,
+        })
+        .from(mediaItems)
+        .where(
+          and(
+            eq(mediaItems.albumId, id),
+            eq(mediaItems.type, 'IMAGE')
+          )
+        )
+        .orderBy(desc(mediaItems.createdAt))
+        .limit(1);
+      coverImage = firstImage || null;
+    }
+
+    return { ...album, mediaCount, coverImage };
   }
 
   /**

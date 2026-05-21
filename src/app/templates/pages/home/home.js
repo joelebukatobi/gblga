@@ -135,16 +135,20 @@ function eventsSection({ events = [], showingPastEvents = false } = {}) {
 function gallery({ albums = [] } = {}) {
   const tiles = albums.length > 0
     ? albums.map((album) => {
-        const coverImage = album.coverImage
-          ? album.coverImage.path
-          : '/public/uploads/images/featured-posts.jpg';
         const mediaCount = album.mediaCount || 0;
         const itemLabel = mediaCount === 1 ? 'item' : 'items';
+        const hasCover = album.coverImage && album.coverImage.path;
+        
         return `
           <article class="gallery-item gallery-item--album">
             <a href="/gallery/${album.slug}" aria-label="View ${album.title}" hx-get="/gallery/${album.slug}" hx-target=".app__main" hx-push-url="true">
               <div class="gallery-item__media" aria-hidden="true">
-                <img src="${coverImage}" alt="${album.title} album cover" loading="lazy" />
+                ${hasCover
+                  ? `<img src="${album.coverImage.path}" alt="${album.title} album cover" loading="lazy" />`
+                  : `<div class="album-cover-placeholder">
+                      <span class="album-cover-placeholder__text">${album.title}</span>
+                    </div>`
+                }
               </div>
               <div class="gallery-item__overlay">
                 <span class="gallery-item__year">${album.title}</span>

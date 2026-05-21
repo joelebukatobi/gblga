@@ -1771,7 +1771,7 @@
 // ============================================================
 .newsletter-modal {
   @apply fixed inset-0 z-[100] flex items-center justify-center p-[2.4rem];
-  background: rgba(58, 25, 32, 0.7);
+  background: rgba(0, 0, 0, 0.15);
 
   &__card {
     @apply bg-cream rounded-[0.8rem] shadow-xl w-full max-w-[40rem] overflow-hidden;

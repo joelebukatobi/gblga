@@ -551,16 +551,28 @@
 
   &__inner {
     @apply mx-auto max-w-[120rem] w-full px-[3.2rem] py-[6.4rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[4.8rem];
+    }
   }
 
   // Filter row
   &__filters {
     @apply flex items-start justify-between mb-[4rem];
+
+    @media (max-width: 768px) {
+      @apply flex-col gap-[1.6rem] mb-[3.2rem];
+    }
   }
 
   // Tag buttons - uses .btn .btn--outline .btn--sm as base
   &__tags {
     @apply flex items-start gap-[1.2rem] flex-wrap max-w-[50%];
+
+    @media (max-width: 768px) {
+      @apply max-w-full w-full;
+    }
 
     // Additional styles for active state
     .blog-page__tag--active {
@@ -608,6 +620,14 @@
   // Blog grid - 3 columns like events
   &__grid {
     @apply grid gap-[2.4rem] grid-cols-3;
+
+    @media (max-width: 1024px) {
+      @apply grid-cols-2 gap-[2rem];
+    }
+
+    @media (max-width: 640px) {
+      @apply grid-cols-1 gap-[1.6rem];
+    }
   }
 
   // Blog post cards - inline styling via parent
@@ -622,6 +642,10 @@
     > a:first-child {
       @apply relative h-[24rem] overflow-hidden block;
 
+      @media (max-width: 640px) {
+        @apply h-[20rem];
+      }
+
       img {
         @apply w-full h-full object-cover transition-transform duration-300;
       }
@@ -635,6 +659,10 @@
     > div {
       @apply flex flex-col p-[2.4rem];
 
+      @media (max-width: 640px) {
+        @apply p-[1.6rem];
+      }
+
       // Meta (date · category)
       > p:first-child {
         @apply text-[1.2rem] text-maroon/70 font-lato m-0 mb-[0.8rem];
@@ -643,6 +671,10 @@
       // Title
       h2 {
         @apply text-[2rem] leading-[1.3] text-black m-0 mb-[1.2rem] font-forum line-clamp-2;
+
+        @media (max-width: 640px) {
+          @apply text-[1.8rem];
+        }
       }
 
       // Divider
@@ -653,6 +685,10 @@
       // Excerpt - no margin-bottom (last element)
       > p:last-of-type {
         @apply text-[1.4rem] leading-[1.6] text-black/80 m-0 font-lato line-clamp-3;
+
+        @media (max-width: 640px) {
+          @apply text-[1.3rem];
+        }
       }
     }
   }
@@ -679,12 +715,24 @@
   &__pagination {
     @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
 
+    @media (max-width: 640px) {
+      @apply mt-[4.8rem] pt-[3.2rem] gap-[1.2rem];
+    }
+
     &-info {
       @apply text-[1.4rem] text-maroon/70 font-lato;
+
+      @media (max-width: 640px) {
+        @apply text-[1.2rem];
+      }
     }
 
     &-controls {
       @apply flex items-center gap-[1.2rem];
+
+      @media (max-width: 640px) {
+        @apply gap-[0.8rem];
+      }
     }
 
     // Pagination buttons - uses .btn .btn--outline .btn--sm as base
@@ -704,8 +752,16 @@
     &-numbers {
       @apply flex items-center gap-[0.4rem];
 
+      @media (max-width: 640px) {
+        @apply flex-wrap justify-center gap-[0.2rem];
+      }
+
       a {
         @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        @media (max-width: 640px) {
+          @apply w-[3.2rem] h-[3.2rem] text-[1.2rem];
+        }
 
         &:hover {
           @apply bg-maroon/10;
@@ -732,6 +788,10 @@
 
   &__inner {
     @apply w-full max-w-[120rem] mx-auto px-[3.2rem] py-[8rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[4.8rem];
+    }
   }
 
   // Back to blog link
@@ -754,11 +814,19 @@
   // Featured image
   &__image {
     @apply w-full h-[48rem] object-cover rounded-[0.8rem] mb-[4rem];
+
+    @media (max-width: 768px) {
+      @apply h-[24rem] mb-[3.2rem];
+    }
   }
 
   // Meta bar
   &__meta {
     @apply flex items-center gap-[2.4rem] mb-[3.2rem] pb-[3.2rem] border-b-[0.1rem] border-maroon/20;
+
+    @media (max-width: 640px) {
+      @apply flex-wrap gap-[1.2rem] mb-[2.4rem] pb-[2.4rem];
+    }
 
     // Date
     time {
@@ -786,14 +854,26 @@
 
     p {
       @apply text-[1.8rem] leading-[1.8] text-black m-0 font-lato;
+
+      @media (max-width: 640px) {
+        @apply text-[1.6rem];
+      }
     }
 
     h2 {
       @apply text-[3.2rem] tracking-[0.02em] text-black mt-[4rem] mb-[1.6rem] font-forum;
+
+      @media (max-width: 640px) {
+        @apply text-[2.4rem] mt-[3.2rem] mb-[1.2rem];
+      }
     }
 
     h3 {
       @apply text-[2.4rem] tracking-[0.02em] text-black mt-[3.2rem] mb-[1.2rem] font-forum;
+
+      @media (max-width: 640px) {
+        @apply text-[2rem] mt-[2.4rem] mb-[1rem];
+      }
     }
 
     ul, ol {
@@ -801,6 +881,10 @@
 
       li {
         @apply text-[1.8rem] leading-[1.8] text-black mb-[0.8rem] font-lato;
+
+        @media (max-width: 640px) {
+          @apply text-[1.6rem];
+        }
       }
     }
 
@@ -809,6 +893,10 @@
 
       p {
         @apply text-[2rem] italic text-maroon m-0 font-forum;
+
+        @media (max-width: 640px) {
+          @apply text-[1.6rem];
+        }
       }
     }
 
@@ -876,6 +964,10 @@
 
   &__related-grid {
     @apply grid gap-[2.4rem] grid-cols-3;
+
+    @media (max-width: 640px) {
+      @apply grid-cols-1;
+    }
 
     article {
       @apply flex flex-col;
@@ -1350,10 +1442,18 @@
 
   &__inner {
     @apply mx-auto max-w-[120rem] px-[3.2rem] py-[6.4rem];
+
+    @media (max-width: 768px) {
+      @apply px-[1.6rem] py-[4.8rem];
+    }
   }
 
   &__filters {
     @apply flex items-start gap-[2.4rem] mb-[4rem];
+
+    @media (max-width: 768px) {
+      @apply mb-[3.2rem];
+    }
   }
 
   &__dropdown {
@@ -1395,26 +1495,62 @@
 
   &__grid {
     @apply grid gap-[2.4rem] grid-cols-4;
+
+    @media (max-width: 1024px) {
+      @apply grid-cols-3;
+    }
+
+    @media (max-width: 768px) {
+      @apply grid-cols-2;
+    }
+
+    @media (max-width: 640px) {
+      @apply grid-cols-1;
+    }
   }
 
   &__albums {
     @apply grid gap-[2.4rem] grid-cols-3;
+
+    @media (max-width: 1024px) {
+      @apply grid-cols-2;
+    }
+
+    @media (max-width: 640px) {
+      @apply grid-cols-1;
+    }
   }
 
   &__empty {
     @apply text-center text-[1.6rem] text-black/60 py-[8rem] font-lato col-span-4;
+
+    @media (max-width: 640px) {
+      @apply py-[6.4rem] col-span-1;
+    }
   }
 
   // Pagination
   &__pagination {
     @apply flex flex-col items-center gap-[1.6rem] mt-[6.4rem] pt-[4rem] border-t-[0.1rem] border-maroon/20;
 
+    @media (max-width: 640px) {
+      @apply mt-[4.8rem] pt-[3.2rem] gap-[1.2rem];
+    }
+
     &-info {
       @apply text-[1.4rem] text-maroon/70 font-lato;
+
+      @media (max-width: 640px) {
+        @apply text-[1.2rem];
+      }
     }
 
     &-controls {
       @apply flex items-center gap-[1.2rem];
+
+      @media (max-width: 640px) {
+        @apply gap-[0.8rem];
+      }
     }
 
     &-btn {
@@ -1432,8 +1568,16 @@
     &-numbers {
       @apply flex items-center gap-[0.4rem];
 
+      @media (max-width: 640px) {
+        @apply flex-wrap justify-center gap-[0.2rem];
+      }
+
       a {
         @apply flex items-center justify-center w-[4rem] h-[4rem] text-[1.4rem] font-lato text-maroon bg-transparent rounded-[0.4rem] no-underline transition-all duration-200;
+
+        @media (max-width: 640px) {
+          @apply w-[3.2rem] h-[3.2rem] text-[1.2rem];
+        }
 
         &:hover {
           @apply bg-maroon/10;
@@ -1474,6 +1618,10 @@
 
   a {
     @apply block h-[32rem];
+
+    @media (max-width: 640px) {
+      @apply h-[24rem];
+    }
   }
 
   img {
@@ -1490,6 +1638,10 @@
 
   &__title {
     @apply text-[2.4rem] text-white m-0 font-forum;
+
+    @media (max-width: 640px) {
+      @apply text-[1.8rem];
+    }
   }
 
   &__count {
@@ -1515,6 +1667,10 @@
 
   a {
     @apply block h-[24rem];
+
+    @media (max-width: 640px) {
+      @apply h-[28rem];
+    }
   }
 
   img {
@@ -1543,6 +1699,10 @@
 
     i {
       @apply text-[4.8rem] text-white/90 drop-shadow-lg;
+
+      @media (max-width: 640px) {
+        @apply text-[3.6rem];
+      }
     }
   }
 }

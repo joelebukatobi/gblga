@@ -640,10 +640,10 @@
 
     // Image container
     > a:first-child {
-      @apply relative h-[24rem] overflow-hidden block;
+      @apply relative h-[32rem] overflow-hidden block;
 
       @media (max-width: 640px) {
-        @apply h-[20rem];
+        @apply h-[24rem];
       }
 
       img {
@@ -1174,7 +1174,7 @@
   }
 
   &__photo {
-    @apply h-[28rem] bg-maroon/5 flex items-center justify-center;
+    @apply h-[32rem] bg-maroon/5 flex items-center justify-center;
     @apply pt-[1.6rem] px-[1.6rem];
 
     @media (max-width: 640px) {
@@ -1384,7 +1384,7 @@
     @apply relative h-[32rem] overflow-hidden;
 
     @media (max-width: 640px) {
-      @apply h-[20rem];
+      @apply h-[24rem];
     }
 
     img {
@@ -1666,10 +1666,10 @@
   }
 
   a {
-    @apply block h-[24rem];
+    @apply block h-[32rem];
 
     @media (max-width: 640px) {
-      @apply h-[28rem];
+      @apply h-[24rem];
     }
   }
 

@@ -2475,12 +2475,12 @@ html {
 .blog-page__grid > article > a:first-child {
   position: relative;
   display: block;
-  height: 24rem;
+  height: 32rem;
   overflow: hidden;
 }
 @media (max-width: 640px) {
   .blog-page__grid > article > a:first-child {
-    height: 20rem;
+    height: 24rem;
   }
 }
 .blog-page__grid > article > a:first-child img {
@@ -3444,7 +3444,7 @@ html {
 }
 .board-member__photo {
   display: flex;
-  height: 28rem;
+  height: 32rem;
   align-items: center;
   justify-content: center;
   background-color: color-mix(in srgb, #3a1920 5%, transparent);
@@ -3835,7 +3835,7 @@ html {
 }
 @media (max-width: 640px) {
   .event-card__media {
-    height: 20rem;
+    height: 24rem;
   }
 }
 .event-card__media img {
@@ -4328,11 +4328,11 @@ html {
 }
 .gallery-card a {
   display: block;
-  height: 24rem;
+  height: 32rem;
 }
 @media (max-width: 640px) {
   .gallery-card a {
-    height: 28rem;
+    height: 24rem;
   }
 }
 .gallery-card img {

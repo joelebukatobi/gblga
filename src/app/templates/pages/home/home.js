@@ -160,6 +160,44 @@ function gallery({ albums = [] } = {}) {
       }).join('')
     : '';
 
+  const scrollScript = albums.length > 0 ? `
+    <div class="gallery__carousel" id="galleryCarousel">
+      <div class="gallery__grid gallery__grid--carousel">
+        ${tiles}
+      </div>
+      <button class="gallery__scroll-left" onclick="scrollGallery(-1)" aria-label="Scroll left">
+        <i class="ph ph-caret-left"></i>
+      </button>
+      <button class="gallery__scroll-right" onclick="scrollGallery(1)" aria-label="Scroll right">
+        <i class="ph ph-caret-right"></i>
+      </button>
+      <div class="gallery__dots">${renderGalleryDots(albums)}</div>
+    </div>
+
+    <script>
+      function scrollGallery(direction) {
+        const carousel = document.querySelector('#galleryCarousel .gallery__grid');
+        const itemWidth = carousel.querySelector('.gallery-item').offsetWidth + 16;
+        carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
+      }
+
+      (function() {
+        const carousel = document.querySelector('#galleryCarousel .gallery__grid');
+        if (!carousel) return;
+        const dots = document.querySelectorAll('#galleryCarousel .gallery__dot');
+        function updateDots() {
+          const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
+          dots.forEach((d, i) => d.classList.toggle('gallery__dot--active', i === idx));
+        }
+        carousel.addEventListener('scroll', updateDots);
+      })();
+    </script>
+  ` : `
+    <div class="gallery__grid">
+      ${tiles}
+    </div>
+  `;
+
   return `
     <section class="gallery" aria-labelledby="gallery-title">
       <div class="gallery__inner">
@@ -170,9 +208,7 @@ function gallery({ albums = [] } = {}) {
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
           </div>
         </div>
-        <div class="gallery__grid">
-          ${tiles}
-        </div>
+        ${scrollScript}
       </div>
     </section>
   `;
@@ -218,6 +254,12 @@ function newsletter() {
       </div>
     </section>
   `;
+}
+
+function renderGalleryDots(albums) {
+  return albums.map((_, i) => `
+    <button class="gallery__dot ${i === 0 ? 'gallery__dot--active' : ''}" aria-label="Slide ${i + 1}"></button>
+  `).join('');
 }
 
 // Home Page Composer

@@ -313,10 +313,52 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      padding-bottom: 0;
 
       &::-webkit-scrollbar {
         display: none;
       }
+    }
+
+    &--carousel {
+      @apply relative;
+    }
+  }
+
+  // Carousel scroll arrows (mobile only)
+  .gallery__scroll-left,
+  .gallery__scroll-right {
+    @apply hidden;
+
+    @media (max-width: 768px) {
+      @apply flex absolute top-1/2 -translate-y-1/2 z-10 items-center justify-center;
+      @apply w-[3.2rem] h-[3.2rem] rounded-full bg-white/80 shadow-md;
+      @apply text-maroon text-[1.6rem] cursor-pointer transition-opacity duration-200;
+    }
+  }
+
+  .gallery__scroll-left {
+    @apply left-[0.4rem];
+  }
+
+  .gallery__scroll-right {
+    @apply right-[0.4rem];
+  }
+
+  // Carousel dot indicators (mobile only)
+  .gallery__dots {
+    @apply hidden;
+
+    @media (max-width: 768px) {
+      @apply flex justify-center gap-[0.8rem] mt-[1.6rem];
+    }
+  }
+
+  .gallery__dot {
+    @apply w-[0.8rem] h-[0.8rem] rounded-full bg-maroon/30 border-0 cursor-pointer p-0 transition-colors duration-200;
+
+    &--active {
+      @apply bg-maroon;
     }
   }
 
@@ -326,7 +368,7 @@
     @apply relative aspect-[4/3] overflow-hidden m-0 cursor-pointer;
 
     @media (max-width: 768px) {
-      @apply flex-shrink-0 w-[85vw] snap-start;
+      @apply flex-shrink-0 w-[calc(100vw-3.2rem)] snap-start;
     }
 
     // Media container
